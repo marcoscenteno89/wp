@@ -1,0 +1,125 @@
+@import url("/wp-content/themes/astra-child-anthem/css/helper.css");
+/* .hidden { 
+    display: none; 
+} */
+.fiberzones thead th, .fiberzones tfoot th {
+    font-weight: 700;
+}
+#percentage {
+    padding-bottom: 10px;
+}
+#myProgress { 
+    width: 100%; 
+    background-color: #e5e9da; 
+    border-radius: 5px; 
+    font-size: 11px;
+}
+#myBar { 
+    width: 1%;  
+    background-color: rgb(166, 38, 46);  
+    text-align: center; 
+    color: #FFFFFF; 
+    border-radius: 5px; 
+}
+.map {    
+    height: auto;   
+    width: 100%;    
+    margin-bottom: 5px;
+}
+
+.btn {
+    margin: 5px;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 25px;
+}
+.green {
+    background-color: #1CE388;
+}
+.red {
+    background-color: #E1341E;
+}
+.row { 
+    flex-direction: row;
+}
+.column { 
+    flex-direction: column; 
+}
+.fiberzones .content {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    max-height: 60vh;
+    padding-right: 10px;
+    justify-content: space-between;
+}
+.fiberzones .content > div {
+    display: flex;
+    flex-direction: column;
+}
+.fiberzones .content .basicinfo > label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.fiberzones .content .textarea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.fiberzones .content #header, .fiberzones .content #details, .fiberzones .content #smallprint {
+    height: 150px;
+}
+.fiberzones .half {
+    width: 49%;
+}
+.fiberzones .fullwidth {
+    width: 100%;
+}
+.fiberzones .content > .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.popupitem {
+    display: none;
+    background: #FFFFFF;
+    padding: 20px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 80%;
+    height: auto;
+    width: 70%;
+}
+.close {
+    background-color: #fff;
+    border: 1px solid rgb(65,137,224);
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -25px;
+    right: -25px;
+    font-size: 30px;
+    font-weight: 300;
+    width: 50px;
+    height: 50px;
+    color: rgb(65,137,224);
+}
+.close:hover {
+    border: 3px solid rgb(192,39,44);
+    color: rgb(192,39,44);
+}
+.tab {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.popupitem {
+    z-index: 99;
+}

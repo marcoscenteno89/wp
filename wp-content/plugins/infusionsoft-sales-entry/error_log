@@ -1,0 +1,172 @@
+[30-Dec-2018 19:38:54 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function plugin_dir_url() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php on line 6
+[30-Dec-2018 19:40:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function plugin_dir_url() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php on line 6
+[30-Dec-2018 19:40:50 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function plugin_dir_url() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/infusionsoft.php on line 6
+[02-Jan-2019 23:53:14 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:12:15 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:12:34 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:12:52 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:13:38 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:15:45 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 00:19:23 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Response), Array)
+#3 /home/dynamite/public_html/sales/wp-content/plugins/inf in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 18:37:02 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[03-Jan-2019 18:37:25 UTC] PHP Fatal error:  Uncaught GuzzleHttp\Exception\ClientException: Client error: `POST https://api.infusionsoft.com/token` resulted in a `400 Bad Request` response:
+{"error":"invalid_grant","error_description":"Invalid refresh token"}
+ in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Exception/RequestException.php:113
+Stack trace:
+#0 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/guzzle/src/Middleware.php(66): GuzzleHttp\Exception\RequestException::create(Object(GuzzleHttp\Psr7\Request), Object(GuzzleHttp\Psr7\Response))
+#1 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(203): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Response))
+#2 /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/guzzlehttp/promises/src/Promise.php(156): GuzzleHttp\Promise\Promise::callHandler(1, Object(GuzzleHttp\Psr7\Respons in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/vendor/infusionsoft/php-sdk/src/Infusionsoft/Http/GuzzleHttpClient.php on line 74
+[26-Jul-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[26-Jul-2019 18:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[27-Jul-2019 06:00:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[27-Jul-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[28-Jul-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[28-Jul-2019 18:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[29-Jul-2019 06:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[29-Jul-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[30-Jul-2019 06:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[30-Jul-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[31-Jul-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[31-Jul-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[01-Aug-2019 06:00:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[01-Aug-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[02-Aug-2019 06:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[02-Aug-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[03-Aug-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[03-Aug-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[04-Aug-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[04-Aug-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[05-Aug-2019 06:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[05-Aug-2019 18:00:02 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[06-Aug-2019 06:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14
+[06-Aug-2019 18:00:03 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function upadateagiletoken() in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/dynamite/public_html/sales/wp-content/plugins/infusionsoft-sales-entry/agile.php on line 14

@@ -1,0 +1,5 @@
+# Ignore Git here
+.vscode
+# But not these files...
+.git
+docker-compose.yml

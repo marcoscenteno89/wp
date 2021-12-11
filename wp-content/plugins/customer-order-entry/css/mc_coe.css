@@ -1,0 +1,68 @@
+.font-red { color: rgb(192,39,45) !important;  }
+.font-blue {    color: rgb(59,121,172) !important;   }
+.font-white {    color: #FFFFFF !important;   }
+.font-black { color: #000000 !important;   }
+.red { background-color: rgb(192,39,45) !important; }
+.blue { background-color: rgb(59,121,172) !important;}
+.white { background-color: #FFFFFF !important; }
+.gray { background: rgb(229,229,229) !important; }
+#customer-form label { 
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+ }
+.contact .notes .wp-editor-wrap, #salesnotes {
+    width: 49% !important;
+}
+.day { 
+    flex: 0 0 150px;
+    padding: 1px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.slotblock { width: 100%; }
+.slot h3, .slot h4, .slot p { 
+    margin: 1rem 0 !important;
+    color: #FFFFFF;
+ }
+.slot {
+    margin: 5px 0 0 0;
+    padding: 10px 5px;
+    color: #FFFFFF;
+    border-radius: 5px;
+    cursor: pointer;
+	display: block;
+}
+
+.calendar {
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    border-right: 1px solid rgba(0, 0, 0, .5);
+    width: 100%;
+}
+.calendar-item {
+    display: block;
+    height: 5px;
+}
+.calendar-control {
+    background-color: rgb(225, 225, 225);
+    border: 1px solid rgba(170, 170, 170, .7);
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 12px;
+}
+.calendar-control[data-calendar-control="prev"] {  float: left;  }
+.calendar-control[data-calendar-control="next"] {  float: right;  }
+@media only screen and (max-width: 959px) { 
+    .day {    flex: 0 0 auto;   }
+    .discounts, .other { padding: 0 10px 0 0;  }
+	.slotblock {
+		display: flex;
+		justify-content: space-around;
+	}
+    .slot {
+        margin: 3px 0 0 0;
+        padding: 0 5px;
+    }
+    .day h2 { margin: 0 !important; }
+}

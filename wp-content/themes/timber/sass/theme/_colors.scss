@@ -1,0 +1,37 @@
+// Brand colors are defined here, these should not be used directly but should be defined as layout colors.
+// All variable names are generated using this tool: http://chir.ag/projects/name-that-color/
+// I made a simpler version: https://woutmager.nl/fiftyshades/
+$color--science-blue: #0067c5;
+$color--red: #f00;
+
+
+// Neutral colors. $color-gray-13 Means '13% gray'.
+// No medium grays please, they're bad for readibility.
+// Read more about color in design systems here: https://medium.com/eightshapes-llc/color-in-design-systems-a1c80f65fa3#.w5cudfcy9
+// Found this gem for colorname: http://chir.ag/projects/name-that-color/#6195ED
+// Built my own variable generator for greys & colors: https://woutmager.nl/fiftyshades/
+$color--white: #fff;
+$color--gray-02: #f7f9f9;
+$color--gray-13: #ddd;
+$color--gray-15: #d9d9d9;
+$color--gray-35: #a5a5a5;
+$color--gray-47: #888;
+$color--gray-87: #222;
+$color--black: #000;
+
+
+// Layout colorset
+// This is the main set. Add more sets to group colors if appropriate.
+// This keeps the colors readable for other people.
+$body-bg:       $color--white;
+$body:          $color--gray-87;  // Should not be #000 for people with dyslexia: http://uxmovement.com/content/6-surprising-bad-practices-that-hurt-dyslexic-users/
+$link:          $color--science-blue;  // Depending on the audience a blue, or another color
+$nav-bg:        $color--white;
+$border:        $color--gray-35;
+$mute:          $color--gray-35;
+$mute--hover:   $color--gray-47;
+
+
+// Feedback colorset
+$alert: $color--red;
+$error: $color--red;

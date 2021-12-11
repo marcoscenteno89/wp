@@ -1,0 +1,31 @@
+/* 
+Author: Marcos Centeno
+Description: this style sheet contains all the basic core styles for themes and plugins
+Version: 1.0.0
+*/
+/* POP UP STYLES */
+#background {
+  justify-content: center;
+  align-items: center;
+}
+#popup > .close {
+  border: 1px solid #FFF;
+	background-color: #ec008c;
+	color: #FFF;
+}
+#popup .heading {
+	background-color: #017d87;
+	color: #FFF;
+	padding: 2rem 0;
+	margin: 0;
+}
+#popup .body {
+	background-color: #FFF;
+	color: #017d87;
+	padding: 1rem;
+}
+@media screen and (max-width: 970px) {
+  #main-nav ul.active { 
+    background: rgba(255, 255, 255, 0.7);
+  }
+}

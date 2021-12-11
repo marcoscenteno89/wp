@@ -1,0 +1,198 @@
+// Container for comments
+.comments-area {
+    margin-top: pt(4);
+
+    ol {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        ol {
+            margin-top: pt(2);
+        }
+    }
+}
+
+#reply-title {
+    margin: 0 0 pt(4);
+}
+
+
+// A comment, trackback, pingback or response
+.comment,
+.trackback,
+.pingback,
+#respond {
+    width: 100%;
+    padding: pt(2) 0;
+    position: relative;
+    border-bottom: 2px solid $border;
+    background: transparent;
+
+    .children .comment.depth-2 {
+        margin-bottom: pt(4);
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    @media (min-width: $mq--lap) {
+        margin: 0 0 pt(2);
+        padding: pt(4);
+        border: 1px solid $border;
+    }
+}
+
+#respond {
+    margin-bottom: 0;
+}
+
+.fn {
+    font-style: normal;
+
+    a {
+        color: $mute--hover;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}
+
+
+// The comment body
+.comment__body {
+    word-break: break-word;
+}
+
+
+// The author name
+.comment__author {
+    width: 100%;
+    font-weight: bold;
+    line-height: 32px;
+
+    @media (min-width: $mq--lap) {
+        margin-bottom: pt(4);
+        font-weight: normal;
+    }
+}
+
+
+// The avatar
+.avatar {
+    width: auto;
+    height: auto;
+    float: right;
+    border-radius: 0;
+    box-shadow: $shadow;
+
+    @media (min-width: $mq--lap) {
+        margin-right: pt(2);
+        float: none;
+        vertical-align: top;
+    }
+}
+
+
+// Text
+.says {
+
+}
+
+
+// Comment meta info
+.comment__meta {
+    font-size: $fs-meta;
+
+    @media (min-width: $mq--lap) {
+        padding-top: 20px;
+        position: absolute;
+        top: 0;
+        right: pt(4);
+        line-height: 32px;
+    }
+
+    a {
+        color: $mute;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            color: $mute--hover;
+        }
+    }
+}
+
+.reply {
+
+}
+
+
+// The nr. of responses
+.comments-area__header {
+    margin: 0 0 pt(4);
+}
+
+.comments-area__list {
+
+}
+
+.comment__author__admin,
+.bypostauthor {
+}
+
+
+// Replies
+.children {
+    margin-bottom: 0;
+    padding: 0;
+    list-style-type: none;
+
+    .comment {
+        margin: 0;
+        padding: pt(2) 0 0 pt(2);
+        border-top: 1px solid $border;
+        border-bottom: 0;
+
+        @media (min-width: $mq--lap) {
+            padding: pt(2);
+            border-bottom: 1px solid $border;
+        }
+    }
+}
+
+
+// Link for replying
+.comment__reply__link {
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+
+// Text
+.logged-in-as {
+
+}
+
+.form__submit {
+    @extend %formrow;
+    margin: 0;
+}
+
+
+//
+.comment-form {
+
+    p {
+        margin-top: 0;
+        margin-bottom: pt(2);
+    }
+}

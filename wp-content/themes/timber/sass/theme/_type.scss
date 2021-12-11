@@ -1,0 +1,60 @@
+// Define font families here.
+// For practical browser support use woff2 & woff. See https://css-tricks.com/snippets/css/using-font-face/
+// This is a good font-face generator: https://www.fontsquirrel.com/tools/webfont-generator
+// Font-files should be placed in the fonts directory
+// Use google fonts locally for a better pagespeed score.
+@font-face {
+    font-family: 'Lato';
+    src: url('/fonts/lato-regular.woff2') format('woff2'),
+         url('/fonts/lato-regular.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
+    font-style: normal;
+}
+
+
+// Font sizes & related stuff
+$lh: 1.8;                        // Default line height. Use unitless line-heights! https://css-tricks.com/almanac/properties/l/line-height/
+$fs-def: pt(2);                  // Font size - default
+$fs-meta: pt(1.5);               // Font size - meta
+
+
+// Define font families here
+$ff--def: 'Lato', Arial, Verdana, sans-serif;        // Default font family
+
+
+// Header sizes
+$h1: 3 * $fs-def;
+$h2: 2 * $fs-def;
+$h3: 1.5 * $fs-def;
+$h4: 1 * $fs-def;
+$h5: 1 * $fs-def;
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    line-height: 1.1;
+    text-rendering: optimizeLegibility;
+    word-break: break-word;
+
+    a {
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}
+
+
+// Code snippet
+code {
+    padding-right: pt(1);
+    padding-left: pt(1);
+    display: inline-block;
+    background: rgba($mute, .25);
+    border-radius: $radius;
+}

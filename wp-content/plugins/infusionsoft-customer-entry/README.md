@@ -1,0 +1,1 @@
+Web project that is meant to be used as a public sales entry

@@ -1,0 +1,134 @@
+// Regular table
+.table {
+    width: 100%;
+    margin: pt(4) 0;
+    border: 1px solid $border;
+    border-spacing: 0;
+
+    tr {
+
+        &:last-child {
+
+            th,
+            td {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    th,
+    td {
+        padding: pt(1);
+        border-bottom: 1px solid $border;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    th {
+        background-color: $border;
+    }
+
+
+
+    // Responsive table
+    &--responsive {
+        position: relative;
+        display: block;
+        clear: both;
+        border: 0;
+        border-spacing: 0;
+        border-collapse: collapse;
+
+        @media (min-width: $mq--lap) {
+            display: table;
+        }
+
+        thead {
+            display: block;
+            border: 1px solid $border;
+            vertical-align: middle;
+
+            @media (min-width: $mq--lap) {
+                display: table-header-group;
+                float: none;
+            }
+
+            tr {
+                display: block;
+
+                @media (min-width: $mq--lap) {
+                    display: table-row;
+                    border-right: 0;
+                }
+            }
+
+            th {
+                display: block;
+                border-bottom: 1px solid $border;
+
+                @media (min-width: $mq--lap) {
+                    display: table-cell;
+                }
+
+                &:last-child {
+                    border-bottom: 0;
+
+                    @media (min-width: $mq--lap) {
+                        border-bottom: 1px solid $border;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            width: auto;
+            position: relative;
+            display: block;
+            overflow-x: auto;
+            font-size: 0;
+            white-space: nowrap;
+            word-wrap: normal;
+
+            @media (min-width: $mq--lap) {
+                display: table-row-group;
+                overflow: visible;
+                border: 1px solid $border;
+                font-size: $fs-def;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+        }
+
+        tr {
+            display: inline-block;
+            border: 1px solid $border;
+            border-left: 0;
+            font-size: $fs-def;
+            vertical-align: top;
+
+            @media (min-width: $mq--lap) {
+                margin: 0;
+                display: table-row;
+                border-right: 0;
+            }
+
+            th,
+            td {
+                display: block;
+                border-bottom: 1px solid $border;
+
+                @media (min-width: $mq--lap) {
+                    display: table-cell;
+                }
+
+                &:last-child {
+                    border-bottom: 0;
+
+                    @media (min-width: $mq--lap) {
+                        border-bottom: 1px solid $border;
+                    }
+                }
+            }
+        }
+    }
+}

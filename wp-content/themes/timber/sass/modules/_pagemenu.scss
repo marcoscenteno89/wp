@@ -1,0 +1,63 @@
+// The menu holding siblings on a page
+.pagemenu {
+
+    @media (min-width: $mq--lap) {
+        margin-bottom: pt(4);
+        display: block;
+        clear: none;
+        border: 1px solid $border;
+    }
+
+    ul {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        border: 1px solid $border;
+
+        @media (min-width: $mq--lap) {
+            border: 0;
+        }
+    }
+
+    li {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: block;
+        background: transparent;
+
+        @media (min-width: $mq--lap) {
+            margin-bottom: 0;
+        }
+
+        &:last-child {
+
+            a {
+                border: 0;
+            }
+        }
+    }
+
+    a {
+        padding: pt(2);
+        display: block;
+
+        @media (min-width: $mq--lap) {
+            border-bottom: 1px solid $border;
+            background: transparent;
+        }
+
+        &:hover,
+        &:focus {
+            background: $border;
+        }
+    }
+
+    .current_page_item {
+
+        a {
+            background: $border;
+        }
+    }
+}

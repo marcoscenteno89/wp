@@ -1,0 +1,102 @@
+// Images used in posts
+%postimage {
+    width: 100%;
+    height: auto;
+    margin: pt(2) 0;
+    display: block;
+    border-radius: 0;
+    box-shadow: $shadow;
+}
+
+// Row in a form
+%formrow {
+    width: 100%;
+    margin-bottom: pt(2);
+    clear: both;
+
+    @media (min-width: $mq--lap) {
+        margin-bottom: pt(4);
+    }
+
+    &:last-child {
+    }
+
+    &.error {
+        margin-bottom: 0;
+        padding: pt(2);
+        border-radius: $radius;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        box-shadow: $shadow;
+        background: $alert;
+        color: $color--white;
+
+        @media (min-width: $mq--lap) {
+            width: 50%;
+        }
+    }
+
+    .textarea + .error {
+        width: 100%;
+    }
+}
+
+// Post summary
+%post {
+    width: 100%;
+    margin-bottom: pt(4);
+    opacity: 1;
+    transition: opacity .2s ease;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    ul {
+        padding-left: 40px;
+    }
+
+    .post-thumb {
+        display: none;
+
+        @media (min-width: $mq--lap) {
+            width: 87px;
+            height: 68px;
+            margin-right: pt(2);
+            position: relative;
+            display: block;
+            overflow: hidden;
+
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: 0;
+            }
+        }
+    }
+}
+
+// Extendable for a primary button
+// Handy if buttons with other html want to use the same styling
+%btn-primary {
+    background: grey;
+}
+
+//
+%column {
+
+    @media (max-width: $mq--lap) {
+        margin-bottom: pt(4);
+    }
+
+    @media (min-width: $mq--lap) {
+        display: grid;
+        grid-gap: pt(3);
+        grid-auto-flow: dense;
+    }
+}

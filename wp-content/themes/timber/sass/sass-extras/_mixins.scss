@@ -1,0 +1,27 @@
+// Zeldman text replace
+// http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/
+@mixin text--hide() {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    word-wrap: normal;
+}
+
+
+// Unreplace Zeldman
+@mixin text--show() {
+    text-indent: 0;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
+}
+
+
+// Hide elements visually, but not for screenreaders
+@mixin screenreader--hide() {
+    height: 1px;
+    width: 1px;
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}

@@ -1,0 +1,156 @@
+// WP image align classes
+.alignnone {
+    @extend %postimage;
+
+    @media (min-width: $mq--palm) {
+        width: auto;
+        max-width: 100%;
+        margin: pt(4) pt(4) pt(4) 0;
+    }
+}
+
+.aligncenter,
+div.aligncenter {
+    @extend %postimage;
+
+    @media (min-width: $mq--palm) {
+        margin: pt(4) auto;
+        display: block;
+    }
+}
+
+.alignright {
+    @extend %postimage;
+
+    @media (min-width: $mq--palm) {
+        width: auto;
+        margin: 0 0 pt(4) pt(4);
+        float: right;
+    }
+}
+
+.alignleft {
+    @extend %postimage;
+
+    @media (min-width: $mq--palm) {
+        width: auto;
+        margin: 0 pt(4) pt(4) 0;
+        float: left;
+    }
+}
+
+a img {
+    @extend %postimage;
+
+    &.alignright {
+
+        @media (min-width: $mq--palm) {
+            width: auto;
+            margin: pt(4) 0 pt(4) pt(4);
+            float: right;
+        }
+    }
+
+    &.alignnone {
+
+        @media (min-width: $mq--palm) {
+            width: auto;
+            margin: pt(4) pt(4) pt(4) 0;
+        }
+    }
+
+    &.alignleft {
+
+        @media (min-width: $mq--palm) {
+            width: auto;
+            margin: pt(4) pt(4) pt(4) 0;
+            float: left;
+        }
+    }
+
+    &.aligncenter {
+
+        @media (min-width: $mq--palm) {
+            margin-right: auto;
+            margin-left: auto;
+            display: block;
+        }
+    }
+}
+
+
+// WP images with a caption
+.wp-caption {
+    @extend %postimage;
+    margin: pt(2) 0;
+    padding: pt(2);
+    border: 1px solid $border;
+    border-radius: 0;
+    background: $color--white;
+    text-align: center;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        margin: 0 0 pt(2);
+        padding: 0;
+        display: block;
+        border: 0 none;
+
+        @media (min-width: $mq--palm) {
+            max-width: auto;
+        }
+    }
+
+    @media (min-width: $mq--palm) {
+        width: auto;
+        max-width: none;
+    }
+
+    p.wp-caption-text {
+        margin: pt(2) 0 0;
+        display: block;
+        font-size: $fs-meta;
+    }
+
+
+    &.alignnone {
+
+        @media (min-width: $mq--palm) {
+            width: auto !important;
+            max-width: 100% !important;
+            margin: pt(4) 0;
+        }
+    }
+
+    &.alignleft {
+
+        @media (min-width: $mq--palm) {
+            margin: 0 pt(4) pt(4) 0;
+        }
+    }
+
+    &.alignright {
+
+        @media (min-width: $mq--palm) {
+            margin: 0 0 pt(4) pt(4);
+        }
+    }
+}
+
+
+// A post thumbnail
+.post-thumbnail {
+    @extend %postimage;
+
+    @media (min-width: $mq--palm) {
+        width: auto;
+        margin: pt(4) 0;
+    }
+
+    @media (min-width: $mq--palm) {
+        margin: 0 0 pt(4) pt(4);
+        float: right;
+    }
+}

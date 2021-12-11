@@ -1,0 +1,16 @@
+{% extends "base/base.twig" %}
+{% block content %}
+  <div class="l-cs">
+    <main role="main">
+      <h1 class="main__header">
+        Search Results For: '{{ searchterm }}'
+      </h1>
+      <div class="main__content">
+        {% for item in posts %}
+          {% include 'modules/post-excerpt.twig' %}
+        {% endfor %}
+        {% include 'modules/pagination.twig' %}
+      </div>
+    </main>
+  </div>
+{% endblock %}

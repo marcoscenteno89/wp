@@ -1,0 +1,47 @@
+// The form
+.searchform {
+    width: 100%;
+    padding: pt(2);
+    position: relative;
+    display: none;
+    clear: both;
+
+
+    // Search form fieldset
+    &__container {
+        margin: 0;
+        padding: 0;
+        line-height: 40px;
+    }
+
+
+    // Hiding the label, but not for screenreaders
+    &__container__label {
+        @include screenreader--hide;
+    }
+
+
+    // When in header
+    .l-header & {
+
+        @media (min-width: $mq--lap) {
+            width: 30%;
+            padding: 0;
+            display: block;
+            clear: none;
+            background: transparent;
+            text-align: left;
+        }
+
+
+        // The search input
+        .searchform__container__field {
+            width: 100%;
+            clear: both;
+
+            @media (min-width: $mq--lap) {
+                width: 70%;
+            }
+        }
+    }
+}

@@ -1,0 +1,130 @@
+// Input sizes
+input,
+textarea {
+    width: 100%;
+    padding: pt(1);
+    font-size: $fs-def;
+    font-family: $ff--def;
+}
+
+textarea {
+    height: pt(12);
+}
+
+input[type="file"] {
+    padding: 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+}
+
+input[type="submit"] {
+
+    @media (min-width: $mq--lap) {
+        width: auto;
+    }
+}
+
+input[type="search"] {
+    box-sizing: border-box;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+
+// The form
+.main form {
+}
+
+.formcontainer {
+    margin: 0;
+    padding: 0;
+    clear: both;
+    border: 0;
+
+    @media (min-width: $mq--lap) {
+        width: 100%;
+    }
+}
+
+
+// A single row
+.form-row {
+    @extend %formrow;
+
+    // Form field explanation. Using a small element is preferrable
+    .input-exp {
+        display: block;
+        font-size: $fs-meta;
+    }
+}
+
+
+// All labels or add a class to other elements
+label,
+.label {
+    width: 100%;
+    display: block;
+    clear: both;
+    cursor: pointer;
+
+    small {
+        font-size: 100%;
+    }
+}
+
+
+// Label with a radio or checkbox
+// Parent should be a fieldset with a legend
+.choice {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    position: relative;
+
+    > input {
+        margin-right: pt(1);
+        flex-shrink: 0;
+    }
+}
+
+
+// Other elements
+#screenreader,
+#loading {
+    display: none;
+}
+
+
+// Required style
+.req {
+    font-size: $fs-def;
+    color: $mute;
+}
+
+
+// Error messages
+.parsley-error {
+
+    &-list {
+        display: none;
+    }
+}
+
+.error,
+.filled {
+    margin: 0;
+    padding: 0;
+    display: block;
+    color: $error;
+
+    > li {
+        margin: 0;
+    }
+}
