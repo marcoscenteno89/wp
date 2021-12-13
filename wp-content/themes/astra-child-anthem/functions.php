@@ -107,7 +107,7 @@ function fz_agile_token() {
     if ($token === '') {
       require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
       $api['request'] = 'POST';
-      $api['url'] = 'http://live.agileisp.com/api/auth-token/';
+      $api['url'] = 'https://agileisp.com/api/auth-token/';
       $api['header'] = array('Content-Type: application/json; charset=utf-8');
       $api['body'] = json_encode([
         'username' => get_option( 'ab_agile_username' ),

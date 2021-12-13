@@ -16,7 +16,8 @@ function form(form,  onTabChange=false) {
     var compiledValues = [];
 
     // CUSTOM FUNCTIONS
-    const switchTab = async (o, event) => {
+    const switchTab = async (o, event, force=false) => {
+      // console.log(force);
       o.current.step.classList.remove('completed', 'cannot-skip', 'skipped', 'incomplete');
       let nextStage = parseInt(event.target.getAttribute('data-step'));
       let thisTab = validate(o.current.tab);
@@ -61,7 +62,7 @@ function form(form,  onTabChange=false) {
         if (finalStep) {
           let completedSteps = o.stage.filter(i => i.status === 'completed');
           let skippedSteps = o.stage.filter(i => i.status === 'skipped');
-          if (completedSteps.length < o.stage.length) {
+          if (completedSteps.length < o.stage.length && !force) {
             let header = '<h2 class="heading flex-center">Attention</h2>';
             let cursStatus = ''
             let l = o.stage;
@@ -90,7 +91,7 @@ function form(form,  onTabChange=false) {
               elem.addEventListener('click', async (event) => {
                 prompt({ remove: true });
                 event.preventDefault();
-                await switchTab(o, event);
+                await switchTab(o, event, force=true);
               });
             });
             return false;

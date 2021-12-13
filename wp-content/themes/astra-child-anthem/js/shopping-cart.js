@@ -155,48 +155,48 @@ const onTabChange = async data => {
 	mainBtn.innerHTML = loader;
 	mainBtn.disabled = true;
   data.forEach(i => thisTab[i.field.name] = i.value);
-  // if (thisTab.agile_contact) {
-  //   let token = await getToken();
-  //   let ifs = await infusionsoftSubmit(thisTab);
-  //   if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
-  //   let agileSearch = await agileLookup(token, thisTab);
-  //   thisTab = agileSearch.data;
-  //   let agileContact = await agileSubmit(token, thisTab);
-  //   if (values.create_account === true) {
-  //     if (agileContact.account) {
-  //       thisTab.account_id = agileContact.account.id;
-  //     }
-  //     if (agileContact.contact) {
-  //       thisTab.contact_id = agileContact.contact.id;
-  //     }
-  //   }
-  //   let i = thisTab;
-  //   if (document.querySelector('#vac')) {
-  //     let vac = document.querySelector('#vac');
-  //     vac.innerHTML = `${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}`;
-  //   } 
-  //   for (let fi of document.querySelectorAll('[name="email"]')) {
-  //     if (fi.type === 'hidden') fi.value = thisTab.email;
-  //   }
-  //   delete thisTab.agile_contact;
-  //   delete thisTab.tags;
-  // }
-  // if (thisTab.agile_schedule) {
-  //   let token = await getToken();
-  //   let schedule = await agileScheduleLookup(token, thisTab.contact_id);
-  //   getSchedule(values.availability);
-  //   delete values.agile_schedule;
-  // }
-	// if (thisTab.package) {
-	// 	values.products.push(parseInt(thisTab.package));
-	// 	delete thisTab.package;
-	// }
-	// if (thisTab.tags) {
-	// 	if (thisTab.tags !== '') {
-	// 		let addons = await infusionsoftSubmit({email:thisTab.email, tags: thisTab.tags});	
-	// 	}
-	// 	delete thisTab.tags;
-	// }
+  if (thisTab.agile_contact) {
+    let token = await getToken();
+    let ifs = await infusionsoftSubmit(thisTab);
+    if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
+    let agileSearch = await agileLookup(token, thisTab);
+    thisTab = agileSearch.data;
+    let agileContact = await agileSubmit(token, thisTab);
+    if (values.create_account === true) {
+      if (agileContact.account) {
+        thisTab.account_id = agileContact.account.id;
+      }
+      if (agileContact.contact) {
+        thisTab.contact_id = agileContact.contact.id;
+      }
+    }
+    let i = thisTab;
+    if (document.querySelector('#vac')) {
+      let vac = document.querySelector('#vac');
+      vac.innerHTML = `${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}`;
+    } 
+    for (let fi of document.querySelectorAll('[name="email"]')) {
+      if (fi.type === 'hidden') fi.value = thisTab.email;
+    }
+    delete thisTab.agile_contact;
+    delete thisTab.tags;
+  }
+  if (thisTab.agile_schedule) {
+    let token = await getToken();
+    let schedule = await agileScheduleLookup(token, thisTab.contact_id);
+    getSchedule(values.availability);
+    delete values.agile_schedule;
+  }
+	if (thisTab.package) {
+		values.products.push(parseInt(thisTab.package));
+		delete thisTab.package;
+	}
+	if (thisTab.tags) {
+		if (thisTab.tags !== '') {
+			let addons = await infusionsoftSubmit({email:thisTab.email, tags: thisTab.tags});	
+		}
+		delete thisTab.tags;
+	}
 	for (let key in thisTab) values[key] = thisTab[key];
 	mainBtn.disabled = false;	
 }
@@ -224,8 +224,8 @@ const verifyAddress = async (firstTry=true) => {
         Products:<br>
         ${or}
       `;
-      // let agileWo = await scheduleWo(token, values);
-      let agilewb = await workbook(token, values);
+      let agileWo = await scheduleWo(token, values);
+      //let agilewb = await workbook(token, values);
       mainBtn.innerHTML = temp;
       mainBtn.disabled = false;			
       let content = `

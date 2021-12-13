@@ -1,5 +1,5 @@
-// const agileUrl = 'https://agileisp.com/api/';
-const agileUrl = 'http://live.agileisp.com/api/';
+const agileUrl = 'https://agileisp.com/api/';
+// const agileUrl = 'http://live.agileisp.com/api/';
 // const agileUrl = 'http://localhost:8000/api/';
 const values = {
   create_account: true,

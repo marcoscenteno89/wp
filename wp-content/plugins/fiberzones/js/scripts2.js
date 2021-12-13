@@ -115,60 +115,59 @@ const custVerifyAddress = async (firstTry=true) => {
 			}
 		}
 	}
-    let token = await getToken();
-    if (firstTry == false) {
-        manual.classList.remove('hidden');
-        formStatus.innerHTML = `
-			<h5>We could not find your address or you are located outside of our active service area.</h5> 
-        	<p style="color:#000;">Please use a different method to locate your location.</p>
-		`;
+  let token = await getToken();
+  if (firstTry == false) {
+    manual.classList.remove('hidden');
+    formStatus.innerHTML = `
+      <h5>We could not find your address or you are located outside of our active service area.</h5> 
+      <p style="color:#000;">Please use a different method to locate your location.</p>
+    `;
+  }
+  form(verForm).then( async val => {
+    let newVal = {};
+    for (let i in val) {
+      newVal[val[i].name] = val[i].field.value;
     }
-    form(verForm).then( async val => {
-		let newVal = {};
-		for (let i in val) {
-			newVal[val[i].name] = val[i].field.value;
-		}
-        address.string = `${newVal.line1}, ${newVal.locality}, ${newVal.region} ${newVal.postal_code}`;
-        address.address = newVal.line1;
-        address.city = newVal.locality;
-        address.state = newVal.region;
-        address.zip = newVal.postal_code;
-        
-		let status = await widthinZone({addr: address, token: token});
-		console.log(status);
-		let i = address;
-		if (status.result.length > 0) {
-			if (formEx) {
-				formEx.cnt = parseInt(formEx.cnt) + 1;
-			} else {
-				formEx = {
-					cnt: 1,
-					disabled: false
-				}
-			}
-			
-// 			if (formEx.cnt > 2) {
-// 				if (!formEx.disabled) {
-// 					let dt = new Date();
-// 					dt.setHours( dt.getHours() + 1 );
-// 					formEx.disabled = true;
-// 					formEx.exp = dt;
-// 				}
-// 			}
-			
-			let j = `${verForm.action}?`;
-			localStorage.setItem("formex", JSON.stringify(formEx));
-			sendData(`
-				${j}address=${i.address}&city=${i.city}
-				&state=${i.state}&zip=${i.zip}
-				&status=${status.result[0].status}
-				${utmString}
-			`);
-		} else {
-			
-			custVerifyAddress(firstTry=false);
-		}
-    });
+    address.string = `${newVal.line1}, ${newVal.locality}, ${newVal.region} ${newVal.postal_code}`;
+    address.address = newVal.line1;
+    address.city = newVal.locality;
+    address.state = newVal.region;
+    address.zip = newVal.postal_code;
+          
+    let status = await widthinZone({addr: address, token: token});
+    console.log(status);
+    let i = address;
+    if (status.result.length > 0) {
+      if (formEx) {
+        formEx.cnt = parseInt(formEx.cnt) + 1;
+      } else {
+        formEx = {
+          cnt: 1,
+          disabled: false
+        }
+      }
+      
+  // 			if (formEx.cnt > 2) {
+  // 				if (!formEx.disabled) {
+  // 					let dt = new Date();
+  // 					dt.setHours( dt.getHours() + 1 );
+  // 					formEx.disabled = true;
+  // 					formEx.exp = dt;
+  // 				}
+  // 			}
+      
+      let j = `${verForm.action}?`;
+      localStorage.setItem("formex", JSON.stringify(formEx));
+      sendData(`
+        ${j}address=${i.address}&city=${i.city}
+        &state=${i.state}&zip=${i.zip}
+        &status=${status.result[0].status}
+        ${utmString}
+      `);
+    } else {
+      custVerifyAddress(firstTry=false);
+    }
+  });
 }
 function initMap() {
 	const navElements = []
