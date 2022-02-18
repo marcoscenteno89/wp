@@ -1,4 +1,5 @@
 const agileUrl = 'https://agileisp.com/api/';
+// const agileUrl = 'https://testlb.agileisp.com/api/';
 // const agileUrl = 'http://live.agileisp.com/api/';
 // const agileUrl = 'http://localhost:8000/api/';
 const values = {
@@ -33,6 +34,7 @@ const updateToken = token => {
     url: agile_token.ajax_url
   }
   return ajax(api).then(res => {
+    console.log(res);
     localStorage.setItem("agiletoken", res.token);
     return res.token;
   });

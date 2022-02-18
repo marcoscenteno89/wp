@@ -8,7 +8,7 @@ Template: astra
 .multi-step :is(input[type=text], input[type=email], input[type=number], input[type=tel], textarea, select, .btn),
 .ifs-form :is(input[type=text], input[type=email], input[type=number], input[type=tel], textarea, select, .btn),
 .shopping-cart :is(input[type=text], input[type=email], input[type=number], input[type=tel], textarea, select, .btn) {
-    max-width: 500px;
+  max-width: 500px;
 	width: 100%;
 }
 .elementor hr {
@@ -22,28 +22,28 @@ Template: astra
 	color: #FFF !important;
 }
 .cta {
-    background-color: #ec008c !important;
+  background-color: #ec008c !important;
 }
 .cta:hover {
-    background-color: #af0068;
+  background-color: #af0068;
 }
 .primary {
-    background-color: #017d87 !important;
+  background-color: #017d87 !important;
 }
 .primary:hover {
-    background-color: #015b62;
+  background-color: #015b62;
 }
 .secondary {
-    background-color: #494949 !important;
+  background-color: #494949 !important;
 }
 .secondary:hover {
-    background-color: #373737;
+  background-color: #373737;
 }
 .yellow {
-    background-color: #e7c418 !important;
+  background-color: #e7c418 !important;
 }
 .yellow:hover {
-    background-color: #a88e11;
+  background-color: #a88e11;
 }
 .red {
 	background-color: #ec1844 !important;
@@ -67,15 +67,10 @@ Template: astra
 	justify-content: center;
 	flex-wrap: wrap;
 	align-items: flex-start;
+  padding-bottom: 3rem;
 }
 .packages input {
 	display: none;
-}
-.packages .paq .hover { 
-	width: 100%; 
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 }
 .packages .paq {
 	background-color: #009eae;
@@ -84,24 +79,36 @@ Template: astra
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	max-width: 200px;
+	max-width: 180px;
 	text-align: center;
-	margin: 1.8vw 0.5vw;
+	margin: 0 1.5rem 3rem 1.5rem;
 	position: relative;
-	overflow: hidden;
 	border-radius: 5px 5px 0 0;
 }
 .packages .paq.active {
 	background-image: linear-gradient(to bottom, #009eae, #ec008c);
+}
+.packages input[type="radio"]:checked + label.active::after {
+  background-color: #ec008c;
 }
 .packages .paq:hover {
 	transform: scale(1.03);
 	box-shadow: 0 0 15px rgba(0,0,0,.5);
 	cursor: pointer;
 }
-.packages > input[type="radio"]:checked + label, .packages > input[type="checkbox"]:checked + label {
-	transform: scale(1.05);
-	box-shadow: 0 0 20px rgba(0,0,0, 1);
+.packages > input[type="radio"]:checked + label {
+	transform: scale(1.1);
+	box-shadow: 0 0 25px rgba(0,0,0,1);
+}
+.packages input[type="radio"]:checked + label::after {
+  position: absolute;
+  content: '';
+  top: 102%;
+  background-color: #009eae;
+  height: 10px;
+  width: 100%;
+  left: 0;
+  box-shadow: 0 0 25px rgba(0,0,0,1);
 }
 .packages .paq .anim-container {
 	background-color: #FFF;
@@ -110,18 +117,19 @@ Template: astra
 	justify-content: center;
 	align-items: center;
 	position: relative;
+  overflow: hidden;
 }
 .packages .paq .anim-container .hide {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	top: 0;
-	left: 100%;
 	background-color: #FFF;
-	transition: left 0.5s linear;
+  transition: left 1s linear;
+  opacity: 0.9;
 }
 .packages .paq:hover .anim-container .hide {
-	left: 0;
+  left: 0% !important;
 }
 .packages .paq .anim-container .anim {
 	display: flex;
@@ -156,21 +164,23 @@ Template: astra
 	transform: skewY(10deg);
 }
 .packages .paq .container {
-	margin: 0 0 0 10%;
+  padding: 0.5rem !important;
 	text-align:left;
 	align-self: start;
 }
 .packages .paq .amount {  
 	color: #FFF;
 	padding: 0;
+  margin-bottom: 0.5rem;
 }
 .packages .paq .symbol, .packages .paq .mo {  
 	font-size: 2rem; 
 	font-weight: 600;
 }
-.packages .paq .content {display: none;}
+.packages .paq .content {
+  display: none;
+}
 .packages .paq .contains { 
-	margin-top: 7px;
 	min-height: 29px;
 }
 .packages .paq .show-content {
@@ -193,45 +203,49 @@ Template: astra
 	transition: 0.5s linear;
 }
 .packages .paq .din-content {
-	padding: 0 1rem;
+	padding: 0 0.5rem;
 	font-size: 0.7rem !important;
 	color: #FFF;
 }
 .packages .paq .din-content p { margin: 0 0 8px 0; }
 .packages .paq .action {
 	width: 80%;
-    border: none;
+  border: none;
 	border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 900;
-    background-color: #FFF;
+  font-size: 1rem;
+  font-weight: 900;
+  background-color: #FFF;
 	color: #efc837;
-    margin: 0.5rem 0 1rem 0;
-    padding: 7px 0;
-    text-decoration: none;
+  margin: 0.5rem 0 1rem 0;
+  padding: 7px 0;
+  text-decoration: none;
+}
+.packages input[type="radio"]:checked + label .action {
+  color: #fff;
+  background-color: #ec008c;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 .packages .paq .main {
 	background-color: #ec008c;
 	color: #FFF;
 	box-shadow: 0 0 5px rgba(0,0,0,.5);
-	padding: 7px 0;
+	padding: 5px 0;
 	width: 90%;
-	margin: 0 0 1rem 0;
+	margin: 0 0 0.5rem 0;
 }
 /* FORM */
 
-
 /* CALENDAR */
 .calendar-content {
-    max-width: 900px;
+  max-width: 900px;
 	width: 100%;
-    background: #fff;
-    padding: 1rem;
-    border: solid 1px #eee;
-    border-radius: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
+  background: #fff;
+  padding: 1rem;
+  border: solid 1px #eee;
+  border-radius: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
 }
 .calendar-content input[type="radio"] {
 	display: none;

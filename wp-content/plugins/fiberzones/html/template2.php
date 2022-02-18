@@ -109,7 +109,7 @@
 			  <div class="package">
 				  <h5>2GB/2GB</h5>
 				  <span>only</span>
-				  <h2>$299</h2>
+				  <h2>$249</h2>
 				  <ul>
 					  <li>No construction fee</li>
 					  <li>No installation fee</li>
@@ -260,6 +260,9 @@
         <p>Nevertheless, our business has undergone a significant transformation in the last few years that has justified a new brand that will better reflect where the company is and where we plan to be in the future. Anthem has been designed to reflect what our original mark stood for while simultaneously moving the brand forward, acknowledging our new company culture and our focus on, and dedication to, the future of internet technologies.</p>
         <p>In this sense, Anthem represents an evolution from our previous experience, origins, and roots to also reflect our focus on the future and our driving passion of using the very best technologies to connect communities to what matters most to them, whether that be work, family, school, shopping, hobbies, games, and more. We encourage everyone to join the Anthem and find their voice in this digital era where the world is at your fingertips.  </p>
       </section>
+	  <footer style="text-align:center;">
+		<p>Copyright © <?php echo date('Y'); ?> Anthem Broadband. All rights reserved</p>
+	  </footer>
     </div>
     <div class="col-3 sidebar flex-col">
       <div class="form-area flex-col">
@@ -267,26 +270,30 @@
         <p style="color:#212529;">Enter your address to get started</p>
         <form action="/signup" class="verify-address" id="verify-address">
           <div class="tabs">
-            <div class="steps"></div>
+			<div class="steps"></div>
             <div class="tab" data-props='{"name":"Check Address","numerate":true,"validate":true}'>
-              <input type="hidden" class="form-input" name="utm_adgroup" value="">
-              <input type="hidden" class="form-input" name="utm_campaign" value="">
-              <input type="hidden" class="form-input" name="utm_source" value="">
-              <input type="hidden" class="form-input" name="utm_medium" value="">
-              <input type="hidden" class="form-input" name="utm_term" value="">
-              <input type="hidden" class="form-input" name="utm_content" value="">
+              <input type="hidden" class="form-input" name="utm_adgroup" value="*">
+              <input type="hidden" class="form-input" name="utm_campaign" value="*">
+              <input type="hidden" class="form-input" name="utm_source" value="organic">
+              <input type="hidden" class="form-input" name="utm_medium" value="*">
+              <input type="hidden" class="form-input" name="utm_term" value="*">
+              <input type="hidden" class="form-input" name="utm_content" value="*">
               <input required type="text" class="form-input" name="line1" placeholder="Street">
               <input required type="text" class="form-input" name="locality" placeholder="City">
               <input required type="text" class="form-input" name="region" placeholder="State">
               <input required type="text" class="form-input" name="postal_code" placeholder="Zip Code">
             </div>
-            <div class="controller fullwidth">
+            <div class="controller">
               <div class="status"></div>
               <button name="next" id="btn" class="btn cta">Check Now</button>
               <button class="btn hidden secondary" id="manual">Add location manually</button>
               <button class="btn hidden secondary" id="manualsubmit">Submit Address</button>
             </div>
           </div>
+		  <h5>Just have questions?</h5>
+          <p style="color:#212529;">
+            Please call <a href="tel:+17753892894" style="font-weight:bold;">775-389-2894</a>
+          </p>
         </form>
       </div>
       <h5 style="color:#FFF;">What makes it unique?</h5>
@@ -309,5 +316,4 @@
     </div>
   </div>
 </article>
-<footer></footer>
 <section id="background" class="flex-row hidden"></section>

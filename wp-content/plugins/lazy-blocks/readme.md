@@ -5,7 +5,7 @@
 * Requires at least: 5.8
 * Tested up to: 5.8
 * Requires PHP: 7.2
-* Stable tag: 2.5.2
+* Stable tag: 2.5.3
 * License: GPLv2 or later
 * License URI: <http://www.gnu.org/licenses/gpl-2.0.html>
 
@@ -102,11 +102,19 @@ The manual installation method involves downloading our Lazy Blocks plugin and u
 
 ## Changelog
 
+= 2.5.3 =
+
+* added block inserter preview (thanks <https://github.com/nk-crew/lazy-blocks/pull/230>)
+* fixed PHP8 deprecation warning
+* fixed security issue in the code for duplicating post (thanks to the Wordfence team)
+* minor changes
+
 = 2.5.2 =
 
 * added support for color slugs in the Color controls when using new FSE themes
 * added code preview in the constructor (thanks <https://github.com/nk-crew/lazy-blocks/pull/227>)
 * fixed propagating cut event in the constructor (thanks <https://github.com/nk-crew/lazy-blocks/pull/226>)
+* removed default value generated for repeaters, as it was not working correctly
 
 = 2.5.1 =
 

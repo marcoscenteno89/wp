@@ -18,6 +18,8 @@ const remChar = (text, char) => {
 }
 let navItems = document.querySelectorAll('.navbar-nav li');
 let formEx = localStorage.getItem("formex");
+if (formEx) formEx = JSON.parse(formEx);
+
 const isInView = (el) => {
 	let currentelem = el;
 	let top = el.offsetTop;
@@ -99,7 +101,6 @@ const widthinZone = (data) => {
 }
 const custVerifyAddress = async (firstTry=true) => {
 	if (formEx) {
-		formEx = JSON.parse(formEx);
 		if (formEx.disabled) {
 			let exp = new Date(formEx.exp);
 			let now = new Date();

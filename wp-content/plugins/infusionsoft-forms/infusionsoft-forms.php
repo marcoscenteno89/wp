@@ -16,9 +16,14 @@ function fi_enqueue_scripts() {
 		date("m.d"), 
 		true 
 	);
-    wp_localize_script( 
+  wp_localize_script( 
 		'fi_scripts', 
 		'fi_submit_contact', 
+		['ajax_url' => admin_url('admin-ajax.php')]
+	);
+  wp_localize_script( 
+		'fi_scripts', 
+		'fi_get_contact', 
 		['ajax_url' => admin_url('admin-ajax.php')]
 	);
 }
@@ -29,6 +34,7 @@ function cst_field($arr, $content,  $id) {
 	}
 	return $arr;
 }
+
 function fi_submit_contact() {
   require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
 	$inf = 'https://api.infusionsoft.com/crm/rest/v1/';
@@ -245,6 +251,30 @@ function fi_submit_contact() {
 	]);
     exit;
 }
+
+function fi_get_contact() {
+  require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
+	$inf = 'https://api.infusionsoft.com/crm/rest/v1/';
+  $tokenObj = unserialize(get_option( 'ab_keap_token' ));
+  $token = '&access_token='.$tokenObj->accessToken;
+  @extract($_POST);
+	$datetime = new DateTime('now', new DateTimeZone('America/Boise'));
+
+  $api['header'] = ['Content-Type: application/json'];
+  $api['request'] = 'GET';
+  $api['url'] = $inf.'contacts?limit=1&email='.$email.$token;
+  $user = apirequest($api);
+  if ($user['count'] > 0) {
+    $userid = $user['contacts'][0]['id'];
+    $api['url'] = $inf.'contacts/'.$userid.'?optional_properties=custom_fields&'.$token;
+    $newuser = apirequest($api);
+    echo json_encode($newuser);
+    wp_die();
+  }
+  echo json_encode($user);
+  wp_die();
+}
+add_action( 'wp_ajax_nopriv_fi_get_contact', 'fi_get_contact' );
 add_action( 'wp_ajax_nopriv_fi_submit_contact', 'fi_submit_contact' );
 add_action( 'wp_ajax_fi_submit_contact', 'fi_submit_contact' );
 add_action( 'wp_enqueue_scripts', 'fi_enqueue_scripts' );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:  Lazy Blocks
  * Description:  Gutenberg blocks visual constructor. Custom meta fields or blocks with output without hard coding.
- * Version:      2.5.2
+ * Version:      2.5.3
  * Author:       nK
  * Author URI:   https://nkdev.info/
  * License:      GPLv2 or later

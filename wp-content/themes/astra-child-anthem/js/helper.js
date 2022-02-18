@@ -17,7 +17,6 @@ function form(form,  onTabChange=false) {
 
     // CUSTOM FUNCTIONS
     const switchTab = async (o, event, force=false) => {
-      // console.log(force);
       o.current.step.classList.remove('completed', 'cannot-skip', 'skipped', 'incomplete');
       let nextStage = parseInt(event.target.getAttribute('data-step'));
       let thisTab = validate(o.current.tab);
@@ -119,20 +118,22 @@ function form(form,  onTabChange=false) {
     }
 
     const showsteps = (e) => {
-      const width = `style="flex: 0 1 ${100 / e.stage.length}%;"`;
       e.next.setAttribute("data-step", e.current.index + 1);
       if (e.prev) e.prev.setAttribute("data-step", e.current.index - 1);
-      e.stage.forEach((i, index) => {
-        e.steps.insertAdjacentHTML("beforeend", `
-          <div ${width} class="step step-${index} flex-col" data-step="${index}">
-            <small class="status"></small>
-            <span>${index + 1}${ i.name ? `.${i.name.toUpperCase()}` : ''}</span>
-          </div>
-        `);
-        i.status = 'unused';
-      });
+      if (e.steps.childNodes.length === 0) {
+        let width = `style="flex: 0 1 ${100 / e.stage.length}%;"`;
+        e.stage.forEach((i, index) => {
+          e.steps.insertAdjacentHTML("beforeend", `
+            <div ${width} class="step step-${index} flex-col" data-step="${index}">
+              <small class="status"></small>
+              <span>${index + 1}${ i.name ? `.${i.name.toUpperCase()}` : ''}</span>
+            </div>
+          `);
+        });
+      }
 
       e.steps.querySelectorAll('.step').forEach((i, index) => {
+        e.stage[index].status = 'unused';
         e.stage[index].step = i;
         e.stage[index].statusElm = i.querySelector('.status');
         i.addEventListener('click', async (event) => {
@@ -140,27 +141,34 @@ function form(form,  onTabChange=false) {
           await switchTab(e, event);
         });
       });
-      e.next.insertAdjacentHTML("beforebegin", `
-        <button 
-          class="btn skip" data-step="${e.current.index + 1}" 
-          style="background:#fff;border:1px solid rgb(1,163,176);color:rgb(1,163,176) !important;margin-left:1rem;margin-right:1rem;"
-          >Skip</button>
-      `);
-      e.skip = document.querySelector('.btn.skip');
-      e.skip.addEventListener('click', async (event) => {
-        event.preventDefault();
-        await switchTab(e, event);
-      });
+      if (e.stage.length > 1) {
+        if (!document.querySelector('.btn.skip')) {
+          e.next.insertAdjacentHTML("beforebegin", `
+            <button 
+              class="btn skip" data-step="${e.current.index + 1}" 
+              style="background:#fff;border:1px solid rgb(1,163,176);color:rgb(1,163,176) !important;margin-left:1rem;margin-right:1rem;"
+              >Skip</button>
+          `);
+        }
+        
+        e.skip = document.querySelector('.btn.skip');
+        e.skip.addEventListener('click', async (event) => {
+          event.preventDefault();
+          await switchTab(e, event);
+        });
+      }
       e.current = e.stage[e.current.index];
     }
 
     const showtab = (e) => { 
-      console.log(e);
-      if (e.current.tabProps.allowskip) {
-        e.skip.style.display = e.current.index + 1 < e.stage.length ? 'flex' : 'none';
-      } else {
-        e.skip.style.display = 'none';
+      if (e.skip) {
+        if (e.current.tabProps.allowskip) {
+          e.skip.style.display = e.current.index + 1 < e.stage.length ? 'flex' : 'none';
+        } else {
+          e.skip.style.display = 'none';
+        }
       }
+      
       for (let i of e.stage) i.tab.style.display = 'none';
       e.stage[e.current.index].tab.style.display = "flex";
       if (e.prev) e.prev.disabled = (e.current.index === 0) ? true : false;
@@ -182,6 +190,7 @@ function form(form,  onTabChange=false) {
           steps: singleMultiStep.querySelector('.steps'),
           next: singleMultiStep.querySelector('.controller button[name="next"]'),
           prev: singleMultiStep.querySelector('.controller button[name="prev"]'),
+          skip: null,
           stage: []
         }
         let o = controller;
@@ -236,6 +245,7 @@ function form(form,  onTabChange=false) {
           return;
         }
         if (field.type === 'checkbox') {
+          
           if (!dup.includes(field.name)) {
             data.push({
               'name': field.name, 
@@ -267,15 +277,17 @@ function form(form,  onTabChange=false) {
         dup.push(field.name);
       });
       Object.keys(data).forEach(i => {
-        if (!data[i].valid) {
-          data[i].field.style.border = '1px solid #f5c6cb';
-          data[i].field.style.background = '#f8d7da';
-          msg += `<div style="color:red;">
-            ${data[i].field.placeholder}: ${data[i].field.validationMessage}
-          </div>`;
-        } else {
-          data[i].field.style.border = '1px solid #c3e6cb';
-          data[i].field.style.background = 'rgb(103,200,208)';
+        if (data[i].field.type !== 'hidden') {
+          if (!data[i].valid) {
+            data[i].field.style.border = '1px solid #f5c6cb';
+            data[i].field.style.background = '#f8d7da';
+            msg += `<div style="color:red;">
+              ${data[i].field.placeholder}: ${data[i].field.validationMessage}
+            </div>`;
+          } else {
+            data[i].field.style.border = '1px solid #c3e6cb';
+            data[i].field.style.background = 'rgb(103,200,208)';
+          }
         }
       });
       status.innerHTML = msg;
@@ -324,21 +336,22 @@ const formatData = (string) => {
 }
 
 function ajax(api, callback=false) {
-    if (!api.method) api.method = 'GET';
-    if (!api.credentials) api.credentials = 'same-origin';
-    if (!api.headers) api.headers = new Headers({ 
-      'Content-Type': 'application/x-www-form-urlencoded; application/json; charset=utf-8' 
-    });
-    var temp;
-    return fetch(api.url, api).then(res => {
-      temp = res.status;
-      if (api.report || temp !== 200) console.log(res);
-      return api.res ? res.text() : res.json();
-    }).then(data => {
-		  if (api.report || temp !== 200) console.log(data, api);
-      data.status = temp;
-      return data;
-    }).catch(err => {
-      console.log(err)
-    });
+  if (!api.method) api.method = 'GET';
+  if (!api.credentials) api.credentials = 'same-origin';
+  if (!api.headers) api.headers = new Headers({ 
+    'Content-Type': 'application/x-www-form-urlencoded; application/json; charset=utf-8' 
+  });
+  var temp;
+  console.log(api);
+  return fetch(api.url, api).then(res => {
+    temp = res.status;
+    if (api.report || temp !== 200) console.log(res);
+    return api.res ? res.text() : res.json();
+  }).then(data => {
+    if (api.report || temp !== 200) console.log(data, api);
+    data.status = temp;
+    return data;
+  }).catch(err => {
+    console.log(err)
+  });
 }

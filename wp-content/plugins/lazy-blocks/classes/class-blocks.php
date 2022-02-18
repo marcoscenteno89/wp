@@ -857,7 +857,7 @@ class LazyBlocks_Blocks {
      * @param array $block_data - block data.
      * @param array $all_controls - control data.
      */
-    public function marshal_block_data_with_controls( $id = null, $post_title = null, $block_data = null, $all_controls ) {
+    public function marshal_block_data_with_controls( $id = null, $post_title = null, $block_data = null, $all_controls = null ) {
         $get_meta_value = function( $name ) use ( $id, $block_data ) {
             if ( $id ) {
                 return $this->get_meta_value_by_id( $name, $id );
@@ -1111,7 +1111,7 @@ class LazyBlocks_Blocks {
             'lazyblocks-gutenberg',
             lazyblocks()->plugin_url() . 'assets/css/style.min.css',
             array(),
-            '2.5.2'
+            '2.5.3'
         );
         wp_style_add_data( 'lazyblocks-gutenberg', 'rtl', 'replace' );
         wp_style_add_data( 'lazyblocks-gutenberg', 'suffix', '.min' );
@@ -1121,7 +1121,7 @@ class LazyBlocks_Blocks {
             'lazyblocks-gutenberg',
             lazyblocks()->plugin_url() . 'assets/js/index.min.js',
             array( 'wp-blocks', 'wp-block-editor', 'wp-i18n', 'wp-element', 'wp-components' ),
-            '2.5.2',
+            '2.5.3',
             true
         );
 
@@ -1261,6 +1261,7 @@ class LazyBlocks_Blocks {
             $data = array(
                 'attributes'      => $attributes,
                 'render_callback' => array( $this, 'render_callback' ),
+                'example'         => array(),
             );
 
             // Register block type.
