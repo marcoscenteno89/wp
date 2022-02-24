@@ -88,9 +88,6 @@ Template: astra
 .packages .paq.active {
 	background-image: linear-gradient(to bottom, #009eae, #ec008c);
 }
-.packages input[type="radio"]:checked + label.active::after {
-  background-color: #ec008c;
-}
 .packages .paq:hover {
 	transform: scale(1.03);
 	box-shadow: 0 0 15px rgba(0,0,0,.5);
@@ -99,16 +96,6 @@ Template: astra
 .packages > input[type="radio"]:checked + label {
 	transform: scale(1.1);
 	box-shadow: 0 0 25px rgba(0,0,0,1);
-}
-.packages input[type="radio"]:checked + label::after {
-  position: absolute;
-  content: '';
-  top: 102%;
-  background-color: #009eae;
-  height: 10px;
-  width: 100%;
-  left: 0;
-  box-shadow: 0 0 25px rgba(0,0,0,1);
 }
 .packages .paq .anim-container {
 	background-color: #FFF;

@@ -342,7 +342,6 @@ function ajax(api, callback=false) {
     'Content-Type': 'application/x-www-form-urlencoded; application/json; charset=utf-8' 
   });
   var temp;
-  console.log(api);
   return fetch(api.url, api).then(res => {
     temp = res.status;
     if (api.report || temp !== 200) console.log(res);

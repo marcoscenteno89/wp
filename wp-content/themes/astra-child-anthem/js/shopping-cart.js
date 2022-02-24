@@ -164,17 +164,7 @@ const loadPackages = async () => {
             <div class="hide" style="left:${percent}%"></div>
           </div>
           <h3 class="title">${i.name}</h3>
-          <div class="container">
-            <div data-accordion="accordion" style="min-height:22px;">
-              <button data-accordion="head" class="show-content">
-                <span class="arr">&#10095; </span> Plan Details
-              </button>
-              <div data-accordion="body" class="din-content"><hr>
-              <p>Speed: ${i.speed}</p>
-              <p>${i.long_description}</p>
-              </div>
-            </div>
-          </div>
+          <h4 style="color:#fff;">${i.speed}</h4>
           <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
           ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
         </label>
@@ -244,18 +234,19 @@ const onTabChange = async data => {
   });
   if (thisTab.agile_contact) {
     let token = await getToken();
-    let wb = await workbook(token, thisTab);
-    console.log(wb);
-    // let ifs = await infusionsoftSubmit(thisTab);
-    // if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
-    // let agileSearch = await agileLookup(token, thisTab);
-    // thisTab = agileSearch.data;
-    // let agileContact = await agileSubmit(token, thisTab);
-    // if (values.create_account === true) {
-    //   if (agileContact.account) thisTab.account_id = agileContact.account.id;
-    //   if (agileContact.contact) thisTab.contact_id = agileContact.contact.id;
-    // }
-    // let i = thisTab;
+    // let wb = await workbook(token, thisTab);
+    // console.log(wb);
+    let ifs = await infusionsoftSubmit(thisTab);
+    console.log(ifs);
+    if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
+    let agileSearch = await agileLookup(token, thisTab);
+    thisTab = agileSearch.data;
+    let agileContact = await agileSubmit(token, thisTab);
+    if (values.create_account === true) {
+      if (agileContact.account) thisTab.account_id = agileContact.account.id;
+      if (agileContact.contact) thisTab.contact_id = agileContact.contact.id;
+    }
+    let i = thisTab;
 
     if (document.querySelector('#vac')) {
       let vac = document.querySelector('#vac');
@@ -286,18 +277,19 @@ const onTabChange = async data => {
 	for (let key in thisTab) values[key] = thisTab[key];
 	mainBtn.disabled = false;	
 }
-const verifyAddress = async (firstTry=true) => {
-  if (document.querySelector('.shopping-cart')) {
+const initShopCartForm = async (firstTry=true) => {
+  let shop = document.querySelector('.shopping-cart');
+  if (shop) {
     loadPackages();
-
-    form(document.querySelector('.shopping-cart'), onTabChange).then( async val => {
+    form(shop, onTabChange).then( async val => {
       mainBtn.innerHTML = loader;
       mainBtn.disabled = true;
       let token = await getToken();
       let ifs = await infusionsoftSubmit(values);
+      console.log(ifs);
       let i = values;
       let or = '';
-      if (ifs.order.order_items) {
+      if (ifs.order.order_items.length > 0) {
         for (let e of ifs.order.order_items) or += `$${e.price} ${e.name}<br>`;
       }
       values.notes = `
@@ -309,21 +301,18 @@ const verifyAddress = async (firstTry=true) => {
         Customer requires to be at home during installation: ${i.installation_notification === 'true' ? true : false}
         ${i.notification_email ? '<br>Notification Email: ' + i.notification_email : '<br>'}
         Customer Signature: ${i.customer_signature}
-        Products:<br>
-        ${or}
+        ${or !== '' ? `Products:<br>${or}`: ''}
       `;
       let agileWo = await scheduleWo(token, values);
-      //let agilewb = await workbook(token, values);
       mainBtn.innerHTML = temp;
-      mainBtn.disabled = false;			
-      let content = `
-        <h2 class="heading flex-center">SUCCESS</h2>
-        <div class="body">
+      mainBtn.disabled = false;
+      console.log(or);		
+      shop.innerHTML = `
         <h4>Data submitted successfully</h4>
         Name: ${i.given_name} ${i.family_name}<br>
         Phone: ${i.phone}<br>
-        Email: ${i.email}
-        ${i.notification_email ? '<br>Notification Email: ' + i.notification_email : '<br>'}
+        Email: ${i.email}<br>
+        ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
         Work Order: #${agileWo.workorder.id}<br>
         Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
         Nid Location: ${i.nid_location}<br>
@@ -332,11 +321,8 @@ const verifyAddress = async (firstTry=true) => {
         Property Owner: ${values.own_location === 'true' ? 'yes' : 'no'}<br>
         Agreed that this is a legal Signature: ${values.legal_signature === 'true' ? 'yes' : 'no'}<br>
         Customer requires to be at home during installation: ${values.installation_notification === 'true' ? 'yes' : 'no'}<br>
-        Products:<br>
-        ${or}
-        </div>
+        ${or !== '' ? `Products:<br>${or}`: ''}
       `;
-      prompt({ background: 'rgba(0, 0, 0, 0.8)', container: 'popup', content: content });
       values.comments = `Work Order: #${agileWo.workorder.id}`;
       delete values.notes;
       let ifs2 = await infusionsoftSubmit(values);
@@ -358,11 +344,7 @@ const woLookup = async (token, a) => {
 document.addEventListener("DOMContentLoaded", () => {
   // VARIABLES
   const sendContract = document.querySelector('#send_contract');
-  const propertyAccess = document.querySelector('#property_access');
-  const ownLocation = document.querySelector('#own_location');
-
   let newUrl = new URLSearchParams(window.location.search);
-  let Shop = document.querySelector('.shopping-cart');
   let owner = document.querySelectorAll('.shopping-cart [name="own_location"]');
   let zone_status = document.querySelector('.zone_status');
   let addon = document.querySelectorAll('.addon');
@@ -370,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let email = document.querySelector('.lookup');
   
   // FUNTIONS
-  verifyAddress();
+  initShopCartForm();
   // woLookup();
   if (newUrl.get('address')) {
     if (document.querySelector('#vac')) {
@@ -414,19 +396,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  if (owner.length > 0) {
+  if (owner) {
+    let no = document.querySelector('.shopping-cart #owner_no');
+    let yes = document.querySelector('.shopping-cart #owner_yes');
+    let access = document.querySelector('[name="property_access"]');
     owner.forEach(a => {
       a.addEventListener('click', (e) => {
-        let no = document.querySelector('.shopping-cart #owner_no');
-        let yes = document.querySelector('.shopping-cart #owner_yes');
         if (e.target.checked) {
           no.style.display = e.target.value === "false" ? 'flex' : 'none';
           if (e.target.value === "true") {
             yes.style.display = 'block';
-            propertyAccess.required = true;
+            access.required = true;
           } else {
             yes.style.display = 'none';
-            propertyAccess.required = false;
+            access.required = false;
           }
         }
       });
@@ -441,7 +424,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `);
         return false;
       }
-
       // let contact = await keapLookup(email.value);
       // console.log(contact);
     });
