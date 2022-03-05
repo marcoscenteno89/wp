@@ -4,7 +4,7 @@ const agileUrl = 'https://agileisp.com/api/';
 // const agileUrl = 'http://localhost:8000/api/';
 const values = {
   create_account: true,
-	products: []
+	packages: []
 }
 const verifyToken = tok => {
   let api = {

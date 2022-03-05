@@ -341,16 +341,16 @@ function ajax(api, callback=false) {
   if (!api.headers) api.headers = new Headers({ 
     'Content-Type': 'application/x-www-form-urlencoded; application/json; charset=utf-8' 
   });
-  var temp;
+  var tmp;
   return fetch(api.url, api).then(res => {
-    temp = res.status;
-    if (api.report || temp !== 200) console.log(res);
+    tmp = res.status;
+    if (api.report && (tmp !== 200 || tmp !== 203)) console.log(res);
     return api.res ? res.text() : res.json();
   }).then(data => {
-    if (api.report || temp !== 200) console.log(data, api);
-    data.status = temp;
+    if (api.report && (tmp !== 200 || tmp !== 203)) console.log(data, api);
+    data.status = tmp;
     return data;
   }).catch(err => {
-    console.log(err)
+    console.log(err);
   });
 }

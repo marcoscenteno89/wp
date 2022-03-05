@@ -88,7 +88,7 @@ const infusionsoftSubmit = (dat) => {
     return res;
   });
 }
-const agileSubmit = async (token, a) => {
+const agileSubmitContact = async (token, a) => {
   const body = {
     email_preference: false,
     sms_preference: false,
@@ -182,21 +182,20 @@ const loadPackages = async () => {
     let accordion = document.querySelectorAll('[data-accordion="accordion"]');
     for (let i of accordion) add_accordion(i);
   });
-}  
-const workbook = async (token, data) => {
-
-  let body = {  
+}
+const generateWoObj = (data) => {
+  return {  
     o: 1,
-    external_lead_id: "314348",
+    external_lead_id: data.ifs_lead_id,
     source_value: "ifs",
-    contact_id: 0,
+    // contact_id: 0,
     contact_info: {
       first_name: data.given_name,
       last_name: data.family_name,
       service_address: {
         id: "0",
         street: data.line1,
-        line2: "",
+        line2: data.line2,
         city: data.locality,
         state: data.region,
         postalcode: data.postal_code
@@ -204,22 +203,19 @@ const workbook = async (token, data) => {
       email_list: [{ id: "0", data: data.email }],
       phone_list: [{ id: "0", data: data.phone }]
     },
-    opportunity_stage: 281,
-    opportunity_notes: "",
-    sales_notes: "",
+    opportunity_stage: data.opportunity_stage,
     sales_source: data.sale_source
   }
-
-  console.log(body);
-
+}
+const workbook = async (token, data) => {
   let api = {
     url: `${agileUrl}sales/save_workbook/`,
 		method: 'POST',
 		headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
-    body: JSON.stringify(body),
+    body: JSON.stringify(data),
     report: true
   }
-  // return await ajax(api).then(res => res);
+  return await ajax(api).then(res => res);
 }
 const onTabChange = async data => {
 	let thisTab = {};
@@ -232,20 +228,24 @@ const onTabChange = async data => {
       thisTab[i.field.name] = i.value;
     }
   });
-  if (thisTab.agile_contact) {
+  if (thisTab.create_contact === 'true') {
     let token = await getToken();
-    // let wb = await workbook(token, thisTab);
-    // console.log(wb);
-    let ifs = await infusionsoftSubmit(thisTab);
-    console.log(ifs);
-    if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
-    let agileSearch = await agileLookup(token, thisTab);
-    thisTab = agileSearch.data;
-    let agileContact = await agileSubmit(token, thisTab);
-    if (values.create_account === true) {
-      if (agileContact.account) thisTab.account_id = agileContact.account.id;
-      if (agileContact.contact) thisTab.contact_id = agileContact.contact.id;
-    }
+    let wpOb = generateWoObj(thisTab);
+    let wb = await workbook(token, wpOb);
+    let workbook_id_list = document.querySelectorAll('.shopping-cart [name=workbook_id]');
+    for (let i of workbook_id_list) i.value = wb.result.workbook_id;
+    console.log(wb.detail);
+
+    // let ifs = await infusionsoftSubmit(thisTab);
+    // console.log(ifs);
+    // if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
+    // let agileSearch = await agileLookup(token, thisTab);
+    // thisTab = agileSearch.data;
+    // let agileContact = await agileSubmitContact(token, thisTab);
+    // if (values.create_account === true) {
+    //   if (agileContact.account) thisTab.account_id = agileContact.account.id;
+    //   if (agileContact.contact) thisTab.contact_id = agileContact.contact.id;
+    // }
     let i = thisTab;
 
     if (document.querySelector('#vac')) {
@@ -255,7 +255,7 @@ const onTabChange = async data => {
     for (let fi of document.querySelectorAll('[name="email"]')) {
       if (fi.type === 'hidden') fi.value = thisTab.email;
     }
-    delete thisTab.agile_contact;
+    delete thisTab.create_contact;
     delete thisTab.tags;
   }
   if (thisTab.agile_schedule) {
@@ -265,7 +265,7 @@ const onTabChange = async data => {
     delete values.agile_schedule;
   }
 	if (thisTab.package) {
-		values.products.push(parseInt(thisTab.package));
+		values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
 		delete thisTab.package;
 	}
 	if (thisTab.tags) {
@@ -286,7 +286,6 @@ const initShopCartForm = async (firstTry=true) => {
       mainBtn.disabled = true;
       let token = await getToken();
       let ifs = await infusionsoftSubmit(values);
-      console.log(ifs);
       let i = values;
       let or = '';
       if (ifs.order.order_items.length > 0) {
@@ -305,8 +304,7 @@ const initShopCartForm = async (firstTry=true) => {
       `;
       let agileWo = await scheduleWo(token, values);
       mainBtn.innerHTML = temp;
-      mainBtn.disabled = false;
-      console.log(or);		
+      mainBtn.disabled = false;	
       shop.innerHTML = `
         <h4>Data submitted successfully</h4>
         Name: ${i.given_name} ${i.family_name}<br>
@@ -424,8 +422,23 @@ document.addEventListener("DOMContentLoaded", () => {
         `);
         return false;
       }
-      // let contact = await keapLookup(email.value);
-      // console.log(contact);
+      let ifsData = {
+        email: email.value,
+        utm_source: document.querySelector('.shopping-cart [name=utm_source]').value,
+        utm_adgroup: document.querySelector('.shopping-cart [name=utm_adgroup]').value,
+        utm_campaign: document.querySelector('.shopping-cart [name=utm_campaign]').value,
+        utm_medium: document.querySelector('.shopping-cart [name=utm_medium]').value,
+        utm_term: document.querySelector('.shopping-cart [name=utm_term]').value,
+        utm_content: document.querySelector('.shopping-cart [name=utm_content]').value,
+        source_page: document.querySelector('.shopping-cart [name=source_page]').value,
+        sales_rep: document.querySelector('.shopping-cart [name=sales_rep]').value
+      }
+      
+      let ifs = await infusionsoftSubmit(ifsData);
+      let ifs_id = document.querySelectorAll('.shopping-cart [name=ifs_lead_id]');
+      for (let i of ifs_id) i.value = ifs.contact.id;
+      let conEmail = ifs.contact.email_addresses.filter(i => i.field === 'EMAIL1')[0];
+      console.log(`${conEmail.email} was stored in keap.`);
     });
   }
 

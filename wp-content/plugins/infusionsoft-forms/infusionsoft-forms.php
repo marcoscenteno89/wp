@@ -75,14 +75,14 @@ function fi_submit_contact() {
 			"field" => "EMAIL2"
 		]);
     }
-	if (isset($data->sales_agent)) {
+	if (isset($data->sales_rep)) {
 		$api['request'] = 'GET';
 		$api['url'] = $inf."users/?access_token=$token->accessToken&";
 		$api['body'] = '';
 		$users = apirequest($api);
 		for ($i = 0; $i < count($users['users']); $i++) {
 			$temp = (object) $users['users'][$i];
-			if ( $data->sales_agent == $temp->email_address ) $user = $temp;
+			if ( $data->sales_rep == $temp->email_address ) $user = $temp;
 		}
 		if ($user != '') $body['owner_id'] = $user->id;
 	}
@@ -111,7 +111,7 @@ function fi_submit_contact() {
 	if (isset($data->legal_signature)) $cstF = cst_field($cstF, $data->legal_signature, 142);
 	if (isset($data->property_access)) $cstF = cst_field($cstF, $data->property_access, 154);
 	if (isset($data->own_location)) $cstF = cst_field($cstF, $data->own_location, 148);
-	if (isset($data->sales_agent)) $cstF = cst_field($cstF, $data->sales_agent, 80);
+	if (isset($data->sales_rep)) $cstF = cst_field($cstF, $data->sales_rep, 80);
 	if (isset($data->installation_notification)) $cstF = cst_field($cstF, $data->installation_notification, 178);
 	// UTM FIELDS
 	if (isset($data->source_page)) $cstF = cst_field($cstF, $data->source_page, 14);
