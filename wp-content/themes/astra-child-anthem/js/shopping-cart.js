@@ -1,5 +1,6 @@
 const mainBtn = document.querySelector('#btn');	
 const temp = mainBtn ? mainBtn.innerHTML : null;
+let wbOb;
 const agileLookup = async (token, data) => {
   let api = {
     url: `${agileUrl}contact/?o=5&first_name=${data.given_name}&last_name=${data.family_name}&email=${data.email}`,
@@ -81,11 +82,18 @@ const infusionsoftSubmit = (dat) => {
     method: 'POST'
   }
   return ajax(api).then(res => {
-    if (res.contact) {
-      let i = res.contact;
-      if (i.id) values.ifs_lead_id = i.id;
-    }  
-    return res;
+    if ( [200, 201].includes(res.contact.status_code) ) {
+      if (res.contact) {
+        let i = res.contact;
+        if (i.id) values.ifs_lead_id = i.id;
+      }
+      let conEmail = res.contact.email_addresses.filter(i => i.field === 'EMAIL1')[0];
+      console.log(`Keap: Stored data for ${conEmail.email}.`);
+      return res;
+    } else {
+      console.log(`Keap: ${res.contact.fault.faultstring}`);
+      return false;
+    }
   });
 }
 const agileSubmitContact = async (token, a) => {
@@ -184,10 +192,8 @@ const loadPackages = async () => {
   });
 }
 const generateWoObj = (data) => {
-  return {  
+  let ob = {  
     o: 1,
-    external_lead_id: data.ifs_lead_id,
-    source_value: "ifs",
     // contact_id: 0,
     contact_info: {
       first_name: data.given_name,
@@ -204,23 +210,30 @@ const generateWoObj = (data) => {
       phone_list: [{ id: "0", data: data.phone }]
     },
     opportunity_stage: data.opportunity_stage,
-    sales_source: data.sale_source
+    sales_source: data.sale_source,
+    packages: []
   }
+  if (data.ifs_lead_id !== '') {
+    ob.external_lead_id = data.ifs_lead_id;
+    ob.source_value =  "ifs";
+  }
+  return ob;
 }
 const workbook = async (token, data) => {
   let api = {
     url: `${agileUrl}sales/save_workbook/`,
 		method: 'POST',
 		headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
-    body: JSON.stringify(data),
-    report: true
+    body: JSON.stringify(data)
   }
   return await ajax(api).then(res => res);
 }
 const onTabChange = async data => {
-	let thisTab = {};
-	mainBtn.innerHTML = loader;
+  mainBtn.innerHTML = loader;
 	mainBtn.disabled = true;
+	let thisTab = {};
+  let token = await getToken();
+  
   data.forEach(i => {
     if (i.field.type === 'checkbox') {
       thisTab[i.field.name] = i.value === '' ? 'false' : i.value;
@@ -228,15 +241,15 @@ const onTabChange = async data => {
       thisTab[i.field.name] = i.value;
     }
   });
-  if (thisTab.create_contact === 'true') {
-    let token = await getToken();
-    let wpOb = generateWoObj(thisTab);
-    let wb = await workbook(token, wpOb);
+
+  if (thisTab.create_contact) {
+    console.log(`Creating Contact`);
+    let ifs = infusionsoftSubmit(thisTab);
+    wbOb = generateWoObj(thisTab);
+    let wb = await workbook(token, wbOb);
     let workbook_id_list = document.querySelectorAll('.shopping-cart [name=workbook_id]');
     for (let i of workbook_id_list) i.value = wb.result.workbook_id;
-    console.log(wb.detail);
-
-    // let ifs = await infusionsoftSubmit(thisTab);
+    console.log(`Workbook ${wb.detail}`);
     // console.log(ifs);
     // if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
     // let agileSearch = await agileLookup(token, thisTab);
@@ -255,25 +268,43 @@ const onTabChange = async data => {
     for (let fi of document.querySelectorAll('[name="email"]')) {
       if (fi.type === 'hidden') fi.value = thisTab.email;
     }
-    delete thisTab.create_contact;
     delete thisTab.tags;
   }
   if (thisTab.agile_schedule) {
-    let token = await getToken();
     let schedule = await agileScheduleLookup(token, thisTab.contact_id);
     getSchedule(values.availability);
     delete values.agile_schedule;
   }
-	if (thisTab.package) {
+	if (thisTab.package && thisTab.package !== '') {
+    console.log(`Storing Package`);
 		values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
+    wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
+    wbOb.workbook_id = parseInt(thisTab.workbook_id);
+    let updatedPackage = await workbook(token, wbOb);
+    console.log(`Workbook package ${updatedPackage.detail}`);
 		delete thisTab.package;
 	}
-	if (thisTab.tags) {
+  if (thisTab.contracts) {
+    console.log(`Storing Contracts`);
+    let contractData = infusionsoftSubmit(thisTab);
+    delete thisTab.tags;
+    let api = {
+      url: `${agileUrl}sales/make_sale/`,
+      method: 'POST',
+      headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
+      body: JSON.stringify({workbook_id: thisTab.workbook_id})
+    }
+    let saleCompleted = await ajax(api).then(res => res);
+    console.log(saleCompleted);
+  }
+  if (thisTab.tags && thisTab.tags !== '') {
+    console.log(`Storing Tags`);
 		if (thisTab.tags !== '') {
-			let addons = await infusionsoftSubmit({email:thisTab.email, tags: thisTab.tags});	
+			let addons = await infusionsoftSubmit(thisTab);
 		}
 		delete thisTab.tags;
 	}
+
 	for (let key in thisTab) values[key] = thisTab[key];
 	mainBtn.disabled = false;	
 }
@@ -381,13 +412,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (addon) {
     if (addon.length > 0) {
-      addon.forEach(a => a.addEventListener('click', () => {
+      addon.forEach(a => a.addEventListener('click', (elem) => {
         let tagsArray = addon_tags.value.split(',');
         tagsArray = tagsArray.filter(e => e !== '');
-        if (this.checked) {
-          tagsArray.push(this.dataset.tag);
+        if (elem.target.checked) {
+          tagsArray.push(elem.target.dataset.tag);
         } else {
-          tagsArray = tagsArray.filter(e => e !== this.dataset.tag);
+          tagsArray = tagsArray.filter(e => e !== elem.target.dataset.tag);
         }
         addon_tags.value = tagsArray.toString();
       }));
@@ -437,8 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let ifs = await infusionsoftSubmit(ifsData);
       let ifs_id = document.querySelectorAll('.shopping-cart [name=ifs_lead_id]');
       for (let i of ifs_id) i.value = ifs.contact.id;
-      let conEmail = ifs.contact.email_addresses.filter(i => i.field === 'EMAIL1')[0];
-      console.log(`${conEmail.email} was stored in keap.`);
     });
   }
 

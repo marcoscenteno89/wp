@@ -344,10 +344,10 @@ function ajax(api, callback=false) {
   var tmp;
   return fetch(api.url, api).then(res => {
     tmp = res.status;
-    if (api.report && (tmp !== 200 || tmp !== 203)) console.log(res);
+    if (api.report || (tmp !== 200 && tmp !== 203)) console.log(res);
     return api.res ? res.text() : res.json();
   }).then(data => {
-    if (api.report && (tmp !== 200 || tmp !== 203)) console.log(data, api);
+    if (api.report || (tmp !== 200 && tmp !== 203)) console.log(data, api);
     data.status = tmp;
     return data;
   }).catch(err => {
