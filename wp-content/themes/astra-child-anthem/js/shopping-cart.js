@@ -159,6 +159,9 @@ const loadPackages = async () => {
     for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
 
     let container = document.querySelector('.shopping-cart .packages');
+    container.insertAdjacentHTML("afterbegin",
+      `<input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">`
+    );
     let percent = 100 - (pack.length * 20);
     for (let i of pack) {
       let tmp = percent;
@@ -193,7 +196,7 @@ const loadPackages = async () => {
 }
 const generateWoObj = (data) => {
   let ob = {  
-    o: 1,
+    o: 5,
     // contact_id: 0,
     contact_info: {
       first_name: data.given_name,
@@ -280,22 +283,32 @@ const onTabChange = async data => {
 		values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
     wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
     wbOb.workbook_id = parseInt(thisTab.workbook_id);
-    let updatedPackage = await workbook(token, wbOb);
-    console.log(`Workbook package ${updatedPackage.detail}`);
+    let wbAddedPackage = await workbook(token, wbOb);
+    console.log(`Workbook package ${wbAddedPackage.detail}`);
 		delete thisTab.package;
 	}
   if (thisTab.contracts) {
     console.log(`Storing Contracts`);
+    thisTab.comments = `Workbook Order: #${values.workbook_id}`;
     let contractData = infusionsoftSubmit(thisTab);
+    let i = thisTab;
+    let or = '';
+    let notes = `
+      Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? true : false}
+      Agreed to Give Property Access: ${i.property_access === 'true' ? true : false}
+      Property Owner: ${i.own_location === 'true' ? true : false}
+      Nid Location: ${i.nid_location}
+      Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? true : false}
+      Customer requires to be at home during installation: ${i.installation_notification === 'true' ? true : false}
+      ${i.notification_email ? '<br>Notification Email: ' + i.notification_email : '<br>'}
+      Customer Signature: ${i.customer_signature}
+      ${or !== '' ? `Products:<br>${or}`: ''}
+    `;
+    wbOb.opportunity_notes = notes;
+    wbOb.sales_notes = notes;
+    let wpAddedNotes = await workbook(token, wbOb);
+    console.log(`Workbook notes ${wpAddedNotes.detail}`);
     delete thisTab.tags;
-    let api = {
-      url: `${agileUrl}sales/make_sale/`,
-      method: 'POST',
-      headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
-      body: JSON.stringify({workbook_id: thisTab.workbook_id})
-    }
-    let saleCompleted = await ajax(api).then(res => res);
-    console.log(saleCompleted);
   }
   if (thisTab.tags && thisTab.tags !== '') {
     console.log(`Storing Tags`);
@@ -316,45 +329,49 @@ const initShopCartForm = async (firstTry=true) => {
       mainBtn.innerHTML = loader;
       mainBtn.disabled = true;
       let token = await getToken();
-      let ifs = await infusionsoftSubmit(values);
       let i = values;
+      // let ifs = infusionsoftSubmit(i);
+
       let or = '';
-      if (ifs.order.order_items.length > 0) {
-        for (let e of ifs.order.order_items) or += `$${e.price} ${e.name}<br>`;
+      // if (ifs.order.order_items.length > 0) {
+      //   for (let e of ifs.order.order_items) or += `$${e.price} ${e.name}<br>`;
+      // }
+
+      let api = {
+        url: `${agileUrl}sales/make_sale/`,
+        method: 'POST',
+        headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
+        body: JSON.stringify({workbook_id: values.workbook_id})
       }
-      values.notes = `
-        Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? true : false}
-        Agreed to Give Property Access: ${i.property_access === 'true' ? true : false}
-        Property Owner: ${i.own_location === 'true' ? true : false}
-        Nid Location: ${i.nid_location}
-        Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? true : false}
-        Customer requires to be at home during installation: ${i.installation_notification === 'true' ? true : false}
-        ${i.notification_email ? '<br>Notification Email: ' + i.notification_email : '<br>'}
-        Customer Signature: ${i.customer_signature}
-        ${or !== '' ? `Products:<br>${or}`: ''}
-      `;
-      let agileWo = await scheduleWo(token, values);
+      let saleCompleted = await ajax(api).then(res => res);
+      console.log(saleCompleted);
+
+      // let agileWo = await scheduleWo(token, values);
+      // Work Order: #${agileWo.workorder.id}<br>
+      // values.comments = `Work Order: #${agileWo.workorder.id}`;
+
       mainBtn.innerHTML = temp;
-      mainBtn.disabled = false;	
+      mainBtn.disabled = false;
+      
       shop.innerHTML = `
         <h4>Data submitted successfully</h4>
         Name: ${i.given_name} ${i.family_name}<br>
         Phone: ${i.phone}<br>
         Email: ${i.email}<br>
         ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
-        Work Order: #${agileWo.workorder.id}<br>
+        Order Number: #${i.workbook_id}<br>
         Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
         Nid Location: ${i.nid_location}<br>
-        Agreed to Terms & Conditions: ${values.terms_conditions === 'true' ? 'yes' : 'no'}<br>
-        Agreed to Give Property Access: ${values.property_access === 'true' ? 'yes' : 'no'}<br>
-        Property Owner: ${values.own_location === 'true' ? 'yes' : 'no'}<br>
-        Agreed that this is a legal Signature: ${values.legal_signature === 'true' ? 'yes' : 'no'}<br>
-        Customer requires to be at home during installation: ${values.installation_notification === 'true' ? 'yes' : 'no'}<br>
+        Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? 'yes' : 'no'}<br>
+        Agreed to Give Property Access: ${i.property_access === 'true' ? 'yes' : 'no'}<br>
+        Property Owner: ${i.own_location === 'true' ? 'yes' : 'no'}<br>
+        Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? 'yes' : 'no'}<br>
+        Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
         ${or !== '' ? `Products:<br>${or}`: ''}
       `;
-      values.comments = `Work Order: #${agileWo.workorder.id}`;
-      delete values.notes;
-      let ifs2 = await infusionsoftSubmit(values);
+      
+      // delete values.notes;
+      // let ifs2 = await infusionsoftSubmit(values);
     });
   }
 }
