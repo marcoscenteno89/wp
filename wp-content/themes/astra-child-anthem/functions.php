@@ -116,12 +116,14 @@ function fz_agile_token() {
 
       $request = apirequest($api);
       $token = $request['token'];
+      $email = update_option( 'ab_agile_user_email', $request['email'], false );
     }
 
     $updated = update_option( 'ab_agile_token', $token, false );
   
     echo json_encode([
-      'token' => get_option('ab_agile_token'), 
+      'token' => get_option('ab_agile_token'),
+      'email' => get_option('ab_agile_user_email'),
       'updated' => $updated,
     ]);
     wp_die();

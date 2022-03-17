@@ -1,0 +1,186 @@
+<style>
+  #primary.primary {
+      background-color: #FFF !important;
+  }
+</style>
+<section class="loginbg">
+  <form class="loginform">
+    <h3 style="text-align:center;color:#fff;">Login</h3>
+    <input type="text" style="width:280px;" name="username" class="form-input" placeholder="Username">
+    <input type="password" style="width:280px;" name="password" class="form-input" placeholder="Password">
+    <button style="width:280px;" class="btn cta loginbtn">Submit</button>
+    <div class="loginstatus" style="width:280px;"></div>
+  </form>
+</section>
+<form class="shopping-cart multi-step" action="thank-you">
+  <div class="tabs">
+    <div class="steps flex arrow"></div>
+    <div class="tab" data-props='{"name":"Contact","numerate":true,"validate":true,"allowskip":false}'>
+      <div class="row" style="justify-content:space-between;">
+        <div class="col-6" style="padding-right:1rem;align-self:center;padding:0 30px 0 0;">
+          <h2>Great News!</h2>
+          <p><strong class="zone_status"></strong></p>
+          <p>Sign up for services now and we will keep you up to date on progress and notify you when we are ready to connect! You won't pay anything now and there are no construction fees.</p>
+          <p>By signing up now, you are letting us know you want service brought to your location. Doing so now means there is no additional cost as long as you sign up before the construction team passes you by.</p>
+          <p>We are constantly working with construction teams to provide the most accurate timelines possible. We will be sending out periodic updates to keep everyone informed of progress and when you are able to connect.</p>
+          <p>Still have questions, Call us at <a style="font-weight:bold;" href="tel:+17753892892">775.389.2892</a></p>
+        </div>
+        <div class="col-6" style="max-width:500px;min-width:300px;padding:0;">
+          <input type="hidden" class="form-input" name="utm_adgroup" value="*">
+          <input type="hidden" class="form-input" name="utm_campaign" value="*">
+          <input type="hidden" class="form-input" name="utm_source" value="organic">
+          <input type="hidden" class="form-input" name="utm_medium" value="sales-entry">
+          <input type="hidden" class="form-input" name="utm_term" value="*">
+          <input type="hidden" class="form-input" name="utm_content" value="*">
+          <input type="hidden" class="form-input" name="source_page" value="signup">
+          <input type="hidden" class="form-input" name="ifs_lead_id">
+          <input type="hidden" class="form-input" name="workbook_id">
+          <input type="hidden" class="form-input" name="create_contact" value="true">
+          <input type="hidden" class="form-input" name="lat">
+          <input type="hidden" class="form-input" name="lng">
+          <input type="hidden" class="form-input" name="sale_source" value="337">
+          <input type="hidden" class="form-input" name="opportunity_stage" value="281">
+          <input type="hidden" class="form-input" name="tags" value="120,401,481">
+		      <input required type="email" class="form-input" name="sales_rep" placeholder="Sales Agent Email" readonly>
+          <input required="" type="email" class="form-input lookup" name="email" placeholder="Email">
+          <input required="" type="text" class="form-input" name="given_name" placeholder="First Name">
+          <input required="" type="text" class="form-input" name="family_name" placeholder="Last Name">
+          <input required="" type="tel" class="form-input" name="phone" placeholder="Phone">
+          <input required="" type="text" class="form-input" name="line1" placeholder="Street">
+          <input type="text" class="form-input" name="line2" placeholder="Street Line 2">
+          <input required="" type="text" class="form-input" name="locality" placeholder="City">
+          <select class="form-input" name="region" required="" data-placeholder="State">
+            <option value="">State</option>
+            <option value="ID">Idaho</option>
+            <option value="MT">Montana</option>
+            <option value="NV">Nevada</option>
+            <option value="NV">Oregon</option>
+          </select>
+          <input required="" type="text" class="form-input" name="postal_code" placeholder="Zip Code">
+          <input type="text" class="form-input" name="promo_code" placeholder="Promo Code">
+          <select class="form-input" name="product_line" required="" data-placeholder="Residential or Commercial Use">
+            <option value="">Residential or Commercial Use</option>
+            <option value="83">Residential</option>
+            <option value="84">Commercial</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="tab" data-props='{"name":"Fiber","numerate":true,"allowskip":true}'>
+      <input type="hidden" class="form-input" name="email">
+      <input type="hidden" class="form-input" name="ifs_lead_id">
+      <input type="hidden" class="form-input" name="workbook_id">
+      <div class="packages" style="flex-direction:reverse;"></div>
+    </div>
+    <div class="tab" data-props='{"name":"Add Ons","numerate":true,"allowskip":true}'>
+      <input type="hidden" class="form-input" name="email">
+      <input type="hidden" class="form-input" name="ifs_lead_id">
+      <input type="hidden" class="form-input" name="workbook_id">
+      <input type="hidden" class="form-input addontags" name="tags">
+      <fieldset>
+        <p>I would also like to receive more information about the following products offered through Anthem Broadband:</p>
+        <div class="form-controller">
+          <div class="input-group-text">
+            <input data-tag="379" class="addon form-input" name="voip" type="checkbox" value="true">
+          </div>
+          VoIP Phone System
+        </div>
+        <div class="form-controller">
+          <div class="input-group-text">
+            <input data-tag="377" class="addon form-input" name="security" type="checkbox" value="true">
+          </div>
+          Home automation and security
+        </div>
+        <div class="form-controller">
+          <div class="input-group-text">
+            <input data-tag="381" class="addon form-input" name="northwest" type="checkbox" value="true">
+          </div>
+          Home or Business wiring solutions, (i.e. home theaters, Wi-Fi, solutions, network cabling. paging, etc.)
+        </div>
+        <small>By selecting any of these options, you give us permission to contact you by phone or email to discuss your options and provide a custom quote.</small>
+      </fieldset>
+    </div>
+    <div class="tab" data-props='{"name":"Access Agreement","numerate":true,"allowskip":true}'>
+      <input type="hidden" class="form-input" name="email">
+      <input type="hidden" class="form-input" name="workbook_id">
+      <input type="hidden" class="form-input" name="contracts" value="true">
+      <input type="hidden" class="form-input" name="tags" value="218">
+      <h2>Tell us more about the property</h2>
+	  <p><button class="btn yellow" id="send_contract">Send Contract to Customer</button></p>
+      <br>
+      <strong id="vac"></strong>
+      <br>
+      <div>
+        I affirm that I am the owner of the property shown above and that I have legal authority to grant access to the property.<br>
+        <input required="" placeholder="Owner Verification" type="radio" class="form-input" name="own_location" value="true"> Yes
+        <input required="" placeholder="Owner Verification" type="radio" class="form-input" name="own_location" value="false"> No
+      </div>
+      <br>
+      <div id="owner_yes" style="display:none;">
+        <input placeholder="property Access Agreement" type="checkbox" class="form-input" name="property_access" value="true"> 
+        I grant Anthem Broadband, its contractors, and employees access to the property for the purpose of installing a fiber internet connection and future access for repair and maintenance of said connection.
+      </div>
+      <div id="owner_no" class="flex-col" style="display:none;color:red;padding:1rem;border:1px solid red;margin:1rem 0;">
+        <p>We require permission from the property owner to proceed with the installation.</p>
+        <input type="text" class="form-input" name="landlord_name" placeholder="Landlord's Name">
+        <input type="text" class="form-input" name="landlord_email" placeholder="Landlord's E-mail">
+        <input type="text" class="form-input" name="landlord_phone" placeholder="Landlord's Phone">
+      </div>
+      <br>
+      <div>
+        <input required="" placeholder="Terms &amp; Conditions Agreement" type="checkbox" class="form-input" name="terms_conditions" value="true"> 
+        I have read and agree to the <a href="https://anthembroadband.com/terms-conditions/" target="_blank" rel="noopener">terms and conditions</a>
+      </div>
+      <hr>
+      <div class="flex-row">
+        <p>For the installation of new services where an existing fiber internet connection does not exist, please indicate which location on the house you would most like the connection point to be made. The connection will consist of a small box (NID) placed on the side of the house. From there, the fiber line will be connected to the service line (most often by the road or alley) and a second connection will be pulled from the NID through the wall to be connected to the router. (click here to learn more)</p>
+        <p>Please note that we will do our best to abide by your request but may have to make alterations based on terrain and other obstacles. If any changes are made, we will contact you in advance to discuss the changes and any options you may have.</p>
+        <div class="w-50">
+          <p>My preferred location for the NID best corresponds with number<br>
+            <input required="" type="number" min="1" max="11" class="form-input small" name="nid_location" placeholder="NID Location">
+          </p>
+          <p><label><input placeholder="Installation Date Notification" type="checkbox" class="form-input" name="installation_notification" value="true"> We typically install the NID when construction teams are available in the area and may do so when you are not home. If you require being home during the install, please check here. Otherwise leave it blank.</label></p>
+          </div>
+          <div style="padding:1rem;" class="w-50">
+            <img src="/wp-content/plugins/fiberzones/img/fiber_connection.jpg">
+            <img src="/wp-content/plugins/fiberzones/img/fiber_home.jpg">
+          </div>
+      </div>
+      <hr>
+      <h3>To the best of my knowledge, the information I have provided is true and correct and I agree to be bound to the terms as outlined in this agreement.</h3>
+      <i>By selecting the "I Accept" button and typing your name below, you agree that you are signing this Agreement electronically. Each party agrees that the electronic signatures, whether digital or encrypted, of the parties included in this Agreement are intended to authenticate this writing and to have the same force and effect as manual signatures. Electronic signature means any electronic writing, symbol, or process attached to or logically associated with a record and executed and adopted by a party with the intent to sign such record, including email electronic signatures."</i>
+      <p><input required="" placeholder="Legal Signature Agreement" type="checkbox" class="form-input" name="legal_signature" value="true"> I Accept</p>
+      <div>
+        Customer Signature: 
+        <br>
+        <input required="" placeholder="Customer Signature" type="text" class="form-input" name="customer_signature">
+      </div>
+      <div>What email address would you like us to send a copy of this agreement to?<br>
+        <input required="" placeholder="Notification Email" type="email" class="form-input" name="notification_email">
+      </div>
+    </div>
+    <!-- <div class="tab validate" data-props='{"name":"Schedule","numerate":true}'>
+      <input type="hidden" class="form-input" name="email">
+      <input type="hidden" class="form-input" name="workbook_id">
+      <div class="calendar-content">
+        <input type="hidden" class="form-input" name="date">
+        <div id="myCalendar" class="vanilla-calendar"></div>
+        <div class="appointments">
+          <div class="date"></div>
+          <input placeholder="Time Slot" type="radio" class="form-input" name="time" value="1" id="1">
+          <label for="1" class="morning"></label>
+          <input placeholder="Time Slot" type="radio" class="form-input" name="time" value="2" id="2">
+          <label for="2" class="afternoon"></label>
+        </div>
+      </div>
+    </div> -->
+    <div class="controller fullwidth">
+      <div class="status"></div>
+      <div class="flex-center w-100" style="justify-content:space-between;">
+        <button name="prev" class="btn flex-center secondary w-100"><span class="btn-rev">Previous</span></button>
+        <button name="next" id="btn" class="btn flex-center red w-100">Continue</button>  
+      </div>
+    </div>
+  </div>
+</form>
+<section id="background" class="flex-row hidden"></section>

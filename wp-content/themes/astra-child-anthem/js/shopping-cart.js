@@ -82,6 +82,8 @@ const infusionsoftSubmit = (dat) => {
     method: 'POST'
   }
   return ajax(api).then(res => {
+
+    console.log(res);
     if ( [200, 201].includes(res.contact.status_code) ) {
       if (res.contact) {
         let i = res.contact;
@@ -152,52 +154,55 @@ const loadPackages = async () => {
 		headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
 	}
   await ajax(api).then(res => {
-    let pack = res.data.filter(i => {
-      return i.product_category__name === 'Fiber' && i.product_line__name === 'Residential' && i.id !== 68;
-    });
-    let cell = '';
-    for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
-
-    let container = document.querySelector('.shopping-cart .packages');
-    container.insertAdjacentHTML("afterbegin",
-      `<input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">`
-    );
-    let percent = 100 - (pack.length * 20);
-    for (let i of pack) {
-      let tmp = percent;
-      percent = tmp + 20;
-      container.insertAdjacentHTML("afterbegin", `
-        <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-        <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
-          <h3 class="amount">$${i.monthly_price}</h3>
-          <div class="anim-container">
-            <div class="anim">${cell}</div>
-            <div class="hide" style="left:${percent}%"></div>
-          </div>
-          <h3 class="title">${i.name}</h3>
-          <h4 style="color:#fff;">${i.speed}</h4>
-          <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
-          ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
-        </label>
-      `);
-      let checkbox = document.querySelector(`#id-${i.id}`);
-      let btn = document.querySelector(`[data-id="${i.id}"]`);
-      checkbox.addEventListener('click', (elem) => {
-        let btns = document.querySelectorAll(`[data-html]`);
-        for (let i of btns) i.innerHTML = i.getAttribute('data-html');
-        let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
-        if (elem.target.checked === true) btn.innerHTML = 'Selected';
+    if ([200, 201, 202, 203].includes(res.status)) {
+      let pack = res.data.filter(i => {
+        return i.product_category__name === 'Fiber' && i.product_line__name === 'Residential' && i.id !== 68;
       });
+      let cell = '';
+      for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
+  
+      let container = document.querySelector('.shopping-cart .packages');
+      container.insertAdjacentHTML("afterbegin",
+        `<input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">`
+      );
+      let percent = 100 - (pack.length * 20);
+      for (let i of pack) {
+        let tmp = percent;
+        percent = tmp + 20;
+        container.insertAdjacentHTML("afterbegin", `
+          <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
+          <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
+            <h3 class="amount">$${i.monthly_price}</h3>
+            <div class="anim-container">
+              <div class="anim">${cell}</div>
+              <div class="hide" style="left:${percent}%"></div>
+            </div>
+            <h3 class="title">${i.name}</h3>
+            <h4 style="color:#fff;">${i.speed}</h4>
+            <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
+            ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
+          </label>
+        `);
+        let checkbox = document.querySelector(`#id-${i.id}`);
+        let btn = document.querySelector(`[data-id="${i.id}"]`);
+        checkbox.addEventListener('click', (elem) => {
+          let btns = document.querySelectorAll(`[data-html]`);
+          for (let i of btns) i.innerHTML = i.getAttribute('data-html');
+          let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
+          if (elem.target.checked === true) btn.innerHTML = 'Selected';
+        });
+      }
+      let accordion = document.querySelectorAll('[data-accordion="accordion"]');
+      for (let i of accordion) add_accordion(i);
+    } else {
+      console.log(`Agile: Packages failed to Load...`);
     }
-    
-    let accordion = document.querySelectorAll('[data-accordion="accordion"]');
-    for (let i of accordion) add_accordion(i);
   });
 }
 const generateWoObj = (data) => {
   let ob = {  
     o: 5,
-    // contact_id: 0,
+    contact_id: 0,
     contact_info: {
       first_name: data.given_name,
       last_name: data.family_name,
@@ -214,6 +219,7 @@ const generateWoObj = (data) => {
     },
     opportunity_stage: data.opportunity_stage,
     sales_source: data.sale_source,
+    product_line: data.product_line,
     packages: []
   }
   if (data.ifs_lead_id !== '') {
@@ -234,6 +240,7 @@ const workbook = async (token, data) => {
 const onTabChange = async data => {
   mainBtn.innerHTML = loader;
 	mainBtn.disabled = true;
+  let stat = document.querySelector('.shopping-cart .controller .status');
 	let thisTab = {};
   let token = await getToken();
   
@@ -246,22 +253,19 @@ const onTabChange = async data => {
   });
 
   if (thisTab.create_contact) {
-    console.log(`Creating Contact`);
     let ifs = infusionsoftSubmit(thisTab);
     wbOb = generateWoObj(thisTab);
     let wb = await workbook(token, wbOb);
+    if (![200, 201, 202].includes(wb.status)) {
+      if (wb.detail) {
+        stat.innerHTML = `<div class="warning">${wb.detail}</div>`;
+      }
+      return false;
+    }
+    
     let workbook_id_list = document.querySelectorAll('.shopping-cart [name=workbook_id]');
     for (let i of workbook_id_list) i.value = wb.result.workbook_id;
-    console.log(`Workbook ${wb.detail}`);
-    // console.log(ifs);
-    // if (ifs.contact) thisTab.ifs_lead_id = ifs.contact.id;
-    // let agileSearch = await agileLookup(token, thisTab);
-    // thisTab = agileSearch.data;
-    // let agileContact = await agileSubmitContact(token, thisTab);
-    // if (values.create_account === true) {
-    //   if (agileContact.account) thisTab.account_id = agileContact.account.id;
-    //   if (agileContact.contact) thisTab.contact_id = agileContact.contact.id;
-    // }
+    console.log(`Contact workbook ${wb.detail}`);
     let i = thisTab;
 
     if (document.querySelector('#vac')) {
@@ -279,16 +283,20 @@ const onTabChange = async data => {
     delete values.agile_schedule;
   }
 	if (thisTab.package && thisTab.package !== '') {
-    console.log(`Storing Package`);
 		values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
     wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
     wbOb.workbook_id = parseInt(thisTab.workbook_id);
-    let wbAddedPackage = await workbook(token, wbOb);
-    console.log(`Workbook package ${wbAddedPackage.detail}`);
+    let wbPack = await workbook(token, wbOb);
+    if (![200, 201, 202].includes(wbPack.status)) {
+      if (wbPack.detail) {
+        stat.innerHTML = `<div class="warning">${wbPack.detail}</div>`;
+      }
+      return false;
+    }
+    console.log(`Workbook package ${wbPack.detail}`);
 		delete thisTab.package;
 	}
   if (thisTab.contracts) {
-    console.log(`Storing Contracts`);
     thisTab.comments = `Workbook Order: #${values.workbook_id}`;
     let contractData = infusionsoftSubmit(thisTab);
     let i = thisTab;
@@ -300,18 +308,18 @@ const onTabChange = async data => {
       Nid Location: ${i.nid_location}
       Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? true : false}
       Customer requires to be at home during installation: ${i.installation_notification === 'true' ? true : false}
-      ${i.notification_email ? '<br>Notification Email: ' + i.notification_email : '<br>'}
+      ${i.notification_email ? 'Notification Email: ' + i.notification_email : ''}
       Customer Signature: ${i.customer_signature}
+      Sales Representative: ${localStorage.getItem("agileRepEmail")}
       ${or !== '' ? `Products:<br>${or}`: ''}
     `;
     wbOb.opportunity_notes = notes;
     wbOb.sales_notes = notes;
-    let wpAddedNotes = await workbook(token, wbOb);
-    console.log(`Workbook notes ${wpAddedNotes.detail}`);
+    let wbNotes = await workbook(token, wbOb);
+    console.log(`Workbook notes ${wbNotes.detail}`);
     delete thisTab.tags;
   }
   if (thisTab.tags && thisTab.tags !== '') {
-    console.log(`Storing Tags`);
 		if (thisTab.tags !== '') {
 			let addons = await infusionsoftSubmit(thisTab);
 		}
@@ -330,12 +338,8 @@ const initShopCartForm = async (firstTry=true) => {
       mainBtn.disabled = true;
       let token = await getToken();
       let i = values;
-      // let ifs = infusionsoftSubmit(i);
 
       let or = '';
-      // if (ifs.order.order_items.length > 0) {
-      //   for (let e of ifs.order.order_items) or += `$${e.price} ${e.name}<br>`;
-      // }
 
       let api = {
         url: `${agileUrl}sales/make_sale/`,
@@ -345,21 +349,41 @@ const initShopCartForm = async (firstTry=true) => {
       }
       let saleCompleted = await ajax(api).then(res => res);
       console.log(saleCompleted);
-
-      // let agileWo = await scheduleWo(token, values);
-      // Work Order: #${agileWo.workorder.id}<br>
-      // values.comments = `Work Order: #${agileWo.workorder.id}`;
+      console.log(saleCompleted.detail);
 
       mainBtn.innerHTML = temp;
       mainBtn.disabled = false;
       
+      let records = ``;
+      if (curPg.includes('sales-entry')) {
+        let o = saleCompleted.result;
+        let e = `https://agileisp.com/?`;
+        let u = `https://vx952.infusionsoft.com/Contact/manageContact.jsp?view=edit&ID=`
+        records = `
+          Workorder Number: <a href="${e}s=wo&p=edit&pk=${o.workorder_id}&o=5" target="_blank"> 
+            #${o.workorder_id}
+          </a><br>
+          Workbook Number: <a href="${e}o=5&s=sales&p=workbook&id=${o.workorder_id}" target="_blank"> 
+            #${o.workorder_id}
+          </a><br>
+          Keap id: <a href="${u}${i.ifs_lead_id}" target="_blank"> 
+            #${i.ifs_lead_id}
+          </a><br>
+        `;
+      } else {
+        records = `
+          Workorder Number: #${o.workorder_id}<br>
+          Workbook Number: #${o.workorder_id}<br>
+        `;
+      }
+
       shop.innerHTML = `
         <h4>Data submitted successfully</h4>
         Name: ${i.given_name} ${i.family_name}<br>
         Phone: ${i.phone}<br>
         Email: ${i.email}<br>
         ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
-        Order Number: #${i.workbook_id}<br>
+        ${records}
         Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
         Nid Location: ${i.nid_location}<br>
         Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? 'yes' : 'no'}<br>
@@ -369,9 +393,6 @@ const initShopCartForm = async (firstTry=true) => {
         Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
         ${or !== '' ? `Products:<br>${or}`: ''}
       `;
-      
-      // delete values.notes;
-      // let ifs2 = await infusionsoftSubmit(values);
     });
   }
 }
@@ -387,7 +408,7 @@ const woLookup = async (token, a) => {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // VARIABLES
   const sendContract = document.querySelector('#send_contract');
   let newUrl = new URLSearchParams(window.location.search);
@@ -396,9 +417,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let addon = document.querySelectorAll('.addon');
   let addon_tags = document.querySelector('.addontags');
   let email = document.querySelector('.lookup');
+  let login = document.querySelector('.login');
   
   // FUNTIONS
-  initShopCartForm();
+  let token = await getToken();
+  await initShopCartForm();
   // woLookup();
   if (newUrl.get('address')) {
     if (document.querySelector('#vac')) {

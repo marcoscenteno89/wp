@@ -54,6 +54,26 @@ function fi_submit_contact() {
 	$body['phone_numbers'] = [];
 	$body['email_opted_in'] = true;
 	$body["opt_in_reason"] = "Service notifications.";
+
+  if (isset($data->sales_rep)) {
+
+    $api['request'] = 'PUT';
+    $api['url'] = $inf."contacts/?access_token=$token->accessToken&";
+    $api['body'] = json_encode([
+      "duplicate_option" => "Email",
+      "email_addresses" => [
+        ["email" => $data->email, "field" => "EMAIL1"]
+      ],
+    ]);
+    $con = (object) apirequest($api);
+
+    // $api['request'] = 'GET';
+    // $api['url'] = $inf."contacts/$data->ifs_lead_id/?access_token=$token->accessToken&";
+    // $api['body'] = '{}';
+    // $con = apirequest($api);
+    echo json_encode(['sales_rep' => $con]);
+    exit;
+  }
 	
   if (isset($data->given_name)) $body["given_name"] = $data->given_name;
   if (isset($data->family_name)) $body["family_name"] = $data->family_name;
@@ -82,12 +102,12 @@ function fi_submit_contact() {
 		$users = apirequest($api);
 		for ($i = 0; $i < count($users['users']); $i++) {
 			$temp = (object) $users['users'][$i];
-			if ( $data->sales_rep == $temp->email_address ) $user = $temp;
+			if (strtolower($data->sales_rep) == strtolower($temp->email_address)) $user = $temp;
 		}
 		if ($user != '') $body['owner_id'] = $user->id;
 	}
 	
-    //CUSTOM FIELDS
+  //CUSTOM FIELDS
 	if (isset($data->product_line)) $cstF = cst_field($cstF, $data->product_line, 20);
 	if (isset($data->how_many_devices)) $cstF = cst_field($cstF, $data->how_many_devices, 22);
 	if (isset($data->referred_by)) $cstF = cst_field($cstF, $data->referred_by, 106);
@@ -249,7 +269,7 @@ function fi_submit_contact() {
 		'users' => $users, 
 		'sales_rep' => $user
 	]);
-    exit;
+  exit;
 }
 
 function fi_get_contact() {

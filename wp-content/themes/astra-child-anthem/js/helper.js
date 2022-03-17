@@ -195,12 +195,17 @@ function form(form,  onTabChange=false) {
         }
         let o = controller;
         for (let i = 0; i < tabList.length; i++) {
-          o.stage.push({
-            index: i,
-            name: JSON.parse(tabList[i].getAttribute("data-props")).name,
-            tab: tabList[i],
-            tabProps: JSON.parse(tabList[i].getAttribute("data-props"))
-          });
+          let stringProps = tabList[i].getAttribute("data-props");
+          if (stringProps) {
+            let props = JSON.parse(stringProps);
+            tabList[i].id = `id-${props.name.toLowerCase().replace(' ', '-')}`;
+            o.stage.push({
+              index: i,
+              name: props.name,
+              tab: tabList[i],
+              tabProps: props
+            });
+          }
         }
         o.next_content = o.next.innerHTML;
         o.current = o.stage[0];
@@ -281,7 +286,7 @@ function form(form,  onTabChange=false) {
           if (!data[i].valid) {
             data[i].field.style.border = '1px solid #f5c6cb';
             data[i].field.style.background = '#f8d7da';
-            msg += `<div style="color:red;">
+            msg += `<div class="warning">
               ${data[i].field.placeholder}: ${data[i].field.validationMessage}
             </div>`;
           } else {
@@ -351,6 +356,7 @@ function ajax(api, callback=false) {
     data.status = tmp;
     return data;
   }).catch(err => {
+    console.log(api);
     console.log(err);
   });
 }

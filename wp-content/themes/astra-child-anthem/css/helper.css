@@ -42,7 +42,7 @@ form :is(.btn) {
     opacity: 1;
     padding-right: 25px;
 }
-form :is(input[type="text"], input[type="email"], input[type="tel"], select, .btn, textarea) {
+form :is(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, .btn, textarea) {
     width: 100%;
     padding: 7px 20px;
     margin-bottom: 7px;
@@ -186,6 +186,14 @@ form :is(.btn-rev) {
 }
 .tabs .steps .step span, .tabs .steps .step small, .btn span {
   pointer-events: none;
+}
+.warning {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 4px 20px;
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
 }
 /* CIRCLE STYLES */
 .tabs .steps.circle .step {
