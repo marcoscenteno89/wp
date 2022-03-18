@@ -54,26 +54,6 @@ function fi_submit_contact() {
 	$body['phone_numbers'] = [];
 	$body['email_opted_in'] = true;
 	$body["opt_in_reason"] = "Service notifications.";
-
-  if (isset($data->sales_rep)) {
-
-    $api['request'] = 'PUT';
-    $api['url'] = $inf."contacts/?access_token=$token->accessToken&";
-    $api['body'] = json_encode([
-      "duplicate_option" => "Email",
-      "email_addresses" => [
-        ["email" => $data->email, "field" => "EMAIL1"]
-      ],
-    ]);
-    $con = (object) apirequest($api);
-
-    // $api['request'] = 'GET';
-    // $api['url'] = $inf."contacts/$data->ifs_lead_id/?access_token=$token->accessToken&";
-    // $api['body'] = '{}';
-    // $con = apirequest($api);
-    echo json_encode(['sales_rep' => $con]);
-    exit;
-  }
 	
   if (isset($data->given_name)) $body["given_name"] = $data->given_name;
   if (isset($data->family_name)) $body["family_name"] = $data->family_name;

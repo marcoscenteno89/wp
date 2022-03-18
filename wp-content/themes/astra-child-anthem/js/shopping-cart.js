@@ -363,8 +363,8 @@ const initShopCartForm = async (firstTry=true) => {
           Workorder Number: <a href="${e}s=wo&p=edit&pk=${o.workorder_id}&o=5" target="_blank"> 
             #${o.workorder_id}
           </a><br>
-          Workbook Number: <a href="${e}o=5&s=sales&p=workbook&id=${o.workorder_id}" target="_blank"> 
-            #${o.workorder_id}
+          Workbook Number: <a href="${e}o=5&s=sales&p=workbook&id=${o.workbook_id}" target="_blank"> 
+            #${o.workbook_id}
           </a><br>
           Keap id: <a href="${u}${i.ifs_lead_id}" target="_blank"> 
             #${i.ifs_lead_id}
@@ -372,8 +372,8 @@ const initShopCartForm = async (firstTry=true) => {
         `;
       } else {
         records = `
-          Workorder Number: #${o.workorder_id}<br>
-          Workbook Number: #${o.workorder_id}<br>
+          Workorder Number: #${saleCompleted.result.workorder_id}<br>
+          Workbook Number: #${saleCompleted.result.workorder_id}<br>
         `;
       }
 
