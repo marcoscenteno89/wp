@@ -26,15 +26,13 @@ function child_enqueue_styles() {
   wp_enqueue_style( 
     'fontawesome', 
     'https://use.fontawesome.com/releases/v5.3.1/css/all.css', 
-    array(), 
-    date("m.d"), 
+    array(),  
     'all'
   );
   wp_enqueue_style( 
     'bootstrapcss', 
     'https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', 
     array(), 
-    date("m.d"), 
     'all'
   );
   wp_enqueue_script( 
@@ -49,39 +47,38 @@ function child_enqueue_styles() {
     array('jquery'), 
     ''
   );
-
   wp_enqueue_script(
     'astrachildjs', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/astra-child.js', 
     array('jquery'), 
-    false, 
+    date("m.d"), 
     true
   );
   wp_enqueue_script(
     'helper', get_stylesheet_directory_uri( __FILE__ ) . '/js/helper.js', 
     array('jquery'), 
-    false, 
+    date("m.d"), 
     true
   );
   wp_enqueue_script(
     'shoppingcart', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/shopping-cart.js', 
-    array('helper'), 
-    date("m.d.h"), 
-    true
-  );
-  wp_enqueue_script(
-    'calendar', 
-    get_stylesheet_directory_uri( __FILE__ ) . '/js/vanilla-calendar.js', 
-    array('shoppingcart'), 
-    false, 
+    array('helper', 'agile'), 
+    date("m.d"), 
     true
   );
   wp_enqueue_script(
     'agile', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/agile.js', 
     array('helper'), 
-    false, 
+    date("m.d"), 
+    true
+  );
+  wp_enqueue_script(
+    'calendar', 
+    get_stylesheet_directory_uri( __FILE__ ) . '/js/vanilla-calendar.js', 
+    array('shoppingcart'), 
+    date("m.d"), 
     true
   );
   wp_localize_script( 
@@ -89,6 +86,7 @@ function child_enqueue_styles() {
     'agile_token', 
     ['ajax_url' => admin_url('admin-ajax.php')]
   );
+  
 }
 
 function year_shortcode() {

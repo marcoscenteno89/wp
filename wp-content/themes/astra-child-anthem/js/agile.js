@@ -18,7 +18,10 @@ const verifyToken = tok => {
     method: 'POST',
     body: JSON.stringify({token: tok})
   }
-  return ajax(api).then(res => res.token ? true : false);
+  return ajax(api).then(res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
+    return res.token ? true : false;
+  });
 }
 const refreshToken = tok => {
   let api = {
@@ -28,6 +31,7 @@ const refreshToken = tok => {
     body: JSON.stringify({token: tok})
   }
   return ajax(api).then(res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
     localStorage.setItem("agileRepToken", res.token);
     localStorage.setItem("agileRepEmail", res.email);
     return res;
@@ -40,6 +44,7 @@ const updateToken = token => {
     url: agile_token.ajax_url
   }
   return ajax(api).then(res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
     localStorage.setItem("agileRepToken", res.token);
     localStorage.setItem("agileRepEmail", res.email);
     return res.token;
@@ -72,7 +77,7 @@ const getToken = async () => {
     // check if agile token is valid. 
     // Attempt to refresh token if no longer valid
     if (await verifyToken(agileRepToken)) {
-      salesRep.value = agileRepEmail;
+      if (salesRep) salesRep.value = agileRepEmail;
       return agileRepToken;
     } else {
       // Try to refresh Agile token
@@ -96,6 +101,7 @@ const newRepToken = async (e) => {
     })
   }
   await ajax(api).then(async res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
     if (![200].includes(res.status)) {
       loginStatus.innerHTML = `<div class="warning">${res.non_field_errors[0]}</div>`;
     }
@@ -107,7 +113,9 @@ const newRepToken = async (e) => {
   });
 }
 
-//EVENT LISTENERS
-if (curPg.includes('sales-entry')) {
-  agileSubmit.addEventListener('click', newRepToken);
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  //EVENT LISTENERS
+  if (curPg.includes('sales-entry')) {
+    agileSubmit.addEventListener('click', newRepToken);
+  }
+});

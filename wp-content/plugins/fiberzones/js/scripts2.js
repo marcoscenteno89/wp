@@ -17,8 +17,12 @@ const remChar = (text, char) => {
   return text.replace(substr, ''.repeat(substr.length));
 }
 let navItems = document.querySelectorAll('.navbar-nav li');
-let formEx = localStorage.getItem("formex");
-if (formEx) formEx = JSON.parse(formEx);
+let formEx = false;
+if (storageAvailable('localStorage')) {
+  formEx = localStorage.getItem("formex");
+  if (formEx) formEx = JSON.parse(formEx);
+}
+
 
 const isInView = (el) => {
 	let currentelem = el;
@@ -158,11 +162,11 @@ const custVerifyAddress = async (firstTry=true) => {
   // 			}
       
       let j = `${verForm.action}?`;
-      localStorage.setItem("formex", JSON.stringify(formEx));
+      if (formEx) localStorage.setItem("formex", JSON.stringify(formEx));
       sendData(`
         ${j}address=${i.address}&city=${i.city}
         &state=${i.state}&zip=${i.zip}
-        &status=${status.result[0].status}
+        &status=${status.result[0].properties.Status}
         ${utmString}
       `);
     } else {

@@ -340,6 +340,18 @@ const formatData = (string) => {
 	return newArr;
 }
 
+const storageAvailable =(type) => {
+  try {
+      var storage = window[type];
+      x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+  } catch(e) {
+      return false;
+  }
+}
+
 function ajax(api, callback=false) {
   if (!api.method) api.method = 'GET';
   if (!api.credentials) api.credentials = 'same-origin';

@@ -38,7 +38,8 @@ function cst_field($arr, $content,  $id) {
 function fi_submit_contact() {
   require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
 	$inf = 'https://api.infusionsoft.com/crm/rest/v1/';
-  $token = unserialize(get_option( 'ab_keap_token' ));
+  $tokenObj = unserialize(get_option( 'ab_keap_token' ));
+  $token = 'access_token='.$tokenObj->accessToken;
   @extract($_POST);
   $data = str_replace('\\', '', $data);
   $data = json_decode($data);
@@ -54,6 +55,25 @@ function fi_submit_contact() {
 	$body['phone_numbers'] = [];
 	$body['email_opted_in'] = true;
 	$body["opt_in_reason"] = "Service notifications.";
+
+  // LOGIN FOR NOT OVERWRITING CURRENT EXTERNAL OWNER
+  if (isset($data->sales_rep)) {
+    $empty = [null, '', ' ', 'null'];
+    $api['request'] = 'PUT';
+    $api['url'] = $inf."contacts/?optional_properties=custom_fields&$token";
+    $api['body'] = json_encode([
+      "duplicate_option" => "Email",
+      "email_addresses" => array(["email" => $data->email, "field" => "EMAIL1"]),
+    ]);
+    $con = (object) apirequest($api);
+    $exOwner = array_filter($con->custom_fields, function($data) {
+      return $data['id'] === 80;
+    });
+    $owner = reset($exOwner)['content'];
+    if (!in_array($owner, $empty)) {
+      $data->external_owner = $owner;
+    }
+  }
 	
   if (isset($data->given_name)) $body["given_name"] = $data->given_name;
   if (isset($data->family_name)) $body["family_name"] = $data->family_name;
@@ -77,7 +97,7 @@ function fi_submit_contact() {
     }
 	if (isset($data->sales_rep)) {
 		$api['request'] = 'GET';
-		$api['url'] = $inf."users/?access_token=$token->accessToken&";
+		$api['url'] = $inf."users/?$token";
 		$api['body'] = '';
 		$users = apirequest($api);
 		for ($i = 0; $i < count($users['users']); $i++) {
@@ -111,7 +131,10 @@ function fi_submit_contact() {
 	if (isset($data->legal_signature)) $cstF = cst_field($cstF, $data->legal_signature, 142);
 	if (isset($data->property_access)) $cstF = cst_field($cstF, $data->property_access, 154);
 	if (isset($data->own_location)) $cstF = cst_field($cstF, $data->own_location, 148);
-	if (isset($data->sales_rep)) $cstF = cst_field($cstF, $data->sales_rep, 80);
+	if (isset($data->sales_rep)) {
+    // CONDITIONAL MAKES SURE TO NOT OVERWRITE CURRENT EXTERNAL OWNER IF IT EXISTS
+    $cstF = cst_field($cstF, $data->external_owner ? $data->external_owner : $data->sales_rep, 80);
+  }
 	if (isset($data->installation_notification)) $cstF = cst_field($cstF, $data->installation_notification, 178);
 	// UTM FIELDS
 	if (isset($data->source_page)) $cstF = cst_field($cstF, $data->source_page, 14);
@@ -195,14 +218,14 @@ function fi_submit_contact() {
     $body["addresses"] = [$shipping, $billing];
   }
 	$api['request'] = 'PUT';
-	$api['url'] = $inf."contacts/?access_token=$token->accessToken&";
+	$api['url'] = $inf."contacts/?$token";
   $api['body'] = json_encode($body);
   $cont = (object) apirequest($api);
 	$tag;
   try {
     if (isset($data->tags)) {
       $api['request'] = 'POST';
-      $api['url'] = $inf."contacts/$cont->id/tags?access_token=$token->accessToken&";
+      $api['url'] = $inf."contacts/$cont->id/tags?$token";
       $api['body'] = '{
         "tagIds": ['.$data->tags.']
       }';
@@ -225,22 +248,21 @@ function fi_submit_contact() {
           array_push($order['order_items'], $item);
         }
         $api['request'] = 'POST';
-        $api['url'] = $inf."orders/?access_token=$token->accessToken&";
+        $api['url'] = $inf."orders/?$token";
         $api['body'] = json_encode($order);
         $or = apirequest($api);
       }
     }
   } catch (\Exception $e) {
-  // 		$state = ['api' => $api, 'contact' => $cont ];
-      if (function_exists( 'wp_sentry_safe')) {
-        wp_sentry_safe(function (\Sentry\State\HubInterface $client) use ($e) {
-          $client->withScope(function (\Sentry\State\Scope $scope) use ($client, $e) {
-            $scope->setExtra('user_data', $e->getData());
-            $client->captureException($e);
-          });
+    if (function_exists( 'wp_sentry_safe')) {
+      wp_sentry_safe(function (\Sentry\State\HubInterface $client) use ($e) {
+        $client->withScope(function (\Sentry\State\Scope $scope) use ($client, $e) {
+          $scope->setExtra('user_data', $e->getData());
+          $client->captureException($e);
         });
-      }
+      });
     }
+  }
 
   echo json_encode([
 		'request' => $data, 
@@ -256,13 +278,13 @@ function fi_get_contact() {
   require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
 	$inf = 'https://api.infusionsoft.com/crm/rest/v1/';
   $tokenObj = unserialize(get_option( 'ab_keap_token' ));
-  $token = '&access_token='.$tokenObj->accessToken;
+  $token = 'access_token='.$tokenObj->accessToken;
   @extract($_POST);
 	$datetime = new DateTime('now', new DateTimeZone('America/Boise'));
 
   $api['header'] = ['Content-Type: application/json'];
   $api['request'] = 'GET';
-  $api['url'] = $inf.'contacts?limit=1&email='.$email.$token;
+  $api['url'] = $inf.'contacts?limit=1&email='.$email.'&'.$token;
   $user = apirequest($api);
   if ($user['count'] > 0) {
     $userid = $user['contacts'][0]['id'];
