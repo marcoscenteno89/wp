@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // VARIABLES
+  const next = document.querySelector('[name=next]');
+  const prev = document.querySelector('[name=prev]');	
+  const sendContract = document.querySelector('#send_contract');
+  let newUrl = new URLSearchParams(window.location.search);
+  let owner = document.querySelectorAll('.shopping-cart [name="own_location"]');
+  let zone_status = document.querySelector('.zone_status');
+  let addon = document.querySelectorAll('.addon');
+  let addon_tags = document.querySelector('.addontags');
+  let email = document.querySelector('.lookup');
+  let login = document.querySelector('.login');
   let wbOb;
   const agileLookup = async (token, data) => {
     let api = {
@@ -143,58 +154,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     return await ajax(api).then(res => res);
   }
-  const loadPackages = async () => {
-    let token = await getToken();
-    let api = {
-      url: `${agileUrl}sales-package/?o=5&html=false`,
-      method: 'GET',
-      headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
-    }
-    await ajax(api).then(res => {
-      let container = document.querySelector('.shopping-cart .packages');
-      if ([200, 201, 202, 203].includes(res.status)) {
-        let pack = res.data.filter(i => {
-          return i.product_category__name === 'Fiber' && i.product_line__name === 'Residential' && i.id !== 68;
-        });
-        let cell = '';
-        for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
-    
-        let percent = 100 - (pack.length * 20);
-        for (let i of pack) {
-          let tmp = percent;
-          percent = tmp + 20;
-          container.insertAdjacentHTML("afterbegin", `
-            <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-            <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
-              <h3 class="amount">$${i.monthly_price}</h3>
-              <div class="anim-container">
-                <div class="anim">${cell}</div>
-                <div class="hide" style="left:${percent}%"></div>
-              </div>
-              <h3 class="title">${i.name}</h3>
-              <h4 style="color:#fff;">${i.speed}</h4>
-              <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
-              ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
-            </label>
-          `);
-          let checkbox = document.querySelector(`#id-${i.id}`);
-          let btn = document.querySelector(`[data-id="${i.id}"]`);
-          checkbox.addEventListener('click', (elem) => {
-            let btns = document.querySelectorAll(`[data-html]`);
-            for (let i of btns) i.innerHTML = i.getAttribute('data-html');
-            let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
-            if (elem.target.checked === true) btn.innerHTML = 'Selected';
-          });
-        }
-        let accordion = document.querySelectorAll('[data-accordion="accordion"]');
-        for (let i of accordion) add_accordion(i);
-      } else {
-        let msg = 'Failed to load packages....'
-        console.log(`Agile: ${res.detail}`);
-        container.insertAdjacentHTML("afterbegin", `<div class="warning col-12">${msg}</div>`);
-      }
-    });
-  }
   const generateWoObj = (data) => {
     let ob = {  
       o: 5,
@@ -218,6 +177,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       product_line: data.product_line,
       packages: []
     }
+    if (data.workbook_id !== '') {
+      ob.workbook_id = data.workbook_id;
+    }
     if (data.ifs_lead_id !== '') {
       ob.external_lead_id = data.ifs_lead_id;
       ob.source_value =  "ifs";
@@ -233,9 +195,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     return await ajax(api).then(res => res);
   }
-  const onTabChange = async data => {
-    mainBtn.innerHTML = loader;
-    mainBtn.disabled = true;
+  const onTabChange = async (data, elem, curTab) => {
+    btnLoader(elem, true);
     let stat = document.querySelector('.shopping-cart .controller .status');
     let thisTab = {};
     let token = await getToken();
@@ -252,14 +213,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       let ifs = infusionsoftSubmit(thisTab);
       wbOb = generateWoObj(thisTab);
       let wb = await workbook(token, wbOb);
-      console.log(`Agile: #${wb.result.workbook_id} #${wb.request.workbook_id} - Contact ${wb.detail}`);
+      console.log(wb);
       if (![200, 201, 202].includes(wb.status)) {
         if (wb.detail) {
           stat.innerHTML = `<div class="warning">${wb.detail}</div>`;
         }
+        btnLoader(elem, false);
         return false;
       }
-      
+      wbOb.workbook_id = parseInt(wb.result.workbook_id);
+      console.log(`Agile: #${wb.result.workbook_id} #${wb.request.workbook_id} - Contact ${wb.detail}`);
       let workbook_id_list = document.querySelectorAll('.shopping-cart [name=workbook_id]');
       for (let i of workbook_id_list) i.value = wb.result.workbook_id;
       let i = thisTab;
@@ -281,8 +244,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (thisTab.package && thisTab.package !== '') {
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
-      wbOb.workbook_id = parseInt(thisTab.workbook_id);
       let wbPack = await workbook(token, wbOb);
+      console.log(wbPack);
       console.log(`Agile: #${wbPack.result.workbook_id} #${wbPack.request.workbook_id} - Package ${wbPack.detail}`);
       if (![200, 201, 202].includes(wbPack.status)) {
         if (wbPack.detail) {
@@ -312,6 +275,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       wbOb.opportunity_notes = notes;
       wbOb.sales_notes = notes;
       let wbNotes = await workbook(token, wbOb);
+      if (![200, 201, 202].includes(wbNotes.status)) {
+        console.log(wbNotes);
+        if (wbNotes.detail) {
+          stat.innerHTML = `<div class="warning">${wbNotes.detail}</div>`;
+        }
+        btnLoader(elem, false);
+        return false;
+      }
       console.log(`Agile: #${wbNotes.result.workbook_id} #${wbNotes.request.workbook_id} - Notes ${wbNotes.detail}`);
       delete thisTab.tags;
     }
@@ -323,12 +294,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     for (let key in thisTab) values[key] = thisTab[key];
-    mainBtn.disabled = false;	
+    btnLoader(elem, false);
+    return true;
   }
   const initShopCartForm = async (firstTry=true) => {
     let shop = document.querySelector('.shopping-cart');
     if (shop) {
-      loadPackages();
+      setTimeout(() => loadPackages(), 500);
       form(shop, onTabChange).then( async val => {
         mainBtn.innerHTML = loader;
         mainBtn.disabled = true;
@@ -351,7 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         mainBtn.disabled = false;
         
         let records = ``;
-        if (curPg.includes('sales-entry')) {
+        if (curPg.includes('sales-entry') && curPg.includes('access')) {
           let o = saleCompleted.result;
           let e = `https://agileisp.com/?`;
           let u = `https://vx952.infusionsoft.com/Contact/manageContact.jsp?view=edit&ID=`
@@ -403,21 +375,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(res);
     });
   }
-
-  // VARIABLES
-  const mainBtn = document.querySelector('#btn');	
-  const temp = mainBtn ? mainBtn.innerHTML : null;
-  const sendContract = document.querySelector('#send_contract');
-  let newUrl = new URLSearchParams(window.location.search);
-  let owner = document.querySelectorAll('.shopping-cart [name="own_location"]');
-  let zone_status = document.querySelector('.zone_status');
-  let addon = document.querySelectorAll('.addon');
-  let addon_tags = document.querySelector('.addontags');
-  let email = document.querySelector('.lookup');
-  let login = document.querySelector('.login');
+  const btnLoader = (elem, state) => {
+    if (state) {
+      elem.setAttribute("data-html", elem.innerHTML);
+      elem.innerHTML = '<div class="loader"></div>';
+      elem.disabled = true;
+    } else {
+      elem.innerHTML = elem.getAttribute("data-html");
+      elem.disabled = false;
+    }
+  }
   
   // FUNTIONS
   // let token = await getToken();
+
   await initShopCartForm();
  
   if (newUrl.get('address')) {

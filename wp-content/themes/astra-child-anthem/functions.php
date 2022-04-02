@@ -101,6 +101,7 @@ function create_post_type() {
 
 function fz_agile_token() {
   $token = $_POST['token'];
+  $request = '';
   if (isset($token)) {
     if ($token === '') {
       require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
@@ -123,6 +124,7 @@ function fz_agile_token() {
       'token' => get_option('ab_agile_token'),
       'email' => get_option('ab_agile_user_email'),
       'updated' => $updated,
+      'request' => $request,
     ]);
     wp_die();
   }

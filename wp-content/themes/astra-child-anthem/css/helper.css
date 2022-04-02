@@ -4,51 +4,51 @@ Description: this style sheet contains all the basic core styles for themes and 
 Version: 1.0.0
  */
 * {
-    font-size: calc(11px + (15 - 11) * ((100vw - 300px) / (1500 - 300)));
+  font-size: calc(11px + (15 - 11) * ((100vw - 300px) / (1500 - 300)));
 }
 html, body { 
-    margin: 0; 
-    padding: 0;
+  margin: 0; 
+  padding: 0;
 }
 section, footer {
-    width: 100%; 
+  width: 100%; 
 }
 /* FORM STYLES*/
 form :is(.btn) {
-    position: relative;
-    margin-bottom: 0.3vw;
-    border-radius: 5px;
-    border: none;
-    color: #FFF !important;
-    font-size: 1.1rem;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  margin-bottom: 0.3vw;
+  border-radius: 5px;
+  border: none;
+  color: #FFF !important;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn:after {
-    content: '\00bb';
-    padding-left: 10px;
-    opacity: 0;
-    transition: all 1s;
+  content: '\00bb';
+  padding-left: 10px;
+  opacity: 0;
+  transition: all 1s;
 }
 .btn:disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 .btn:disabled::after {
-    content: normal;
+  content: normal;
 }
 .btn:hover::after {
-    opacity: 1;
-    padding-right: 25px;
+  opacity: 1;
+  padding-right: 25px;
 }
 form :is(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, .btn, textarea) {
-    width: 100%;
-    padding: 7px 20px;
-    margin-bottom: 4px;
-    border-radius: 5px;
-    border: solid 1px #666;
-    max-width: 280px;
+  width: 100%;
+  padding: 7px 20px;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  border: solid 1px #666;
+  max-width: 280px;
 }
 form :is(fieldset) {
 	padding: 2rem;
@@ -57,19 +57,19 @@ form :is(fieldset) {
 	border-radius: 5px;
 }
 form :is(.form-controller) {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    width: 100%;
-    margin-bottom: 7px;
-    border-radius: 5px;
-    border: none;
-    color: #666;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  width: 100%;
+  margin-bottom: 7px;
+  border-radius: 5px;
+  border: none;
+  color: #666;
 }
 form :is(.input-group-text) {
-    padding: 12px;
-    margin-right: 10px;
-    border-radius: 5px 0 0 5px;
+  padding: 12px;
+  margin-right: 10px;
+  border-radius: 5px 0 0 5px;
 }
 form :is(button[name=prev]) {
   transform: rotateY(180deg);
@@ -78,7 +78,7 @@ form :is(.btn-rev) {
   transform: rotateY(180deg);
 }
 .flex { 
-    display: flex;
+  display: flex;
 }
 .flex-center {
 	display: flex !important;
@@ -86,17 +86,17 @@ form :is(.btn-rev) {
 	align-items: center;
 }
 .flex-col {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
 }
 .flex-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
 }
 .w-100 { width: 100% !important; }
 .w-90 { width: 90% !important; }
@@ -111,60 +111,60 @@ form :is(.btn-rev) {
 .black-transparent { background: rgba(0, 0, 0, 0.8) !important; }
 .white-transparent { background: rgba(255, 255, 255, 0.8) !important; }
 .bold { 
-    font-weight: bold; 
-    text-decoration: underline;
+  font-weight: bold; 
+  text-decoration: underline;
 }
 /* LOADER STYLES */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 /* POPUP STYLES */
 #background {
-    top: 0;
-    left: 0;
-    position: fixed;
-    z-index: 999;
-    width: 100%;
-    height: 100vh;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 100vh;
 }
-#loader {
-   border-radius: 50%;
-    border-top: 2px solid #FFF;
-    width: 24px;
-    height: 24px;
-    animation: spin 2s linear infinite;
+.loader {
+  border-radius: 50%;
+  border-top: 2px solid #FFF;
+  width: 24px;
+  height: 24px;
+  animation: spin 2s linear infinite;
 }
 #popup {
-    position: relative;
-    width: 90%;
-    max-width: 768px;
+  position: relative;
+  width: 90%;
+  max-width: 768px;
 }
 #popup > .close {
-    border-radius: 50px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: -1.3rem;
-    right: -1.3rem;
-    font-size: 2rem;
-    font-weight: 300;
-    width: 3.4rem;
-    height: 3.4rem;
-    opacity: 1;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -1.3rem;
+  right: -1.3rem;
+  font-size: 2rem;
+  font-weight: 300;
+  width: 3.4rem;
+  height: 3.4rem;
+  opacity: 1;
 	z-index: 1;
 }
 /* MULTI-STEP FORMS STYLES */
 .tabs {
-    justify-content: center;
-    flex-direction: column;
+  justify-content: center;
+  flex-direction: column;
 }
 .tabs .tab {   
-    display: none;
-    flex-direction: column;
-    padding: 30px 0 0 0;
+  display: none;
+  flex-direction: column;
+  padding: 30px 0 0 0;
 }
 .tabs .steps .step.active {
   background-color: #FFFFFF;
@@ -172,8 +172,7 @@ form :is(.btn-rev) {
   z-index: 1;
 }
 .tabs .steps {
-    justify-content: space-between;
-    /* border: solid 1px #373737; */
+  justify-content: space-between;
 }
 .tabs .steps .step {
   display: flex;

@@ -4,7 +4,6 @@ Author: Marcos Centeno
 Version: 1.0
 */
 const exists = ['', undefined, null];
-const loader = '<div id="loader"></div>';
 const valid_phone = (x) => x.replace(/[^0-9]/g, '');
 
 function form(form,  onTabChange=false) {
@@ -57,7 +56,10 @@ function form(form,  onTabChange=false) {
       }
       if (processData) {
         for (let value of thisTab) compiledValues.push(value);
-        if (onTabChange) await onTabChange(thisTab);
+        if (onTabChange) {
+          let tabChangeStatus = await onTabChange(thisTab, event.target, o.current.index);
+          if (!tabChangeStatus) return false;
+        }
         if (finalStep) {
           let completedSteps = o.stage.filter(i => i.status === 'completed');
           let skippedSteps = o.stage.filter(i => i.status === 'skipped');
