@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
       contact_id: [`input[name="contact_id"]`],
       account_id: [`input[name="account_id"]`],
 		lat: [`input[name="lat"]`, `input[name="latitude"]`],
-		lng: [`input[name="lng"]`, `input[name="longitude"]`]
+		lng: [`input[name="lng"]`, `input[name="longitude"]`],
+    workbook_id: [`input[name="workbook_id"]`],
+    ifs_lead_id: [`input[name="ifs_lead_id"]`],
+    product_line: [`input[name="product_line"]`]
   }
 	const utm = ['utm_adgroup', 'utm_campaign', 'utm_source', 'utm_medium', 'utm_term', 'utm_content'];
 

@@ -115,6 +115,10 @@ function fi_submit_contact() {
 	if (isset($data->comments)) $cstF = cst_field($cstF, $data->comments, 102);
 	if (isset($data->account_id)) $cstF = cst_field($cstF, $data->account_id, 160);
 	if (isset($data->contact_id)) $cstF = cst_field($cstF, $data->contact_id, 156);
+
+  if (isset($data->workbook_id)) $cstF = cst_field($cstF, $data->workbook_id, 203);
+  if (isset($data->fiber_drop_wo)) $cstF = cst_field($cstF, $data->fiber_drop_wo, 199);
+  if (isset($data->new_activation_wo)) $cstF = cst_field($cstF, $data->new_activation_wo, 201);
 	//OPTIONAL PRODUCT FIELDS
 	if (isset($data->internet)) $cstF = cst_field($cstF, $data->internet, 181);
 	if (isset($data->voip)) $cstF = cst_field($cstF, $data->voip, 183);

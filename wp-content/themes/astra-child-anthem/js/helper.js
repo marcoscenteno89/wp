@@ -6,6 +6,17 @@ Version: 1.0
 const exists = ['', undefined, null];
 const valid_phone = (x) => x.replace(/[^0-9]/g, '');
 
+const btnLoader = (elem, state) => {
+  if (state) {
+    elem.setAttribute("data-html", elem.innerHTML);
+    elem.innerHTML = '<div class="loader"></div>';
+    elem.disabled = true;
+  } else {
+    elem.innerHTML = elem.getAttribute("data-html");
+    elem.disabled = false;
+  }
+}
+
 function form(form,  onTabChange=false) {
   return new Promise(function (resolve) {
 
@@ -57,7 +68,7 @@ function form(form,  onTabChange=false) {
       if (processData) {
         for (let value of thisTab) compiledValues.push(value);
         if (onTabChange) {
-          let tabChangeStatus = await onTabChange(thisTab, event.target, o.current.index);
+          let tabChangeStatus = await onTabChange(thisTab, event.target, o.current.index, status);
           if (!tabChangeStatus) return false;
         }
         if (finalStep) {
@@ -68,6 +79,7 @@ function form(form,  onTabChange=false) {
             let cursStatus = ''
             let l = o.stage;
             for (let i = 0; i < l.length; i++) {
+              btnLoader(o.next, true);
               cursStatus += `<p>
                 <button data-step="${i}" class="btn dynamic-btn ${l[i].status} flex-row" style="color:#fff;max-width:280px;">
                   <span>${i + 1}.${l[i].name.toUpperCase()}</span>
@@ -90,8 +102,8 @@ function form(form,  onTabChange=false) {
             let dynamicBtn = document.querySelectorAll('.dynamic-btn');
             dynamicBtn.forEach((elem, index) => {
               elem.addEventListener('click', async (event) => {
-                prompt({ remove: true });
                 event.preventDefault();
+                prompt({ remove: true });
                 await switchTab(o, event, force=true);
               });
             });
