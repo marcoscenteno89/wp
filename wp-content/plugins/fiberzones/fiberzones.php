@@ -18,9 +18,9 @@ function mc_fz_enqueue_scripts() {
   wp_register_style( 'mc_fz_admin_css', plugins_url( 'css/mc_fz_admin.css' , __FILE__ ), array(), date("m.d"), 'all');
   wp_register_style( 'styles1', plugins_url( 'css/styles1.css' , __FILE__ ), array('helpercss'), date("m.d"), 'all');
   wp_enqueue_style( 'styles2', plugins_url( 'css/styles2.css' , __FILE__ ), array('helpercss'), date("m.d"), 'all');
-  wp_register_script( 'scripts1', plugins_url( 'js/scripts1.js', __FILE__ ), array('helper_js'), date("m.d"), true);
-  wp_enqueue_script( 'scripts2', plugins_url( 'js/scripts2.js', __FILE__ ), array('agile'), date("m.d"), true);
-  wp_register_script( 'mc_fz_admin_js', plugins_url('js/mc_fz_admin.js' ,  __FILE__ ), array('helper_js'), date("m.d"), true);
+  wp_register_script( 'scripts1', plugins_url( 'js/scripts1.js', __FILE__ ), array('helper'), date("m.d"), true);
+  wp_enqueue_script( 'scripts2', plugins_url( 'js/scripts2.js', __FILE__ ), array('helper'), date("m.d"), true);
+  wp_register_script( 'mc_fz_admin_js', plugins_url('js/mc_fz_admin.js' ,  __FILE__ ), array('helper'), date("m.d"), true);
   wp_enqueue_script( 
     'googleapi', 
     "https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry&key=$googleapi", 

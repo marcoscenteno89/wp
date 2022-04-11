@@ -3,8 +3,13 @@ Description: This file contains helper functions and constant variables
 Author: Marcos Centeno
 Version: 1.0
 */
-const exists = ['', undefined, null];
+const exists = [''.trim(), undefined, null, false, 'null'];
 const valid_phone = (x) => x.replace(/[^0-9]/g, '');
+const agileUrl = 'https://agileisp.com/api/';
+const curPg = window.location.pathname;
+let agileRepToken = localStorage.getItem("agileRepToken");
+let agileRepEmail = localStorage.getItem("agileRepEmail");
+let agileAdmin = localStorage.getItem("agileAdmin");
 
 const btnLoader = (elem, state) => {
   if (state) {
@@ -17,7 +22,7 @@ const btnLoader = (elem, state) => {
   }
 }
 
-function form(form,  onTabChange=false) {
+const form = (form,  onTabChange=false) => {
   return new Promise(function (resolve) {
 
     // VARIABLES
@@ -315,7 +320,7 @@ function form(form,  onTabChange=false) {
   });
 }
 
-function prompt(a) {
+const prompt = (a) => {
   let background = document.querySelector('#background');
   if (a.container) {
     if (a.container === 'popup') {
@@ -366,7 +371,7 @@ const storageAvailable =(type) => {
   }
 }
 
-function ajax(api, callback=false) {
+const ajax = (api, callback=false) => {
   if (!api.method) api.method = 'GET';
   if (!api.credentials) api.credentials = 'same-origin';
   if (!api.headers) api.headers = new Headers({ 
@@ -385,4 +390,84 @@ function ajax(api, callback=false) {
     console.log(api);
     console.log(err);
   });
+}
+
+const verifyToken = tok => {
+  let api = {
+    url: `${agileUrl}auth-token/verify/`,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    method: 'POST',
+    body: JSON.stringify({token: tok})
+  }
+  return ajax(api).then(res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
+    return res.token ? true : false;
+  });
+}
+
+const refreshToken = tok => {
+  let api = {
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    url: `${agileUrl}auth-token/refresh/`,
+    method: 'POST',
+    body: JSON.stringify({token: tok})
+  }
+  return ajax(api).then(res => {
+    if (![200, 201, 202].includes(res.status)) console.log(res);
+    localStorage.setItem("agileRepToken", res.token);
+    localStorage.setItem("agileRepEmail", res.email);
+    return res;
+  });
+}
+
+const updateToken = token => {
+  let api = {
+    body: `action=agile_token&token=${token}`,
+    method: 'POST',
+    url: agile_token.ajax_url
+  }
+  return ajax(api).then(res => {
+    console.log(res);
+    localStorage.setItem("agileRepToken", res.token);
+    localStorage.setItem("agileRepEmail", res.email);
+    return res.token;
+  });
+}
+
+const getToken = async () => {
+  if(agileAdmin === 'true') {
+    if (agileRepEmail === 'cmason@anthembusinessgroup.com') {
+      localStorage.setItem("agileRepToken", null);
+      localStorage.setItem("agileRepEmail", null);
+    }
+    
+    if (exists.includes(agileRepToken)) {
+      agileLogin.style.display = 'flex';
+    } else {
+      if (await verifyToken(agileRepToken)) {
+        salesRep.value = agileRepEmail;
+        agileLogin.style.display = 'none';
+        return agileRepToken;
+      } else {
+        agileLogin.style.display = 'flex';
+      }
+    }
+    
+  } else {
+    // If token is null request brand new token 
+    if (exists.includes(agileRepToken)) {
+      return updateToken('');
+    }
+    // check if agile token is valid. 
+    // Attempt to refresh token if no longer valid
+    if (await verifyToken(agileRepToken)) {
+      return agileRepToken;
+    } else {
+      // Try to refresh Agile token
+      let newToken = await refreshToken(agileRepToken);
+      // If refreshtoken is sucessfull, send new token to server
+      // If refreshtoken is not sucessfull, request server for a brand new token
+      return newToken.token ? newToken.token : updateToken(''); 
+    }
+  }
 }

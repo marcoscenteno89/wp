@@ -23,7 +23,6 @@ if (storageAvailable('localStorage')) {
   if (formEx) formEx = JSON.parse(formEx);
 }
 
-
 const isInView = (el) => {
 	let currentelem = el;
 	let top = el.offsetTop;
@@ -129,6 +128,8 @@ const custVerifyAddress = async (firstTry=true) => {
     `;
   }
   form(verForm).then( async val => {
+    let next = document.querySelector('[name="next"]');
+    btnLoader(next, true);
     let newVal = {};
     for (let i in val) {
       newVal[val[i].name] = val[i].field.value;
@@ -169,8 +170,10 @@ const custVerifyAddress = async (firstTry=true) => {
         &status=${status.result[0].properties.Status}
         ${utmString}
       `);
+      setTimeout(() => btnLoader(next, false), 8000);
     } else {
       custVerifyAddress(firstTry=false);
+      btnLoader(next, false);
     }
   });
 }
