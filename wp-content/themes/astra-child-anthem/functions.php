@@ -63,14 +63,7 @@ function child_enqueue_styles() {
   wp_enqueue_script(
     'shoppingcart', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/shopping-cart.js', 
-    array('helper', 'agile'), 
-    date("m.d"), 
-    true
-  );
-  wp_enqueue_script(
-    'agile', 
-    get_stylesheet_directory_uri( __FILE__ ) . '/js/agile.js', 
-    array('helper'), 
+    array(), 
     date("m.d"), 
     true
   );
@@ -82,7 +75,7 @@ function child_enqueue_styles() {
     true
   );
   wp_localize_script( 
-    'agile', 
+    'shoppingcart', 
     'agile_token', 
     ['ajax_url' => admin_url('admin-ajax.php')]
   );
@@ -116,6 +109,7 @@ function fz_agile_token() {
       $request = apirequest($api);
       $token = $request['token'];
       $email = update_option( 'ab_agile_user_email', $request['email'], false );
+      $userId = update_option( 'ab_agile_user_id', $request['id'], false );
     }
 
     $updated = update_option( 'ab_agile_token', $token, false );
@@ -123,8 +117,8 @@ function fz_agile_token() {
     echo json_encode([
       'token' => get_option('ab_agile_token'),
       'email' => get_option('ab_agile_user_email'),
+      'id' => get_option('ab_agile_user_id'),
       'updated' => $updated,
-      'request' => $request,
     ]);
     wp_die();
   }

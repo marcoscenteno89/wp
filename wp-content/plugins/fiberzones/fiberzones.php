@@ -7,7 +7,14 @@
  */
 if ( !defined( 'ABSPATH' ) ) wp_die();
 function mc_fz_addmenu() {
-  add_menu_page('Fiber Zones Dashboard', 'Fiber Zones', 'manage_options', 'Fiber_zones', 'mc_fz_admin', 'dashicons-sos');
+  add_menu_page(
+    'Fiber Zones Dashboard', 
+    'Fiber Zones', 
+    'manage_options', 
+    'Fiber_zones', 
+    'mc_fz_admin', 
+    'dashicons-sos'
+  );
 }
 function fiberzones_options() {
   echo 'hello world';
@@ -15,12 +22,48 @@ function fiberzones_options() {
 function mc_fz_enqueue_scripts() {
   $googleapi = get_option( 'ab_google_api_1' );
   // ADD YOUR CUSTOM FILES HERE
-  wp_register_style( 'mc_fz_admin_css', plugins_url( 'css/mc_fz_admin.css' , __FILE__ ), array(), date("m.d"), 'all');
-  wp_register_style( 'styles1', plugins_url( 'css/styles1.css' , __FILE__ ), array('helpercss'), date("m.d"), 'all');
-  wp_enqueue_style( 'styles2', plugins_url( 'css/styles2.css' , __FILE__ ), array('helpercss'), date("m.d"), 'all');
-  wp_register_script( 'scripts1', plugins_url( 'js/scripts1.js', __FILE__ ), array('helper'), date("m.d"), true);
-  wp_enqueue_script( 'scripts2', plugins_url( 'js/scripts2.js', __FILE__ ), array('helper'), date("m.d"), true);
-  wp_register_script( 'mc_fz_admin_js', plugins_url('js/mc_fz_admin.js' ,  __FILE__ ), array('helper'), date("m.d"), true);
+  wp_register_style( 
+    'mc_fz_admin_css', 
+    plugins_url( 'css/mc_fz_admin.css' , __FILE__ ), 
+    array(), 
+    date("m.d"), 
+    'all'
+  );
+  wp_register_style( 
+    'styles1', 
+    plugins_url( 'css/styles1.css' , __FILE__ ), 
+    array('helpercss'), 
+    date("m.d"), 
+    'all'
+  );
+  wp_enqueue_style( 
+    'styles2', 
+    plugins_url( 'css/styles2.css' , __FILE__ ), 
+    array('helpercss'), 
+    date("m.d"), 
+    'all'
+  );
+  wp_register_script( 
+    'scripts1', 
+    plugins_url( 'js/scripts1.js', __FILE__ ), 
+    array('helper'), 
+    date("m.d"), 
+    true
+  );
+  wp_enqueue_script( 
+    'scripts2', 
+    plugins_url( 'js/scripts2.js', __FILE__ ), 
+    array(), 
+    date("m.d"), 
+    true
+  );
+  wp_register_script( 
+    'mc_fz_admin_js', 
+    plugins_url('js/mc_fz_admin.js' ,  __FILE__ ), 
+    array('helper'), 
+    date("m.d"), 
+    true
+  );
   wp_enqueue_script( 
     'googleapi', 
     "https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry&key=$googleapi", 
@@ -28,11 +71,36 @@ function mc_fz_enqueue_scripts() {
     array(), 
     true,
   );
-  wp_localize_script( 'mc_fz_admin_js', 'admin_ajax_url', ['ajax_url' => admin_url('admin-ajax.php')]);
-  wp_localize_script( 'mc_fz_js', 'fz_get_zone', ['ajax_url' => admin_url('admin-ajax.php')]);
-  wp_localize_script( 'mc_fz_admin_js', 'fz_get_zone', ['ajax_url' => admin_url('admin-ajax.php')]);
-  wp_localize_script( 'mc_fz_admin_js', 'fz_post_zone', ['ajax_url' => admin_url('admin-ajax.php')]);
-  wp_localize_script( 'mc_fz_js', 'fz_post_contact', ['ajax_url' => admin_url('admin-ajax.php')]);
+  wp_localize_script( 
+    'mc_fz_admin_js', 
+    'admin_ajax_url', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
+  wp_localize_script( 
+    'mc_fz_js', 
+    'fz_get_zone', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
+  wp_localize_script( 
+    'mc_fz_admin_js', 
+    'fz_get_zone', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
+  wp_localize_script( 
+    'mc_fz_admin_js', 
+    'fz_post_zone', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
+  wp_localize_script( 
+    'mc_fz_js', 
+    'fz_post_contact', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
+  wp_localize_script( 
+    'scripts2', 
+    'agile_token', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
 }
 function mc_fz( $atts ) {
   if (!is_admin()) {

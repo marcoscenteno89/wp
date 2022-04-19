@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 	
+	
 });
 
 function add_accordion(i) {

@@ -11,9 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const valid_phone = (x) => x.replace(/[^0-9]/g, '');
   const agileUrl = 'https://agileisp.com/api/';
   const curPg = window.location.pathname;
-  let agileRepToken = localStorage.getItem("agileRepToken");
-  let agileRepEmail = localStorage.getItem("agileRepEmail");
-  let agileAdmin = localStorage.getItem("agileAdmin");
 
   const agileLogin = document.querySelector('.loginbg');
   localStorage.setItem("agileAdmin", agileLogin ? true : false);
@@ -439,7 +436,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return ajax(api).then(res => {
       if (![200, 201, 202].includes(res.status)) console.log(res);
       localStorage.setItem("agileRepToken", res.token);
-      localStorage.setItem("agileRepEmail", res.email);
       return res;
     });
   }
@@ -451,48 +447,49 @@ document.addEventListener("DOMContentLoaded", async () => {
       url: agile_token.ajax_url
     }
     return ajax(api).then(res => {
-      console.log(res);
       localStorage.setItem("agileRepToken", res.token);
       localStorage.setItem("agileRepEmail", res.email);
+      localStorage.setItem("agileRepId", res.id);
       return res.token;
     });
   }
 
   const getToken = async () => {
-    if(agileAdmin === 'true') {
-      return loginScreen();
+    if (localStorage.getItem("agileAdmin") === 'true') {
+      if (localStorage.getItem("agileRepEmail") === 'cmason@anthembusinessgroup.com') {
+        localStorage.setItem("agileRepToken", null);
+        localStorage.setItem("agileRepEmail", null);
+        localStorage.setItem("agileRepId", null);
+      }
+
+      if (exists.includes(localStorage.getItem("agileRepToken"))) {
+        agileLogin.style.display = 'flex';
+      } else {
+        let verified = await verifyToken(localStorage.getItem("agileRepToken"));
+        if (verified) {
+          salesRep.value = localStorage.getItem("agileRepEmail");
+          agileLogin.style.display = 'none';
+          return localStorage.getItem("agileRepToken");
+        } else {
+          agileLogin.style.display = 'flex';
+          return false;
+        }
+      }
     } else {
       // If token is null request brand new token 
-      if (exists.includes(agileRepToken)) {
+      if (exists.includes(localStorage.getItem("agileRepToken"))) {
         return updateToken('');
       }
       // check if agile token is valid. 
       // Attempt to refresh token if no longer valid
-      if (await verifyToken(agileRepToken)) {
-        return agileRepToken;
+      if (await verifyToken(localStorage.getItem("agileRepToken"))) {
+        return localStorage.getItem("agileRepToken");
       } else {
         // Try to refresh Agile token
-        let newToken = await refreshToken(agileRepToken);
+        let newToken = await refreshToken(localStorage.getItem("agileRepToken"));
         // If refreshtoken is sucessfull, send new token to server
         // If refreshtoken is not sucessfull, request server for a brand new token
         return newToken.token ? newToken.token : updateToken(''); 
-      }
-    }
-  }
-
-  const loginScreen = async () => {
-    console.log(agileLogin);
-    if (exists.includes(agileRepToken)) {
-      agileLogin.style.display = 'flex';
-    } else {
-      let verified = await verifyToken(agileRepToken);
-      if (verified) {
-        salesRep.value = agileRepEmail;
-        agileLogin.style.display = 'none';
-        return agileRepToken;
-      } else {
-        agileLogin.style.display = 'flex';
-        return false;
       }
     }
   }
@@ -509,6 +506,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         password: document.querySelector('[name=password]').value
       })
     }
+    console.log(api);
     await ajax(api).then(async res => {
       btnLoader(e.target, false);
       if (![200].includes(res.status)) {
@@ -517,6 +515,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       localStorage.setItem("agileRepToken", res.token);
       localStorage.setItem("agileRepEmail", res.email);
+      localStorage.setItem("agileRepId", res.id);
       salesRep.value = res.email;
       agileLogin.style.display = 'none';
       setTimeout(() => loadPackages(), 1000);
@@ -524,7 +523,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const loadPackages = async () => {
     let token = await getToken();
-    console.log(token);
     setTimeout( async () => {
       let api = {
         url: `${agileUrl}sales-package/?o=5&html=false`,
@@ -540,36 +538,54 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
             let cell = '';
             for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
-        
             let percent = 100 - (pack.length * 20);
-            for (let i of pack) {
-              let tmp = percent;
-              percent = tmp + 20;
-              container.insertAdjacentHTML("afterbegin", `
-                <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-                <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
-                  <h3 class="amount">$${i.monthly_price}</h3>
-                  <div class="anim-container">
-                    <div class="anim">${cell}</div>
-                    <div class="hide" style="left:${percent}%"></div>
-                  </div>
-                  <h3 class="title">${i.name}</h3>
-                  <h4 style="color:#fff;">${i.speed}</h4>
-                  <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
-                  ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
-                </label>
-              `);
-              let checkbox = document.querySelector(`#id-${i.id}`);
-              let btn = document.querySelector(`[data-id="${i.id}"]`);
-              checkbox.addEventListener('click', (elem) => {
-                let btns = document.querySelectorAll(`[data-html]`);
-                for (let i of btns) i.innerHTML = i.getAttribute('data-html');
-                let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
-                if (elem.target.checked === true) btn.innerHTML = 'Selected';
-              });
-            }
-            let accordion = document.querySelectorAll('[data-accordion="accordion"]');
-            for (let i of accordion) add_accordion(i);
+            
+            if (curPg.includes('access')) {
+              for (let i of pack) {
+                let tmp = percent;
+                percent = tmp + 20;
+                container.insertAdjacentHTML("afterbegin", `
+                  <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
+                  <label for="id-${i.id}" class="paq-ver">
+                    <h5 class="title" style="width:50%;">${i.name}</h5>
+                    <div class="anim-container" style="width:30%;">
+                      <div class="anim">${cell}</div>
+                      <div class="hide" style="left:${percent}%"></div>
+                    </div>
+                    <h3 class="amount" style="width:20%;text-align:right;">$${i.monthly_price}</h3>
+                  </label>
+                `);
+              }
+            } else {
+              for (let i of pack) {
+                let tmp = percent;
+                percent = tmp + 20;
+                container.insertAdjacentHTML("afterbegin", `
+                  <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
+                  <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
+                    <h3 class="amount">$${i.monthly_price}</h3>
+                    <div class="anim-container">
+                      <div class="anim">${cell}</div>
+                      <div class="hide" style="left:${percent}%"></div>
+                    </div>
+                    <h3 class="title">${i.name}</h3>
+                    <h4 style="color:#fff;">${i.speed}</h4>
+                    <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
+                    ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
+                  </label>
+                `);
+                let checkbox = document.querySelector(`#id-${i.id}`);
+                let btn = document.querySelector(`[data-id="${i.id}"]`);
+                checkbox.addEventListener('click', (elem) => {
+                  let btns = document.querySelectorAll(`[data-html]`);
+                  for (let i of btns) i.innerHTML = i.getAttribute('data-html');
+                  let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
+                  if (elem.target.checked === true) btn.innerHTML = 'Selected';
+                });
+              }
+              let accordion = document.querySelectorAll('[data-accordion="accordion"]');
+              for (let i of accordion) add_accordion(i);
+            }            
             console.log('Loaded packages....')
           } else {
             let msg = 'Failed to load packages....'
@@ -675,7 +691,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
-  const agileSubmitContact = async (token, a) => {
+  const agileCreateContact = async (a, elem, label) => {
+    let token = await getToken();
     const body = {
       email_preference: false,
       sms_preference: false,
@@ -691,8 +708,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       phone: a.phone,
       first_name: a.given_name,
       last_name: a.family_name,
-      // force_svc: 1,
-      // force_bill: 1,
       org_id_list: [5]
     }
     if (a.account_id) body.account_id = a.account_id;
@@ -704,21 +719,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       method: 'POST',
       body: JSON.stringify(body)
     }
-    return await ajax(api).then(res => res);
+    return await ajax(api).then(res => {
+      showStatus(res, elem, label);
+      return [200, 201, 202].includes(res.status) ? res : false;
+    });
   }
-  const scheduleWo = async (token, data) => {
+  const createWo = async (a, elem, label) => {
+    let token = await getToken();
     let api = {
       url: `${agileUrl}workorder/`,
       method: 'POST',
       headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
       body: JSON.stringify({
-        contact_id: parseInt(data.contact_id),
-        account_id: parseInt(data.account_id),
-        product_line_id: data.product_line === 'Residential' ? 83 : 84,
+        contact_id: parseInt(a.contact_id),
+        account_id: parseInt(a.account_id),
+        product_line_id: a.product_line === 'Residential' ? 83 : 84,
         type_id: 1082,
         workorder_org_id_list: [5],
         o: 5,
-        notes: data.notes
+        notes: a.notes,
+        sales_user_id: parseInt(localStorage.getItem("agileRepId"))
       })
     }
     return await ajax(api).then(res => res);
@@ -742,6 +762,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         phone_list: [{ id: "0", data: data.phone }]
       },
       product_line: data.product_line,
+      obo_sales_user_id: parseInt(localStorage.getItem("agileRepId")),
+      original_salesperson_id: parseInt(localStorage.getItem("agileRepId")),
       packages: []
     }
     if (data.sales_source !== '' && data.sales_source) {
@@ -749,6 +771,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     if (data.opportunity_stage !== '' && data.opportunity_stage) {
       ob.opportunity_stage = data.opportunity_stage;
+    }
+    if (data.contact_id !== '' && data.contact_id) {
+      ob.contact_id = data.contact_id;
+    }
+    if (data.account_id !== '' && data.account_id) {
+      ob.account_id = data.account_id;
+    }
+    if (data.wo_id !== '' && data.wo_id) {
+      ob.wo_id = data.wo_id;
     }
     if (data.workbook_id !== '') {
       ob.workbook_id = data.workbook_id;
@@ -768,7 +799,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       body: JSON.stringify(data)
     }
     return await ajax(api).then(res => {
-      showStatus(res, elem, label);
+      showStatus(res, elem, label, false);
       return [200, 201, 202].includes(res.status) ? res : false;
     });
   }
@@ -783,6 +814,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         thisTab[i.field.name] = i.value;
       }
     });
+
+    if (thisTab.agile_contact) {
+      let agileCon = await agileCreateContact(thisTab, elem, 'Agile ');
+      let conId = document.querySelectorAll('.shopping-cart [name=contact_id]');
+      let accId= document.querySelectorAll('.shopping-cart [name=account_id]');
+      for (let i of conId) i.value = agileCon.contact.id;
+      for (let i of accId) i.value = agileCon.account.id;
+      thisTab.contact_id = agileCon.contact.id;
+      thisTab.account_id = agileCon.account.id;
+    }
 
     if (thisTab.create_contact) {
       let ifs = infusionsoftSubmit(thisTab);
@@ -802,17 +843,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       delete thisTab.tags;
     }
+
     if (thisTab.agile_schedule) {
       let schedule = await agileScheduleLookup(token, thisTab.contact_id);
       getSchedule(values.availability);
       delete values.agile_schedule;
     }
+
     if (thisTab.package && thisTab.package !== '') {
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       let wbPack = await workbook(wbOb, elem, 'Package');
       delete thisTab.package;
     }
+
     if (thisTab.contracts) {
       thisTab.comments = `Workbook Order: #${values.workbook_id}`;
       let contractData = infusionsoftSubmit(thisTab);
@@ -832,9 +876,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       wbOb.opportunity_notes = notes;
       wbOb.sales_notes = notes;
+      thisTab.notes = notes;
+      if (thisTab.create_wo) {
+        let woCreate = await createWo(thisTab, elem, 'Workorder');
+        let woId = document.querySelectorAll('.shopping-cart [name=wo_id]');
+        for (let i of woId) i.value = woCreate.workorder.id;
+      }
+
       let wbNotes = await workbook(wbOb, elem, 'Notes');
       delete thisTab.tags;
     }
+
     if (thisTab.tags && thisTab.tags !== '') {
       if (thisTab.tags !== '') {
         let addons = await infusionsoftSubmit(thisTab);
@@ -846,7 +898,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnLoader(elem, false);
     return true;
   }
-  const makeSale = async (token, workbook_id, elem) => {
+  const makeSale = async (workbook_id, elem) => {
+    let token = await getToken();
     let api = {
       url: `${agileUrl}sales/make_sale/`,
       method: 'POST',
@@ -867,7 +920,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       btnLoader(btn, false);
     } else {
-      console.log(`Agile: #${p.request.workbook_id} #${p.result.workbook_id} - ${label} ${p.detail}`);
+      if (p.request.workbook_id) {
+        console.log(`Agile: #${p.request.workbook_id} #${p.result.workbook_id} - ${label} ${p.detail}`);
+      } else {
+        console.log(`${label} ${p.detail}`);
+      }
+      
     }
   }
   const initShopCartForm = async (firstTry=true) => {
@@ -890,9 +948,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           let addPackage = await workbook(wbOb, next, 'Package does not exist, Package');
         }
 
-        let p = await makeSale(token, i.workbook_id, next);
+        let p = await makeSale(i.workbook_id, next);
         let records = ``;
-        if (curPg.includes('sales-entry') && curPg.includes('access')) {
+        if (curPg.includes('sales-entry')) {
           let e = `https://agileisp.com/?`;
           let u = `https://vx952.infusionsoft.com/Contact/manageContact.jsp?view=edit&ID=`
           records = `
@@ -933,12 +991,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   }
-  const woLookup = async (token, a) => {
+  const woLookup = async (a) => {
+    let token = await getToken();
     let api = {
       url: `${agileUrl}workorder/list_view/`,
       headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
       method: 'POST',
-      body: JSON.stringify({wo_search: "marcos"})
+      body: JSON.stringify({
+        wo_text_search: "4449 Hamilton Stage Rd",
+        o: 5,
+        html: false
+      })
     }
     return ajax(api).then(res => {
       console.log(res);
@@ -947,22 +1010,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // FUNTIONS
 
-  if(agileAdmin === 'true') {
-    if (agileRepEmail === 'cmason@anthembusinessgroup.com') {
-      localStorage.setItem("agileRepToken", null);
-      localStorage.setItem("agileRepEmail", null);
-    }
-  }
-
   await initShopCartForm();
 
   if (newUrl.get('address')) {
+    let ad = formatData(newUrl.get('address'));
+    let city = formatData(newUrl.get('city'));
+    let state = formatData(newUrl.get('state'));
+    let zip = formatData(newUrl.get('zip'));
     if (document.querySelector('#vac')) {
-      let ad = formatData(newUrl.get('address'));
-      let city = formatData(newUrl.get('city'));
-      let state = formatData(newUrl.get('state'));
-      let zip = formatData(newUrl.get('zip'));
       document.querySelector('#vac').innerHTML = `${ad}, ${city}, ${state} ${zip}`;
+    }
+
+    if (ad !== '' && city !== '') {
+      console.log(`${ad}, ${city}, ${state} ${zip}`);
+      woLookup();
     }
   }
 
@@ -1065,7 +1126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  if (agileAdmin === 'true') {
+  if (localStorage.getItem("agileAdmin") === 'true') {
     agileSubmit.addEventListener('click', newRepToken);
   }
 });
