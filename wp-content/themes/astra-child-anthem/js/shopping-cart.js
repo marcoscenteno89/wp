@@ -778,8 +778,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (data.account_id !== '' && data.account_id) {
       ob.account_id = data.account_id;
     }
-    if (data.wo_id !== '' && data.wo_id) {
-      ob.wo_id = data.wo_id;
+    if (data.workorder_id !== '' && data.workorder_id) {
+      ob.workorder_id = data.workorder_id;
     }
     if (data.workbook_id !== '') {
       ob.workbook_id = data.workbook_id;
@@ -879,12 +879,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       thisTab.notes = notes;
       if (thisTab.create_wo) {
         let woCreate = await createWo(thisTab, elem, 'Workorder');
-        let woId = document.querySelectorAll('.shopping-cart [name=wo_id]');
+        let woId = document.querySelectorAll('.shopping-cart [name=workorder_id]');
         for (let i of woId) i.value = woCreate.workorder.id;
+        wbOb.workorder_id = woCreate.workorder.id;
       }
 
       let wbNotes = await workbook(wbOb, elem, 'Notes');
       delete thisTab.tags;
+    }
+
+    if (thisTab.make_sale) {
+      let p = await makeSale(thisTab.workbook_id, next);
     }
 
     if (thisTab.tags && thisTab.tags !== '') {
