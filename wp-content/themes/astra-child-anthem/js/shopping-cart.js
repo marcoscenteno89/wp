@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     create_account: true,
     packages: []
   }
-
   const btnLoader = (elem, state) => {
     if (state) {
       elem.setAttribute("data-html", elem.innerHTML);
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       elem.disabled = false;
     }
   }
-
   const form = (form,  onTabChange=false) => {
     return new Promise(function (resolve) {
 
@@ -100,41 +98,45 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (finalStep) {
             let completedSteps = o.stage.filter(i => i.status === 'completed');
             let skippedSteps = o.stage.filter(i => i.status === 'skipped');
-            if (completedSteps.length < o.stage.length && !force) {
-              let header = '<h2 class="heading flex-center">Attention</h2>';
-              let cursStatus = ''
-              let l = o.stage;
-              for (let i = 0; i < l.length; i++) {
-                btnLoader(o.next, true);
-                cursStatus += `<p>
-                  <button data-step="${i}" class="btn dynamic-btn ${l[i].status} flex-row" style="color:#fff;max-width:280px;">
-                    <span>${i + 1}.${l[i].name.toUpperCase()}</span>
-                  </button>
-                  <small>${l[i].status.toUpperCase()}</small>
-                </p>`;
-              }
-              let content = `
-                ${header}
-                <div class="body">
-                <h2>${skippedSteps.length} section${skippedSteps.length > 1 ? 's were' : ' was '} skipped. 
-                Click on ${skippedSteps.length > 1 ? 'them' : 'it'} to complete or submit the form now.</h2>
-                  ${cursStatus}
-                </div>
-                <div class="footer" style="padding:1rem;flex-center;">
-                  <button data-step="${l.length}" style="width:100%;max-width:280px;" class="btn dynamic-btn red">Submit</button>
-                </div>
-              `;
-              prompt({ background: 'rgba(0, 0, 0, 0.8)', container: 'popup', content: content });
-              let dynamicBtn = document.querySelectorAll('.dynamic-btn');
-              dynamicBtn.forEach((elem, index) => {
-                elem.addEventListener('click', async (event) => {
-                  event.preventDefault();
-                  prompt({ remove: true });
-                  await switchTab(o, event, force=true);
+
+            if (!curPg.includes('access')) {
+              if (completedSteps.length < o.stage.length && !force) {
+                let header = '<h2 class="heading flex-center">Attention</h2>';
+                let cursStatus = ''
+                let l = o.stage;
+                for (let i = 0; i < l.length; i++) {
+                  btnLoader(o.next, true);
+                  cursStatus += `<p>
+                    <button data-step="${i}" class="btn dynamic-btn ${l[i].status} flex-row" style="color:#fff;max-width:280px;">
+                      <span>${i + 1}.${l[i].name.toUpperCase()}</span>
+                    </button>
+                    <small>${l[i].status.toUpperCase()}</small>
+                  </p>`;
+                }
+                let content = `
+                  ${header}
+                  <div class="body">
+                  <h2>${skippedSteps.length} section${skippedSteps.length > 1 ? 's were' : ' was '} skipped. 
+                  Click on ${skippedSteps.length > 1 ? 'them' : 'it'} to complete or submit the form now.</h2>
+                    ${cursStatus}
+                  </div>
+                  <div class="footer" style="padding:1rem;flex-center;">
+                    <button data-step="${l.length}" style="width:100%;max-width:280px;" class="btn dynamic-btn red">Submit</button>
+                  </div>
+                `;
+                prompt({ background: 'rgba(0, 0, 0, 0.8)', container: 'popup', content: content });
+                let dynamicBtn = document.querySelectorAll('.dynamic-btn');
+                dynamicBtn.forEach((elem, index) => {
+                  elem.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    prompt({ remove: true });
+                    await switchTab(o, event, force=true);
+                  });
                 });
-              });
-              return false;
+                return false;
+              }
             }
+
             resolve(compiledValues);
             return false;
           }
@@ -340,7 +342,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
-
   const prompt = (a) => {
     let background = document.querySelector('#background');
     if (a.container) {
@@ -366,7 +367,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       background.innerHTML = '';
     }
   }
-
   const formatData = (string) => {
     const chkAgainst = ['+']
     let newArr = '';
@@ -379,7 +379,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     return newArr;
   }
-
   const storageAvailable =(type) => {
     try {
         var storage = window[type];
@@ -391,7 +390,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return false;
     }
   }
-
   const ajax = (api, callback=false) => {
     if (!api.method) api.method = 'GET';
     if (!api.credentials) api.credentials = 'same-origin';
@@ -399,12 +397,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       'Content-Type': 'application/x-www-form-urlencoded; application/json; charset=utf-8' 
     });
     var tmp;
+    
     return fetch(api.url, api).then(res => {
       tmp = res.status;
-      if (api.report || (tmp !== 200 && tmp !== 203)) console.log(res);
+      if (api.report || ![200, 201, 202, 203].includes(tmp)) console.log(res);
       return api.res ? res.text() : res.json();
     }).then(data => {
-      if (api.report || (tmp !== 200 && tmp !== 203)) console.log(data, api);
+      if (api.report || ![200, 201, 202, 203].includes(tmp)) console.log(data, api);
       data.status = tmp;
       return data;
     }).catch(err => {
@@ -412,7 +411,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(err);
     });
   }
-
   const verifyToken = tok => {
     let api = {
       url: `${agileUrl}auth-token/verify/`,
@@ -425,7 +423,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return res.token ? true : false;
     });
   }
-
   const refreshToken = tok => {
     let api = {
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -439,7 +436,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return res;
     });
   }
-
   const updateToken = token => {
     let api = {
       body: `action=agile_token&token=${token}`,
@@ -453,7 +449,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       return res.token;
     });
   }
-
   const getToken = async () => {
     if (localStorage.getItem("agileAdmin") === 'true') {
       if (localStorage.getItem("agileRepEmail") === 'cmason@anthembusinessgroup.com') {
@@ -741,7 +736,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         sales_user_id: parseInt(localStorage.getItem("agileRepId"))
       })
     }
-    return await ajax(api).then(res => res);
+    return await ajax(api).then(res => {
+      showStatus(res, elem, label);
+      return [200, 201, 202].includes(res.status) ? res : false;
+    });
   }
   const generateWoObj = (data) => {
     let ob = {  
@@ -803,6 +801,37 @@ document.addEventListener("DOMContentLoaded", async () => {
       return [200, 201, 202].includes(res.status) ? res : false;
     });
   }
+  const workorderToWb = async(a, elem, label) => {
+    let token = await getToken();
+    let data = {
+      "o": 0,
+      "workorder_id": 0,
+      "sales_source_id": 0,
+      "lead_source_id": 0,
+      "packages": [
+        {
+          "id": 0,
+          "qty": 0
+        }
+      ],
+      "promotions": [
+        {
+          "id": 0
+        }
+      ],
+      "referred_by": "string"
+    }
+    let api = {
+      url: `${agileUrl}sales/workorder_to_wb/`,
+      method: 'POST',
+      headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
+      body: JSON.stringify(data)
+    }
+    return await ajax(api).then(res => {
+      showStatus(res, elem, label, false);
+      return [200, 201, 202].includes(res.status) ? res : false;
+    });
+  }
   const onTabChange = async (data, elem, curTab, stat) => {
     btnLoader(elem, true);
     let thisTab = {};
@@ -854,6 +883,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       let wbPack = await workbook(wbOb, elem, 'Package');
+
       delete thisTab.package;
     }
 
@@ -888,8 +918,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       delete thisTab.tags;
     }
 
-    if (thisTab.make_sale) {
-      let p = await makeSale(thisTab.workbook_id, next);
+    if (thisTab.workorder_to_wo) {
+      let p = await workorderToWb(thisTab, next);
+      console.log(p);
     }
 
     if (thisTab.tags && thisTab.tags !== '') {
@@ -928,9 +959,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (p.request.workbook_id) {
         console.log(`Agile: #${p.request.workbook_id} #${p.result.workbook_id} - ${label} ${p.detail}`);
       } else {
-        console.log(`${label} ${p.detail}`);
+        console.log(`${label} ${p.detail ? p.detail : ''} ${p.workorder ? p.workorder.id : ''}`);
       }
-      
     }
   }
   const initShopCartForm = async (firstTry=true) => {
@@ -976,7 +1006,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           `;
         }
 
-        shop.innerHTML = `
+        shop.innerHTML = `<div>
           <h4>Data submitted successfully</h4>
           Name: ${i.given_name} ${i.family_name}<br>
           Phone: ${i.phone}<br>
@@ -991,7 +1021,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? 'yes' : 'no'}<br>
           Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
           ${or !== '' ? `Products:<br>${or}`: ''}
-        `;
+        </div>`;
         btnLoader(next, false);
       });
     }

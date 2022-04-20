@@ -1,5 +1,6 @@
-var utmString = '';
+
 document.addEventListener("DOMContentLoaded", () => {
+  var utmString = '';
   let all = document.querySelectorAll(".ifs-form");
   //ASSIGN GOOGLE VARIABLES
   let url = new URLSearchParams(window.location.search);
@@ -28,7 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
     product_line: [`input[name="product_line"]`]
   }
 	const utm = ['utm_adgroup', 'utm_campaign', 'utm_source', 'utm_medium', 'utm_term', 'utm_content'];
-
+  const formatData = (string) => {
+    const chkAgainst = ['+']
+    let newArr = '';
+    if (string) {
+      let arr = string.split('');
+      for (let i = 0; i < arr.length; i++) {
+        if (chkAgainst.includes(arr[i])) arr[i] = ' ';
+      }
+      newArr = arr.join("");
+    }
+    return newArr;
+  }
+  
   Object.keys(fields).forEach(i => {
     for (let e of fields[i]) {
       let elem = document.querySelectorAll(`${e}`);
