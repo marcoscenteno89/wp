@@ -189,7 +189,7 @@ form :is(.btn-rev) {
 .warning {
   color: #721c24;
   background-color: #f8d7da;
-  border-color: #f5c6cb;
+  border: 1px solid #f5c2c7;
   padding: 4px 20px;
   margin-bottom: 0.2rem;
   border-radius: 5px;

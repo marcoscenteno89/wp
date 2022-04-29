@@ -62,9 +62,9 @@
 
       <section id="anthemDifference">
         <h1 class="heading">Anthem Does Fiber Internet Differently!</h1>
-		<h2>Pay half as much and get more!</h2>
-		<p>Unlike other providers, Anthem Broadband provides a dedicated, fiber connection from your home to the main switch. You won’t share a connection with your neighbors and can rely on our redundant links to guarantee greater connectivity and reliability than anyone else! Learn More (link down to “the project”)</p>
-		<p><strong>We tell our customers “no” a lot – like no fees, no data caps, no credit checks, no rentals, and more.</strong></p>
+        <h2>Pay half as much and get more!</h2>
+        <p>Unlike other providers, Anthem Broadband provides a dedicated, fiber connection from your home to the main switch. You won’t share a connection with your neighbors and can rely on our redundant links to guarantee greater connectivity and reliability than anyone else! Learn More (link down to “the project”)</p>
+        <p><strong>We tell our customers “no” a lot – like no fees, no data caps, no credit checks, no rentals, and more.</strong></p>
         <h2>Think of what you could do with Gig speeds, especially when it’s only $119!</h2>
         <br>
         <div class="flex-row" style="justify-content:space-between;">
@@ -106,60 +106,62 @@
         <h3>Internet Services</h3>
         <div class="tb">
           <section class="flex-center" style="padding:2rem 0;flex-wrap:wrap;">
-			  <div class="package">
-				  <h5>2GB/2GB</h5>
-				  <span>only</span>
-				  <h2>$249</h2>
-				  <ul>
-					  <li>No construction fee</li>
-					  <li>No installation fee</li>
-					  <li>No contracts</li>
-					  <li>No data caps</li>
-				  </ul>
-				  <a class="btn pakbtn" href="#verify-address">Get Started</a>
-			  </div>
-			  <div class="package popular">
-				  <h5>1GB/1GB</h5>
-				  <span>only</span>
-				  <h2>$119</h2>
-				  <ul>
-					  <li>No construction fee</li>
-					  <li>No installation fee</li>
-					  <li>No contracts</li>
-					  <li>No data caps</li>
-				  </ul>
-				  <a class="btn pakbtn" href="#verify-address">Get Started</a>
-			  </div>
-			  <div class="package">
-				  <h5>500Mb/500Mb</h5>
-				  <span>only</span>
-				  <h2>$99</h2>
-				  <ul>
-					  <li>No construction fee</li>
-					  <li>No installation fee</li>
-					  <li>No contracts</li>
-					  <li>No data caps</li>
-				  </ul>
-				  <a class="btn pakbtn" href="#verify-address">Get Started</a>
-			  </div>
-			  <div class="package">
-				  <h5>250Mb/250Mb</h5>
-				  <span>only</span>
-				  <h2>$79</h2>
-				  <ul>
-					  <li>No construction fee</li>
-					  <li>No installation fee</li>
-					  <li>No contracts</li>
-					  <li>No data caps</li>
-				  </ul>
-				  <a class="btn pakbtn" href="#verify-address">Get Started</a>
-			  </div>
-			</section>
-          <div>
-            <p><strong><a href="#verify-address">Check availability</a></strong> 
-			to see what other plans are available in your area. Every plan includes our own</p>
-            <p>Parental Controls built in and Managed Wi-Fi at no additional cost</p>
+          <div class="package">
+            <h5>2GB/2GB</h5>
+            <span>only</span>
+            <h2>$249</h2>
+            <ul>
+              <li>No construction fee</li>
+              <li>No installation fee</li>
+              <li>No contracts</li>
+              <li>No data caps</li>
+            </ul>
+            <a class="btn pakbtn" href="#verify-address">Get Started</a>
           </div>
+          <div class="package popular">
+            <h5>1GB/1GB</h5>
+            <span>only</span>
+            <h2>$119</h2>
+            <ul>
+              <li>No construction fee</li>
+              <li>No installation fee</li>
+              <li>No contracts</li>
+              <li>No data caps</li>
+            </ul>
+            <a class="btn pakbtn" href="#verify-address">Get Started</a>
+          </div>
+          <div class="package">
+            <h5>500Mb/500Mb</h5>
+            <span>only</span>
+            <h2>$99</h2>
+            <ul>
+              <li>No construction fee</li>
+              <li>No installation fee</li>
+              <li>No contracts</li>
+              <li>No data caps</li>
+            </ul>
+            <a class="btn pakbtn" href="#verify-address">Get Started</a>
+          </div>
+          <div class="package">
+            <h5>250Mb/250Mb</h5>
+            <span>only</span>
+            <h2>$79</h2>
+            <ul>
+              <li>No construction fee</li>
+              <li>No installation fee</li>
+              <li>No contracts</li>
+              <li>No data caps</li>
+            </ul>
+            <a class="btn pakbtn" href="#verify-address">Get Started</a>
+          </div>
+        </div>
+			</section>
+
+      <section>
+        <div>
+          <p><strong><a href="#verify-address">Check availability</a></strong> 
+            to see what other plans are available in your area. Every plan includes our own</p>
+          <p>Parental Controls built in and Managed Wi-Fi at no additional cost</p>
         </div>
         <h3>Additional Services</h3>
         <div class="tb">
@@ -199,9 +201,11 @@
         <div class="flex-row fiber-difference row" style="position:relative;">
           <img class="ftimg desktop" src="<?php echo plugin_dir_url( __FILE__ ); ?>../img/fib-12.svg" />
           <div>
+
             <section class="bg fiber-difference">
               <img class="w-100" src="<?php echo plugin_dir_url( __FILE__ ); ?>../img/fib-10.svg" />
             </section>
+
             <section class="fiber-difference block-content">
               <div class="col-12 green-block flex-col">
                 <h3 id="activeEthernet">Anthem</h3>
@@ -252,6 +256,7 @@
           </div>
         </div>
       </section>
+
       <section id="whatAboutSafelink">
         <h2 class="heading">What Happened to Safelink?</h2>
         <p>Safelink Internet is now Anthem Broadband! The name change is a result of a rebranding effort designed to mirror the growth, transformation, and future vision of the company.</p>
@@ -260,6 +265,7 @@
         <p>Nevertheless, our business has undergone a significant transformation in the last few years that has justified a new brand that will better reflect where the company is and where we plan to be in the future. Anthem has been designed to reflect what our original mark stood for while simultaneously moving the brand forward, acknowledging our new company culture and our focus on, and dedication to, the future of internet technologies.</p>
         <p>In this sense, Anthem represents an evolution from our previous experience, origins, and roots to also reflect our focus on the future and our driving passion of using the very best technologies to connect communities to what matters most to them, whether that be work, family, school, shopping, hobbies, games, and more. We encourage everyone to join the Anthem and find their voice in this digital era where the world is at your fingertips.  </p>
       </section>
+
 	  <footer style="text-align:center;">
 		<p>Copyright © <?php echo date('Y'); ?> Anthem Broadband. All rights reserved</p>
 	  </footer>
@@ -270,7 +276,7 @@
         <p style="color:#212529;">Enter your address to get started</p>
         <form action="/signup" class="verify-address" id="verify-address">
           <div class="tabs">
-			<div class="steps"></div>
+			      <div class="steps"></div>
             <div class="tab" data-props='{"name":"Check Address","numerate":true,"validate":true}'>
               <input type="hidden" class="form-input" name="utm_adgroup" value="*">
               <input type="hidden" class="form-input" name="utm_campaign" value="*">
@@ -286,11 +292,11 @@
             <div class="controller">
               <div class="status"></div>
               <button name="next" id="btn" class="btn cta">Check Now</button>
-              <button class="btn hidden secondary" id="manual">Add location manually</button>
-              <button class="btn hidden secondary" id="manualsubmit">Submit Address</button>
+              <!-- <button class="btn hidden secondary" id="manual">Add location manually</button> -->
+              <!-- <button class="btn hidden secondary" id="manualsubmit">Submit Address</button> -->
             </div>
           </div>
-		  <h5>Just have questions?</h5>
+		      <h5>Just have questions?</h5>
           <p style="color:#212529;">
             Please call <a href="tel:+17753892894" style="font-weight:bold;">775-389-2894</a>
           </p>
@@ -316,4 +322,37 @@
     </div>
   </div>
 </article>
-<section id="background" class="flex-row hidden"></section>
+<section id="background" class="hidden" style="background-color:rgba(0,0,0,0.8);">
+  <!-- <div id="popup">
+    <div class="close">X</div>
+    <div class="content">
+      <h2 class="heading flex-center" style="color:#fff;text-align:center;padding:1rem;">
+        Zoom in, then click to place a pin on your home or business.
+      </h2>
+      <form action="/signup" class="verify-address" id="verify-address">
+        <div class="tabs">
+          <div class="steps"></div>
+          <div class="tab" data-props='{"name":"Check Address","numerate":true,"validate":true}'>
+            <input type="hidden" class="form-input" name="utm_adgroup" value="*">
+            <input type="hidden" class="form-input" name="utm_campaign" value="*">
+            <input type="hidden" class="form-input" name="utm_source" value="organic">
+            <input type="hidden" class="form-input" name="utm_medium" value="*">
+            <input type="hidden" class="form-input" name="utm_term" value="*">
+            <input type="hidden" class="form-input" name="utm_content" value="*">
+            <input type="hidden" class="form-input" name="line1">
+            <input type="hidden" class="form-input" name="locality">
+            <input type="hidden" class="form-input" name="region">
+            <input type="hidden" class="form-input" name="postal_code">
+          </div>
+          <div class="controller">
+            <div class="status"></div>
+            <button name="next" id="btn" class="btn cta">Submit Address</button>
+          </div>
+        </div>
+      </form>
+      <div id="map"></div>
+    </div>
+  </div> -->
+  
+  <!-- <button style="margin:1rem;color:#fff;" class="btn cta" id="manualsub">Submit</button> -->
+</section>

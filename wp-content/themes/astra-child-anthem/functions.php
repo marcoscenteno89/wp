@@ -50,36 +50,10 @@ function child_enqueue_styles() {
   wp_enqueue_script(
     'astrachildjs', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/astra-child.js', 
-    array('jquery'), 
-    date("m.d"), 
-    true
-  );
-  wp_enqueue_script(
-    'helper', get_stylesheet_directory_uri( __FILE__ ) . '/js/helper.js', 
-    array('jquery'), 
-    date("m.d"), 
-    true
-  );
-  wp_enqueue_script(
-    'shoppingcart', 
-    get_stylesheet_directory_uri( __FILE__ ) . '/js/shopping-cart.js', 
     array(), 
     date("m.d"), 
     true
-  );
-  wp_enqueue_script(
-    'calendar', 
-    get_stylesheet_directory_uri( __FILE__ ) . '/js/vanilla-calendar.js', 
-    array('shoppingcart'), 
-    date("m.d"), 
-    true
-  );
-  wp_localize_script( 
-    'shoppingcart', 
-    'agile_token', 
-    ['ajax_url' => admin_url('admin-ajax.php')]
-  );
-  
+  );  
 }
 
 function year_shortcode() {
@@ -90,40 +64,6 @@ function create_post_type() {
   // Add categories and tags to page
   register_taxonomy_for_object_type('post_tag', 'page'); 
   register_taxonomy_for_object_type('category', 'page'); 
-}
-
-function fz_agile_token() {
-  $token = $_POST['token'];
-  $request = '';
-  if (isset($token)) {
-    if ($token === '') {
-      require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
-      $api['request'] = 'POST';
-      $api['url'] = 'https://agileisp.com/api/auth-token/';
-      $api['header'] = array('Content-Type: application/json; charset=utf-8');
-      $api['body'] = json_encode([
-        'username' => get_option( 'ab_agile_username' ),
-        'password' => get_option( 'ab_agile_password' ),
-      ]);
-
-      $request = apirequest($api);
-      $token = $request['token'];
-      $email = update_option( 'ab_agile_user_email', $request['email'], false );
-      $userId = update_option( 'ab_agile_user_id', $request['id'], false );
-    }
-
-    $updated = update_option( 'ab_agile_token', $token, false );
-  
-    echo json_encode([
-      'token' => get_option('ab_agile_token'),
-      'email' => get_option('ab_agile_user_email'),
-      'id' => get_option('ab_agile_user_id'),
-      'updated' => $updated,
-    ]);
-    wp_die();
-  }
-  echo json_encode(['token not found']);
-  wp_die();
 }
 
 function checkForEI() {
@@ -142,7 +82,5 @@ function checkForEI() {
 add_action( 'init', 'create_post_type' );
 add_shortcode('year', 'year_shortcode');
 add_shortcode('checkei', 'checkForEI');
-add_action( 'wp_ajax_agile_token', 'fz_agile_token');
-add_action( 'wp_ajax_nopriv_agile_token', 'fz_agile_token');
 add_action( 'wp_enqueue_scripts', 'child_enqueue_styles');
 remove_action( 'admin_notices', 'woothemes_updater_notice' );

@@ -8,24 +8,41 @@
 if ( !defined( 'ABSPATH' ) ) wp_die();
 
 function fi_enqueue_scripts() {
-  wp_enqueue_style( 'fi_styles', plugins_url( 'css/styles.css' , __FILE__ ), array(), 'all' );
+  wp_enqueue_style( 
+    'fi_styles', 
+    plugins_url( 'css/styles.css' , __FILE__ ), 
+    array(), 
+    'all' 
+  );
 	wp_enqueue_script( 
-		'fi_scripts', 
-		plugins_url( 'js/scripts.js', __FILE__ ), 
+		'fi_forms', 
+		plugins_url( 'js/forms.js', __FILE__ ), 
 		array(), 
 		date("m.d"), 
 		true 
 	);
+  wp_enqueue_script(
+    'calendar', 
+    get_stylesheet_directory_uri( __FILE__ ) . '/js/vanilla-calendar.js', 
+    array('shoppingcart'), 
+    date("m.d"), 
+    true
+  );
   wp_localize_script( 
-		'fi_scripts', 
+		'fi_forms', 
 		'fi_submit_contact', 
 		['ajax_url' => admin_url('admin-ajax.php')]
 	);
   wp_localize_script( 
-		'fi_scripts', 
+		'fi_forms', 
 		'fi_get_contact', 
 		['ajax_url' => admin_url('admin-ajax.php')]
 	);
+  wp_localize_script( 
+    'fi_forms', 
+    'agile_token', 
+    ['ajax_url' => admin_url('admin-ajax.php')]
+  );
 }
 
 function cst_field($arr, $content,  $id) {
@@ -300,6 +317,42 @@ function fi_get_contact() {
   echo json_encode($user);
   wp_die();
 }
+
+function fz_agile_token() {
+  $token = $_POST['token'];
+  $request = '';
+  if (isset($token)) {
+    if ($token === '') {
+      require ABSPATH . 'wp-content/plugins/infusionsoft-token-manager/functions.php';
+      $api['request'] = 'POST';
+      $api['url'] = 'https://agileisp.com/api/auth-token/';
+      $api['header'] = array('Content-Type: application/json; charset=utf-8');
+      $api['body'] = json_encode([
+        'username' => get_option( 'ab_agile_username' ),
+        'password' => get_option( 'ab_agile_password' ),
+      ]);
+
+      $request = apirequest($api);
+      $token = $request['token'];
+      $email = update_option( 'ab_agile_user_email', $request['email'], false );
+      $userId = update_option( 'ab_agile_user_id', $request['id'], false );
+    }
+
+    $updated = update_option( 'ab_agile_token', $token, false );
+  
+    echo json_encode([
+      'token' => get_option('ab_agile_token'),
+      'email' => get_option('ab_agile_user_email'),
+      'id' => get_option('ab_agile_user_id'),
+      'updated' => $updated,
+    ]);
+    wp_die();
+  }
+  echo json_encode(['token not found']);
+  wp_die();
+}
+
+add_action( 'wp_ajax_nopriv_agile_token', 'fz_agile_token');
 add_action( 'wp_ajax_nopriv_fi_get_contact', 'fi_get_contact' );
 add_action( 'wp_ajax_nopriv_fi_submit_contact', 'fi_submit_contact' );
 add_action( 'wp_ajax_fi_submit_contact', 'fi_submit_contact' );

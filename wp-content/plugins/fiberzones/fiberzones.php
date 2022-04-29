@@ -96,11 +96,6 @@ function mc_fz_enqueue_scripts() {
     'fz_post_contact', 
     ['ajax_url' => admin_url('admin-ajax.php')]
   );
-  wp_localize_script( 
-    'scripts2', 
-    'agile_token', 
-    ['ajax_url' => admin_url('admin-ajax.php')]
-  );
 }
 function mc_fz( $atts ) {
   if (!is_admin()) {

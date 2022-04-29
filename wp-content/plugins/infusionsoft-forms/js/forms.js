@@ -1,4 +1,3 @@
-
 /* 
   Description: This file contains helper functions and constant variables 
   Author: Marcos Centeno
@@ -12,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const agileUrl = 'https://agileisp.com/api/';
   const curPg = window.location.pathname;
 
+  var utmString = '';
   const agileLogin = document.querySelector('.loginbg');
   localStorage.setItem("agileAdmin", agileLogin ? true : false);
   const agileSubmit = document.querySelector('.loginbtn');
@@ -20,13 +20,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const next = document.querySelector('[name=next]');
   const prev = document.querySelector('[name=prev]');	
   const sendContract = document.querySelector('#send_contract');
-  let newUrl = new URLSearchParams(window.location.search);
+  const shop = document.querySelector('.shopping-cart');
+  const accessShop = document.querySelector('.access-shopping-cart');
+  const verifyAddressForm = document.querySelector('.verify-address'); 
+  const genericIfsForms = document.querySelectorAll(".ifs-form");
+  const url = new URLSearchParams(window.location.search);
   let owner = document.querySelectorAll('.shopping-cart [name="own_location"]');
   let zone_status = document.querySelector('.zone_status');
   let addon = document.querySelectorAll('.addon');
   let addon_tags = document.querySelector('.addontags');
   let email = document.querySelector('.lookup');
   let wbOb;
+
   const values = {
     create_account: true,
     packages: []
@@ -340,6 +345,58 @@ document.addEventListener("DOMContentLoaded", async () => {
         status.innerHTML = msg;
         return Array.from(data).filter(i => i.field.classList.contains('form-input')); // THIS MIGHT RETURN TRUE INSTEAD
       }
+    });
+  }
+  const utmInit = () => {
+    let all = document.querySelectorAll(".ifs-form");
+    let fields = {
+      utm_adgroup: [`input[name="utm_adgroup"]`, `input[name="inf_custom_utm_adgroup"]`],
+      utm_campaign: [`input[name="utm_campaign"]`, `input[name="inf_custom_utm_campaign"]`],
+      utm_source: [`input[name="utm_source"]`],
+      utm_medium: [`input[name="utm_medium"]`],
+      utm_term: [`input[name="utm_term"]`],
+      utm_content: [`input[name="utm_content"]`],
+      email: [`input[name="email"]`, `input[name="inf_field_Email"]`],
+      given_name: [`input[name="given_name"]`],
+      family_name: [`input[name="family_name"]`],
+      phone: [`input[name="phone"]`],
+      address: [`input[name="line1"]`],
+      city: [`input[name="locality"]`],
+      state: [`input[name="region"]`],
+      zip: [`input[name="postal_code"]`],
+        product_line: [`input[name="product_line"]`],
+        contact_id: [`input[name="contact_id"]`],
+        account_id: [`input[name="account_id"]`],
+      lat: [`input[name="lat"]`, `input[name="latitude"]`],
+      lng: [`input[name="lng"]`, `input[name="longitude"]`],
+      workbook_id: [`input[name="workbook_id"]`],
+      ifs_lead_id: [`input[name="ifs_lead_id"]`],
+      product_line: [`input[name="product_line"]`]
+    }
+    const utm = ['utm_adgroup', 'utm_campaign', 'utm_source', 'utm_medium', 'utm_term', 'utm_content'];
+    
+    Object.keys(fields).forEach(i => {
+      for (let e of fields[i]) {
+        let elem = document.querySelectorAll(`${e}`);
+        let param = url.get(i);
+        if (param != null && elem.length > 0) {
+          for (let x of elem) {
+            if (utm.includes(i)) utmString += `&${i}=${param}`;
+            x.value = formatData(param);
+          }
+        }
+      }
+    });
+  }
+  const add_accordion = (i) => {
+    let head = i.querySelector('[data-accordion="head"]');
+    let body = i.querySelector('[data-accordion="body"]');
+    let arrow = i.querySelector('.arr');
+    head.addEventListener('click', (e) => {
+      e.preventDefault();
+      arrow.classList.contains('active') ? arrow.classList.remove('active') : arrow.classList.add('active');
+      head.classList.contains('active') ? head.classList.remove('active') : head.classList.add('active');
+      body.classList.contains('active') ? body.classList.remove('active') : body.classList.add('active');
     });
   }
   const prompt = (a) => {
@@ -844,16 +901,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    if (thisTab.agile_contact) {
-      let agileCon = await agileCreateContact(thisTab, elem, 'Agile ');
-      let conId = document.querySelectorAll('.shopping-cart [name=contact_id]');
-      let accId= document.querySelectorAll('.shopping-cart [name=account_id]');
-      for (let i of conId) i.value = agileCon.contact.id;
-      for (let i of accId) i.value = agileCon.account.id;
-      thisTab.contact_id = agileCon.contact.id;
-      thisTab.account_id = agileCon.account.id;
-    }
-
     if (thisTab.create_contact) {
       let ifs = infusionsoftSubmit(thisTab);
       wbOb = generateWoObj(thisTab);
@@ -883,12 +930,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       let wbPack = await workbook(wbOb, elem, 'Package');
-
       delete thisTab.package;
     }
 
     if (thisTab.contracts) {
-      thisTab.comments = `Workbook Order: #${values.workbook_id}`;
       let contractData = infusionsoftSubmit(thisTab);
       let i = thisTab;
       let or = '';
@@ -907,19 +952,92 @@ document.addEventListener("DOMContentLoaded", async () => {
       wbOb.opportunity_notes = notes;
       wbOb.sales_notes = notes;
       thisTab.notes = notes;
-      if (thisTab.create_wo) {
-        let woCreate = await createWo(thisTab, elem, 'Workorder');
-        let woId = document.querySelectorAll('.shopping-cart [name=workorder_id]');
-        for (let i of woId) i.value = woCreate.workorder.id;
-        wbOb.workorder_id = woCreate.workorder.id;
-      }
-
       let wbNotes = await workbook(wbOb, elem, 'Notes');
       delete thisTab.tags;
     }
 
+    if (thisTab.tags && thisTab.tags !== '') {
+      if (thisTab.tags !== '') {
+        let addons = await infusionsoftSubmit(thisTab);
+      }
+      delete thisTab.tags;
+    }
+
+    for (let key in thisTab) values[key] = thisTab[key];
+    btnLoader(elem, false);
+    return true;
+  }
+  const onTabChangeAccess = async (data, elem, curTab, stat) => {
+    btnLoader(elem, true);
+    let thisTab = {};
+    
+    data.forEach(i => {
+      if (i.field.type === 'checkbox') {
+        thisTab[i.field.name] = i.value === '' ? 'false' : i.value;
+      } else {
+        thisTab[i.field.name] = i.value;
+      }
+    });
+
+    if (thisTab.create_contact) {
+      let ifs = infusionsoftSubmit(thisTab);
+      let agileCon = await agileCreateContact(thisTab, elem, 'Agile ');
+      let conId = document.querySelectorAll('.shopping-cart [name=contact_id]');
+      let accId= document.querySelectorAll('.shopping-cart [name=account_id]');
+      for (let i of conId) i.value = agileCon.contact.id;
+      for (let i of accId) i.value = agileCon.account.id;
+      thisTab.contact_id = agileCon.contact.id;
+      thisTab.account_id = agileCon.account.id;
+
+      let i = thisTab;
+      if (document.querySelector('#vac')) {
+        let vac = document.querySelector('#vac');
+        vac.innerHTML = `${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}`;
+      } 
+      for (let fi of document.querySelectorAll('[name="email"]')) {
+        if (fi.type === 'hidden') fi.value = thisTab.email;
+      }
+      delete thisTab.tags;
+    }
+
+    if (thisTab.agile_schedule) {
+      let schedule = await agileScheduleLookup(token, thisTab.contact_id);
+      getSchedule(values.availability);
+      delete values.agile_schedule;
+    }
+
+    if (thisTab.package && thisTab.package !== '') {
+      values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
+      wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
+      let wbPack = await workbook(wbOb, elem, 'Package');
+
+      delete thisTab.package;
+    }
+
+    if (thisTab.contracts) {
+      let contractData = infusionsoftSubmit(thisTab);
+      let i = thisTab;
+      let notes = `
+        Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? true : false}
+        Agreed to Give Property Access: ${i.property_access === 'true' ? true : false}
+        Property Owner: ${i.own_location === 'true' ? true : false}
+        Nid Location: ${i.nid_location}
+        Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? true : false}
+        Customer requires to be at home during installation: ${i.installation_notification === 'true' ? true : false}
+        ${i.notification_email ? 'Notification Email: ' + i.notification_email : ''}
+        Customer Signature: ${i.customer_signature}
+        Sales Representative: ${localStorage.getItem("agileRepEmail")}
+      `;
+      thisTab.notes = notes;
+      let woCreate = await createWo(thisTab, elem, 'Workorder');
+      let woId = document.querySelectorAll('.shopping-cart [name=workorder_id]');
+      for (let i of woId) i.value = woCreate.workorder.id;
+
+      delete thisTab.tags;
+    }
+
     if (thisTab.workorder_to_wo) {
-      let p = await workorderToWb(thisTab, next);
+      let p = await workorderToWb(thisTab, next,);
       console.log(p);
     }
 
@@ -933,6 +1051,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (let key in thisTab) values[key] = thisTab[key];
     btnLoader(elem, false);
     return true;
+  }
+  const onTabChangeGeneric = (data) => {
+    let values = {}
+    data.forEach(i => values[i.field.name] = i.field.value);
+    let api = {
+      body: `action=fi_submit_contact&data=${JSON.stringify(values)}`,
+      url: fi_submit_contact.ajax_url,
+      method: 'POST',
+      report: true
+    }
+    ajax(api).then(res => {
+      let email = {}
+      for (let i of document.querySelectorAll('[name="email"]')) email[i.type] = i;
+      email.hidden.value = email.email.value;
+    });
   }
   const makeSale = async (workbook_id, elem) => {
     let token = await getToken();
@@ -963,116 +1096,290 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   }
-  const initShopCartForm = async (firstTry=true) => {
-    let shop = document.querySelector('.shopping-cart');
-    if (shop) {
-      setTimeout(() => loadPackages(), 1000);
-      form(shop, onTabChange).then( async val => {
-        btnLoader(next, true);
-        let i = values;
-        let or = '';
-
-        if (!wbOb) {
-          wbOb = generateWoObj(i);
-          wbOb.packages.push({ id: 102, qty: 1 });
-          let addPackage = await workbook(wbOb, next, 'WB Oject does not exists, Package');
-        }
-
-        if (wbOb.packages.length === 0) {
-          wbOb.packages.push({ id: 102, qty: 1 });
-          let addPackage = await workbook(wbOb, next, 'Package does not exist, Package');
-        }
-
-        let p = await makeSale(i.workbook_id, next);
-        let records = ``;
-        if (curPg.includes('sales-entry')) {
-          let e = `https://agileisp.com/?`;
-          let u = `https://vx952.infusionsoft.com/Contact/manageContact.jsp?view=edit&ID=`
-          records = `
-            Workorder Number: <a href="${e}s=wo&p=edit&pk=${p.result.workorder_id}&o=5" target="_blank"> 
-              #${p.result.workorder_id}
-            </a><br>
-            Workbook Number: <a href="${e}o=5&s=sales&p=workbook&id=${p.result.workbook_id}" target="_blank"> 
-              #${p.result.workbook_id}
-            </a><br>
-            Keap id: <a href="${u}${i.ifs_lead_id}" target="_blank"> 
-              #${i.ifs_lead_id}
-            </a><br>
-          `;
-        } else {
-          records = `
-            Workorder Number: #${p.result.workorder_id}<br>
-            Workbook Number: #${p.result.workbook_id}<br>
-          `;
-        }
-
-        shop.innerHTML = `<div>
-          <h4>Data submitted successfully</h4>
-          Name: ${i.given_name} ${i.family_name}<br>
-          Phone: ${i.phone}<br>
-          Email: ${i.email}<br>
-          ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
-          ${records}
-          Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
-          Nid Location: ${i.nid_location}<br>
-          Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? 'yes' : 'no'}<br>
-          Agreed to Give Property Access: ${i.property_access === 'true' ? 'yes' : 'no'}<br>
-          Property Owner: ${i.own_location === 'true' ? 'yes' : 'no'}<br>
-          Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? 'yes' : 'no'}<br>
-          Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
-          ${or !== '' ? `Products:<br>${or}`: ''}
-        </div>`;
-        btnLoader(next, false);
-      });
+  const widthinZone = (data) => {
+    let api = {
+      url: `${agileUrl}fiber-tool/zone_status/?address=${data.addr.string}&project_id=v%3A58&o=5`,
+      headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${data.token}` }
     }
+    
+    if (data.addr.lat) api.url = `${api.url}&latitude=${data.addr.lat}`;
+    if (data.addr.lng) api.url = `${api.url}&longitude=${data.addr.lng}`;
+
+    return ajax(api);
   }
-  const woLookup = async (a) => {
+  const woLookup = async (term) => {
     let token = await getToken();
     let api = {
       url: `${agileUrl}workorder/list_view/`,
       headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
       method: 'POST',
       body: JSON.stringify({
-        wo_text_search: "4449 Hamilton Stage Rd",
+        wo_text_search: term,
         o: 5,
         html: false
       })
     }
     return ajax(api).then(res => {
-      console.log(res);
+      let header = res.data[0];
+      let woList = []
+      for (let i = 1; i < res.data.length; i++) {
+        let wo = res.data[i];
+        let cur = {}
+        for (let e = 0; e < wo.length; e++) {
+          cur[header[e]] = wo[e];
+        }
+        woList.push(cur);
+      }
+      let filtered = woList.filter( i => i.Status !== "Cancelled" && i.Type === "Anthem Fiber Drop");
+      console.log(filtered);
     });
   }
+
+  // FORMS INIT
+
+  const initVerifyAddress = async (firstTry=true) => {
+
+    var formStatus = verifyAddressForm.querySelector('.controller .status');
+    // var manual = verifyAddressForm.querySelector('#manual');
+    var address = {}
+    const sendData = (url =>  window.location.href = url);
+
+    let formEx = false;
+    if (storageAvailable('localStorage')) {
+      formEx = localStorage.getItem("formex");
+      if (formEx) formEx = JSON.parse(formEx);
+    }
+
+    if (formEx) {
+      if (formEx.disabled) {
+        let exp = new Date(formEx.exp);
+        let now = new Date();
+        if (now > exp) {
+          formEx = '';
+          localStorage.removeItem('formex');
+        } else {
+          let remining = Math.floor((((exp - now) / 1000) / 60));
+          verForm.querySelector('#btn').disabled = true;
+          verForm.querySelector('.status').innerHTML = `
+            <p style="color:red;">Limit of uses reached<br>Try again in ${remining} minutes</p>
+          `;
+        }
+      }
+    }
+    let token = await getToken();
+    if (firstTry == false) {
+      // manual.classList.remove('hidden');
+      formStatus.innerHTML = `<div class="warning">
+        <strong>We could not find your address or you are located outside of our active service area.</strong> 
+        <p>Please use a different method to locate your location.</p>
+      </div>`;
+    }
+    form(verifyAddressForm).then( async val => {
+      let next = document.querySelector('[name="next"]');
+      btnLoader(next, true);
+      let newVal = {};
+      for (let i in val) {
+        newVal[val[i].name] = val[i].field.value;
+      }
+      address.string = `${newVal.line1}, ${newVal.locality}, ${newVal.region} ${newVal.postal_code}`;
+      address.address = newVal.line1;
+      address.city = newVal.locality;
+      address.state = newVal.region;
+      address.zip = newVal.postal_code;
+            
+      let status = await widthinZone({addr: address, token: token});
+      console.log(status);
+      let i = address;
+      if (status.result.length > 0) {
+        if (formEx) {
+          formEx.cnt = parseInt(formEx.cnt) + 1;
+        } else {
+          formEx = {
+            cnt: 1,
+            disabled: false
+          }
+        }
+        
+    // 			if (formEx.cnt > 2) {
+    // 				if (!formEx.disabled) {
+    // 					let dt = new Date();
+    // 					dt.setHours( dt.getHours() + 1 );
+    // 					formEx.disabled = true;
+    // 					formEx.exp = dt;
+    // 				}
+    // 			}
+        
+        let j = `${verifyAddressForm.action}?`;
+        let o = status.result[0].properties.Status;
+        if (formEx) localStorage.setItem("formex", JSON.stringify(formEx));
+        sendData(`
+          ${j}address=${i.address}&city=${i.city}&state=${i.state}&zip=${i.zip}&status=${o}${utmString}
+        `);
+        setTimeout(() => btnLoader(next, false), 8000);
+      } else {
+        initVerifyAddress(firstTry=false);
+        btnLoader(next, false);
+      }
+    });
+  }
+  const initShopCartForm = async (firstTry=true) => {
+    setTimeout(() => loadPackages(), 1000);
+    form(shop, onTabChange).then( async val => {
+      btnLoader(next, true);
+      let i = values;
+      let or = '';
+
+      if (!wbOb) {
+        wbOb = generateWoObj(i);
+        wbOb.packages.push({ id: 102, qty: 1 });
+        let addPackage = await workbook(wbOb, next, 'WB Oject does not exists, Package');
+      }
+
+      if (wbOb.packages.length === 0) {
+        wbOb.packages.push({ id: 102, qty: 1 });
+        let addPackage = await workbook(wbOb, next, 'Package does not exist, Package');
+      }
+
+      let p = await makeSale(i.workbook_id, next);
+      let records = ``;
+      if (localStorage.getItem("agileAdmin") === 'true') {
+        let e = `https://agileisp.com/?`;
+        let u = `https://vx952.infusionsoft.com/Contact/manageContact.jsp?view=edit&ID=`
+        records = `
+          Workorder Number: <a href="${e}s=wo&p=edit&pk=${p.result.workorder_id}&o=5" target="_blank"> 
+            #${p.result.workorder_id}
+          </a><br>
+          Workbook Number: <a href="${e}o=5&s=sales&p=workbook&id=${p.result.workbook_id}" target="_blank"> 
+            #${p.result.workbook_id}
+          </a><br>
+          Keap id: <a href="${u}${i.ifs_lead_id}" target="_blank"> #${i.ifs_lead_id}</a><br>
+        `;
+      } else {
+        records = `
+          Workorder Number: #${p.result.workorder_id}<br>
+          Workbook Number: #${p.result.workbook_id}<br>
+        `;
+      }
+
+      shop.innerHTML = `<div>
+        <h4>Data submitted successfully</h4>
+        Name: ${i.given_name} ${i.family_name}<br>
+        Phone: ${i.phone}<br>
+        Email: ${i.email}<br>
+        ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
+        ${records}
+        Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
+        Nid Location: ${i.nid_location}<br>
+        Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? 'yes' : 'no'}<br>
+        Agreed to Give Property Access: ${i.property_access === 'true' ? 'yes' : 'no'}<br>
+        Property Owner: ${i.own_location === 'true' ? 'yes' : 'no'}<br>
+        Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? 'yes' : 'no'}<br>
+        Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
+        ${or !== '' ? `Products:<br>${or}`: ''}
+      </div>`;
+      btnLoader(next, false);
+    });
+  }
+  const initAccessShop = async (firstTry=true) => {
+    setTimeout(() => loadPackages(), 1000);
+    form(accessShop, onTabChangeAccess).then( async val => {
+      btnLoader(next, true);
+      let i = values;
+      let or = '';
+
+      if (!wbOb) {
+        wbOb = generateWoObj(i);
+        wbOb.packages.push({ id: 102, qty: 1 });
+        let addPackage = await workbook(wbOb, next, 'WB Oject does not exists, Package');
+      }
+
+      if (wbOb.packages.length === 0) {
+        wbOb.packages.push({ id: 102, qty: 1 });
+        let addPackage = await workbook(wbOb, next, 'Package does not exist, Package');
+      }
+
+      let p = await makeSale(i.workbook_id, next);
+
+      shop.innerHTML = `<div>
+        <h4>Data submitted successfully</h4>
+        Name: ${i.given_name} ${i.family_name}<br>
+        Phone: ${i.phone}<br>
+        Email: ${i.email}<br>
+        ${i.notification_email ? `Notification Email: ${i.notification_email}<br>` : ''}
+        Workorder Number: #${p.result.workorder_id}<br>
+        Workbook Number: #${p.result.workbook_id}<br>
+        Service Address: ${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}<br>
+        Nid Location: ${i.nid_location}<br>
+        Agreed to Terms & Conditions: ${i.terms_conditions === 'true' ? 'yes' : 'no'}<br>
+        Agreed to Give Property Access: ${i.property_access === 'true' ? 'yes' : 'no'}<br>
+        Property Owner: ${i.own_location === 'true' ? 'yes' : 'no'}<br>
+        Agreed that this is a legal Signature: ${i.legal_signature === 'true' ? 'yes' : 'no'}<br>
+        Customer requires to be at home during installation: ${i.installation_notification === 'true' ? 'yes' : 'no'}<br>
+        ${or !== '' ? `Products:<br>${or}`: ''}
+      </div>`;
+      btnLoader(next, false);
+    });
+  }
+  const initGenericForm = async (firstTry=true) => {
+    for (let i of genericIfsForms) {
+      form(i, onTabChangeGeneric).then( data => {
+        let values = {}
+        data.forEach(i => values[i.field.name] = i.field.value);
+        let api = {
+          body: `action=fi_submit_contact&data=${JSON.stringify(values)}`,
+          url: fi_submit_contact.ajax_url,
+          method: 'POST',
+          report: true
+        }
+        ajax(api).then(res => window.location.replace(i.action));
+      });
+    }
+  }
   
-  // FUNTIONS
+  // INITIALIZE
 
-  await initShopCartForm();
+  utmInit();
 
-  if (newUrl.get('address')) {
-    let ad = formatData(newUrl.get('address'));
-    let city = formatData(newUrl.get('city'));
-    let state = formatData(newUrl.get('state'));
-    let zip = formatData(newUrl.get('zip'));
+  if (genericIfsForms.length > 0) {
+    await initGenericForm();
+  }
+
+  if (shop) {
+    await initShopCartForm();
+  }
+
+  if (verifyAddressForm) {
+    await initVerifyAddress();
+  }
+
+  if (accessShop) {
+    await initAccessShop();
+  }
+
+  if (url.get('address')) {
+    let ad = formatData(url.get('address'));
+    let city = formatData(url.get('city'));
+    let state = formatData(url.get('state'));
+    let zip = formatData(url.get('zip'));
     if (document.querySelector('#vac')) {
       document.querySelector('#vac').innerHTML = `${ad}, ${city}, ${state} ${zip}`;
     }
 
     if (ad !== '' && city !== '') {
-      console.log(`${ad}, ${city}, ${state} ${zip}`);
-      woLookup();
+      woLookup(`${ad}`);
     }
   }
 
   if (zone_status) {
-    let url = newUrl.get('status');
-    if (url) {
-      let cap = url.charAt(0).toUpperCase() + url.slice(1);
+    if (url.get('status')) {
+      let cap = url.get('status').charAt(0).toUpperCase() + url.get('status').slice(1);
       zone_status.innerHTML = cap;
     }
   }
  
   //EVENT LISTENERS
 
-  if (salesRep) salesRep.value = agileRepEmail;
+  if (salesRep) salesRep.value = localStorage.getItem("agileRepEmail");
 
   if (sendContract) {
     sendContract.addEventListener('click', async (e) => {
