@@ -67,12 +67,10 @@
       <input type="hidden" class="form-input" name="utm_content" value="*">
       <input type="hidden" class="form-input" name="source_page" value="signup">
       <input type="hidden" class="form-input" name="ifs_lead_id">
-      <input type="hidden" class="form-input" name="workbook_id">
       <input type="hidden" class="form-input" name="contact_id">
       <input type="hidden" class="form-input" name="account_id">
       <input type="hidden" class="form-input" name="workorder_id">
       <input type="hidden" class="form-input" name="create_contact" value="true">
-	    <input type="hidden" class="form-input" name="agile_contact" value="true">
       <input type="hidden" class="form-input" name="lat">
       <input type="hidden" class="form-input" name="lng">
       <input type="hidden" class="form-input" name="sales_rep">
@@ -83,8 +81,8 @@
       <input required="" type="text" class="form-input" name="given_name" placeholder="First Name">
       <input required="" type="text" class="form-input" name="family_name" placeholder="Last Name">
       <input required="" type="tel" class="form-input" name="phone" placeholder="Phone">
-      <input required="" type="text" class="form-input" name="line1" placeholder="Street">
-      <input type="text" class="form-input" name="line2" placeholder="Street Line 2">
+      <input required="" type="text" class="form-input" name="line1" placeholder="Address">
+      <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
       <input required="" type="text" class="form-input" name="locality" placeholder="City">
       <select class="form-input" name="region" required="" data-placeholder="State">
         <option selected value="NV">Nevada</option>
@@ -169,7 +167,7 @@
       <input type="hidden" class="form-input" name="ifs_lead_id">
       <input type="hidden" class="form-input" name="workbook_id">
       <input type="hidden" class="form-input" name="make_sale" value="true">
-      <div class="packages">
+      <div data-packages="true" data-type="elko" data-productline="residential" data-template="1">
         <input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">
       </div>
     </div>
@@ -212,33 +210,40 @@
 </form>
 <section id="background" class="flex-row hidden"></section>
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-  setTimeout(() => {
-    let stage1 = document.querySelector('#id-contact');
-    let btn = document.querySelector('[name=next]');
-    btn.addEventListener('click', async () => {
-      elemChanged(stage1).then((status) => {});
-    });
-  }, 2000);
-  const elemChanged = (elem, count=0) => {
-    if (count > 10) {
-      resolve(false);
+  window.addEventListener('DOMContentLoaded', event => {
+    const form = document.querySelector('.slidefrm');
+    const formbanner = document.querySelector('.form-banner');
+    const funct = () => {
+      if (window.innerWidth > 992) {
+        form.classList.add('fixed-form');
+        formbanner.classList.add('fixed');
+      } else {
+        form.classList.remove('fixed-form');
+        formbanner.classList.add('fixed');
+      }
     }
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (elem.style.display !== 'flex') { 
-          document.querySelector('.form-banner').style.display = 'none';
-          let form = document.querySelector('.form-container');
-          form.style.width = '100%';
-          form.style.height = 'auto';
-          form.querySelector('.tabs').style.maxWidth = '100%';
-          document.querySelector('.controller').classList.add('green');
-          resolve(true);
-        } else {
-          elemChanged(elem, count + 1);
-        }
-      }, 500);
-    });
-  }
-});
+    funct();
+    window.addEventListener('resize', funct);
+    
+    setTimeout(() => {
+      let stage1 = document.querySelector('#id-contact');
+      let btn = document.querySelector('[name=next]');
+      btn.addEventListener('click', async () => {
+        elemChanged(stage1).then((status) => {});
+      });
+    }, 2000);
+    const elemChanged = (elem, count=0) => {
+      return new Promise((resolve) => {
+        if (count > 10)  resolve(false);
+          setTimeout(() => {
+            if (elem.style.display !== 'flex') { 
+              document.querySelector('.form-banner').classList.add('form-active');
+              resolve(true);
+            } else {
+              elemChanged(elem, count + 1);
+            }
+          }, 500);
+        });
+    }
+  });
 </script>

@@ -47,13 +47,6 @@ function child_enqueue_styles() {
     array('jquery'), 
     ''
   );
-  wp_enqueue_script(
-    'astrachildjs', 
-    get_stylesheet_directory_uri( __FILE__ ) . '/js/astra-child.js', 
-    array(), 
-    date("m.d"), 
-    true
-  );  
 }
 
 function year_shortcode() {

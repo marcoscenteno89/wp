@@ -274,6 +274,23 @@
       <div class="form-area flex-col">
         <h5>Find out when service is available in your area</h5>
         <p style="color:#212529;">Enter your address to get started</p>
+        <style>
+          #primary.primary {
+              background-color: #FFF !important;
+          }
+          form .steps {
+              border-radius: 5px;
+              overflow: hidden;
+          }
+          form .steps .step {
+              color: #fff !important;
+              padding-top: 10px;
+              padding-bottom: 10px;
+          }
+          .tabs .tab {
+              padding: 10px 0 0 0 !important;
+          }
+        </style>
         <form action="/signup" class="verify-address" id="verify-address">
           <div class="tabs">
 			      <div class="steps"></div>
@@ -284,7 +301,12 @@
               <input type="hidden" class="form-input" name="utm_medium" value="*">
               <input type="hidden" class="form-input" name="utm_term" value="*">
               <input type="hidden" class="form-input" name="utm_content" value="*">
-              <input required type="text" class="form-input" name="line1" placeholder="Street">
+              <input type="hidden" class="form-input" name="o" value="5">
+              <input type="hidden" class="form-input" name="lat">
+              <input type="hidden" class="form-input" name="lng">
+              <input type="hidden" class="form-input" name="project_id" value="3A58">
+              <input required type="text" class="form-input" name="line1" placeholder="Address">
+              <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
               <input required type="text" class="form-input" name="locality" placeholder="City">
               <input required type="text" class="form-input" name="region" placeholder="State">
               <input required type="text" class="form-input" name="postal_code" placeholder="Zip Code">

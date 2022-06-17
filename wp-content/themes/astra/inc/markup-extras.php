@@ -97,6 +97,7 @@ if ( ! function_exists( 'astra_body_classes' ) ) {
 		} elseif ( 'plain-container' == $content_layout ) {
 			$classes[] = 'ast-plain-container';
 		}
+
 		// Sidebar location.
 		$page_layout = 'ast-' . astra_page_layout();
 		$classes[]   = esc_attr( $page_layout );
@@ -405,8 +406,8 @@ if ( ! function_exists( 'astra_get_search' ) ) {
 		ob_start();
 		?>
 		<div class="ast-search-menu-icon slide-search" <?php echo apply_filters( 'astra_search_slide_toggle_data_attrs', '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+		<?php astra_get_search_form(); ?>
 			<div class="ast-search-icon">
-			<?php astra_get_search_form(); ?>
 				<a class="slide-search astra-search-icon" aria-label="<?php esc_attr_e( 'Search icon link', 'astra' ); ?>" href="#">
 					<span class="screen-reader-text"><?php esc_html_e( 'Search', 'astra' ); ?></span>
 					<?php Astra_Icons::get_icons( 'search', true ); ?>

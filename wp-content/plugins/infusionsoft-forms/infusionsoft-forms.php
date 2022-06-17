@@ -12,20 +12,21 @@ function fi_enqueue_scripts() {
     'fi_styles', 
     plugins_url( 'css/styles.css' , __FILE__ ), 
     array(), 
+    date("m.d.h"), 
     'all' 
   );
 	wp_enqueue_script( 
 		'fi_forms', 
 		plugins_url( 'js/forms.js', __FILE__ ), 
 		array(), 
-		date("m.d"), 
+		date("m.d.h"), 
 		true 
 	);
   wp_enqueue_script(
     'calendar', 
     get_stylesheet_directory_uri( __FILE__ ) . '/js/vanilla-calendar.js', 
     array('shoppingcart'), 
-    date("m.d"), 
+    date("m.d.h"), 
     true
   );
   wp_localize_script( 
@@ -72,6 +73,16 @@ function fi_submit_contact() {
 	$body['phone_numbers'] = [];
 	$body['email_opted_in'] = true;
 	$body["opt_in_reason"] = "Service notifications.";
+
+  // RETURN CUSTOM FIELDS
+  // $api['request'] = 'GET';
+  // $api['url'] = $inf."contacts/model/?$token";
+  // $api['body'] = '';
+  // $custFields = apirequest($api);
+  // echo json_encode([
+	// 	'fields' => $custFields, 
+	// ]);
+  // exit;
 
   // LOGIN FOR NOT OVERWRITING CURRENT EXTERNAL OWNER
   if (isset($data->sales_rep)) {

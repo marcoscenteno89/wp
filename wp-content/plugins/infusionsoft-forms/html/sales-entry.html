@@ -2,6 +2,10 @@
   #primary.primary {
       background-color: #FFF !important;
   }
+  .shopping-cart :is(input[type=text], input[type=email], input[type=number], input[type=tel], textarea, select) {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 </style>
 <section class="loginbg">
   <form class="loginform">
@@ -16,59 +20,61 @@
   <div class="tabs">
     <div class="steps flex arrow"></div>
     <div class="tab" data-props='{"name":"Contact","numerate":true,"validate":true,"allowskip":false}'>
-      <div class="row" style="justify-content:space-between;">
-        <div class="col-6" style="padding-right:1rem;align-self:center;padding:0 30px 0 0;">
-          <h2>Great News!</h2>
-          <p><strong class="zone_status"></strong></p>
-          <p>Sign up for services now and we will keep you up to date on progress and notify you when we are ready to connect! You won't pay anything now and there are no construction fees.</p>
-          <p>By signing up now, you are letting us know you want service brought to your location. Doing so now means there is no additional cost as long as you sign up before the construction team passes you by.</p>
-          <p>We are constantly working with construction teams to provide the most accurate timelines possible. We will be sending out periodic updates to keep everyone informed of progress and when you are able to connect.</p>
-          <p>Still have questions, Call us at <a style="font-weight:bold;" href="tel:+17753892892">775.389.2892</a></p>
-        </div>
-        <div class="col-6" style="max-width:500px;min-width:300px;padding:0;">
-          <input type="hidden" class="form-input" name="utm_adgroup" value="*">
-          <input type="hidden" class="form-input" name="utm_campaign" value="*">
-          <input type="hidden" class="form-input" name="utm_source" value="organic">
-          <input type="hidden" class="form-input" name="utm_medium" value="sales-entry">
-          <input type="hidden" class="form-input" name="utm_term" value="*">
-          <input type="hidden" class="form-input" name="utm_content" value="*">
-          <input type="hidden" class="form-input" name="source_page" value="signup">
-          <input type="hidden" class="form-input" name="ifs_lead_id">
-          <input type="hidden" class="form-input" name="workbook_id">
-          <input type="hidden" class="form-input" name="create_contact" value="true">
-          <input type="hidden" class="form-input" name="lat">
-          <input type="hidden" class="form-input" name="lng">
-          <input type="hidden" class="form-input" name="sale_source" value="337">
-          <input type="hidden" class="form-input" name="opportunity_stage" value="281">
-          <input type="hidden" class="form-input" name="tags" value="120,401,481">
-		      <input required type="email" class="form-input" name="sales_rep" placeholder="Sales Agent Email" readonly>
-          <input required="" type="email" class="form-input lookup" name="email" placeholder="Email">
-          <input required="" type="text" class="form-input" name="given_name" placeholder="First Name">
-          <input required="" type="text" class="form-input" name="family_name" placeholder="Last Name">
-          <input required="" type="tel" class="form-input" name="phone" placeholder="Phone">
-          <input required="" type="text" class="form-input" name="line1" placeholder="Street">
-          <input type="text" class="form-input" name="line2" placeholder="Street Line 2">
-          <input required="" type="text" class="form-input" name="locality" placeholder="City">
-          <select class="form-input" name="region" required="" data-placeholder="State">
-            <option selected value="NV">Nevada</option>
-          </select>
-          <input required="" type="text" class="form-input" name="postal_code" placeholder="Zip Code">
-          <input type="text" class="form-input" name="promo_code" placeholder="Promo Code">
-          <select class="form-input" name="product_line" required="" data-placeholder="Residential or Commercial Use">
-            <option value="">Residential or Commercial Use</option>
-            <option value="83">Residential</option>
-            <option value="84">Commercial</option>
-          </select>
-        </div>
-      </div>
+      <strong class="zone_status success" hidden></strong>
+      <input type="hidden" class="form-input" name="utm_adgroup" value="*">
+      <input type="hidden" class="form-input" name="utm_campaign" value="*">
+      <input type="hidden" class="form-input" name="utm_source" value="organic">
+      <input type="hidden" class="form-input" name="utm_medium" value="sales-entry">
+      <input type="hidden" class="form-input" name="utm_term" value="*">
+      <input type="hidden" class="form-input" name="utm_content" value="*">
+      <input type="hidden" class="form-input" name="source_page" value="signup">
+      <input type="hidden" class="form-input" name="ifs_lead_id">
+      <input type="hidden" class="form-input" name="workbook_id">
+      <input type="hidden" class="form-input" name="create_contact" value="true">
+      <input type="hidden" class="form-input" name="lat">
+      <input type="hidden" class="form-input" name="lng">
+      <input type="hidden" class="form-input" name="sale_source" value="337">
+      <input type="hidden" class="form-input" name="opportunity_stage" value="281">
+      <input type="hidden" class="form-input" name="tags" value="587,401">
+      <input type="hidden" class="form-input" name="check_address" value="true">
+      <input type="hidden" class="form-input" name="project_id">
+      <input required type="email" class="form-input" name="sales_rep" placeholder="Sales Agent Email">
+      <input required type="text" hidden class="form-input" name="o" placeholder="Organization">
+      <select class="select_update" name="o_update">
+        <option value="">Organization</option>
+        <option selected value="5" data-project-id="58">Anthem of Nevada</option>
+        <option value="1" data-project-id="39">Anthem of Idaho</option>
+      </select>
+      <input required type="email" class="form-input lookup" name="email" placeholder="Email">
+      <input required type="text" class="form-input" name="given_name" placeholder="First Name">
+      <input required type="text" class="form-input" name="family_name" placeholder="Last Name">
+      <input required type="tel" class="form-input" name="phone" placeholder="Phone">
+      <input required type="text" class="form-input" name="line1" placeholder="Address">
+      <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
+      <input required type="text" class="form-input" name="locality" placeholder="City">
+      <input required type="text" hidden class="form-input" name="region" placeholder="State">
+      <select class="select_update" name="region_update">
+        <option value="">State</option>
+        <option selected value="ID">Idaho</option>
+        <option value="NV">Nevada</option>
+        <option value="MT">Montana</option>
+        <option value="OR">Oregon</option>
+      </select>
+      <input required type="text" class="form-input" name="postal_code" placeholder="Zip Code">
+      <input type="text" class="form-input" name="promo_code" placeholder="Promo Code">
+      <input required type="text" hidden class="form-input" name="product_line" placeholder="Residential or Commercial Use">
+      <select class="select_update" name="product_line_update">
+        <option value="">Residential or Commercial Use</option>
+        <option value="83">Residential</option>
+        <option value="84">Commercial</option>
+      </select>
     </div>
     <div class="tab" data-props='{"name":"Fiber","numerate":true,"allowskip":true}'>
       <input type="hidden" class="form-input" name="email">
       <input type="hidden" class="form-input" name="ifs_lead_id">
       <input type="hidden" class="form-input" name="workbook_id">
-      <div class="packages" style="flex-direction:reverse;">
-        <input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">
-      </div>
+      <input checked type="radio" placeholder="Package" class="form-input hidden" name="package" value="102" id="id-102">
+      <div data-packages="true" data-type="elko" data-productline="residential" data-template="1"></div>
     </div>
     <div class="tab" data-props='{"name":"Add Ons","numerate":true,"allowskip":true}'>
       <input type="hidden" class="form-input" name="email">
@@ -102,9 +108,10 @@
       <input type="hidden" class="form-input" name="email">
       <input type="hidden" class="form-input" name="workbook_id">
       <input type="hidden" class="form-input" name="contracts" value="true">
-      <input type="hidden" class="form-input" name="tags" value="218">
+      <input type="hidden" class="form-input" name="tags" value="587,613">
+      <input type="hidden" class="form-input" name="dynamic_tags" value="593">
       <h2>Tell us more about the property</h2>
-	  <p><button class="btn yellow" id="send_contract">Send Contract to Customer</button></p>
+      <p><button class="btn yellow" id="send_contract">Send Contract to Customer</button></p>
       <br>
       <strong id="vac"></strong>
       <br>

@@ -8,9 +8,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   // VARIABLES
   const exists = [''.trim(), undefined, null, false, 'null'];
   const valid_phone = (x) => x.replace(/[^0-9]/g, '');
-  const agileUrl = 'https://agileisp.com/api/';
+  const agile = 'https://agileisp.com/'
+  const agileUrl = `${agile}api/`;
   const curPg = window.location.pathname;
 
+  const addressNotFound = `<div class="warning">
+    <strong>We could not find your address or you are located outside of our active service area.</strong><br>
+    <!-- Please use a different method to locate your location. -->
+  </div>`;
   var utmString = '';
   const agileLogin = document.querySelector('.loginbg');
   localStorage.setItem("agileAdmin", agileLogin ? true : false);
@@ -19,23 +24,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const salesRep = document.querySelector('[name=sales_rep]');
   const next = document.querySelector('[name=next]');
   const prev = document.querySelector('[name=prev]');	
-  const sendContract = document.querySelector('#send_contract');
   const shop = document.querySelector('.shopping-cart');
   const accessShop = document.querySelector('.access-shopping-cart');
   const verifyAddressForm = document.querySelector('.verify-address'); 
   const genericIfsForms = document.querySelectorAll(".ifs-form");
   const url = new URLSearchParams(window.location.search);
-  let owner = document.querySelectorAll('.shopping-cart [name="own_location"]');
-  let zone_status = document.querySelector('.zone_status');
-  let addon = document.querySelectorAll('.addon');
-  let addon_tags = document.querySelector('.addontags');
   let email = document.querySelector('.lookup');
   let wbOb;
+  let checkedAdrs = false;
+  let recursiveCnt = 0;
 
   const values = {
     create_account: true,
     packages: []
   }
+  const hasProp = (obj) => Object.entries(obj).length > 0;
   const btnLoader = (elem, state) => {
     if (state) {
       elem.setAttribute("data-html", elem.innerHTML);
@@ -135,6 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   elem.addEventListener('click', async (event) => {
                     event.preventDefault();
                     prompt({ remove: true });
+                    btnLoader(document.querySelector('[name="next"]'), false);
                     await switchTab(o, event, force=true);
                   });
                 });
@@ -296,8 +300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             return;
           }
-          if (field.type === 'checkbox') {
-            
+          if (field.type === 'checkbox') { 
             if (!dup.includes(field.name)) {
               data.push({
                 'name': field.name, 
@@ -328,18 +331,14 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
           dup.push(field.name);
         });
-        Object.keys(data).forEach(i => {
-          if (data[i].field.type !== 'hidden') {
-            if (!data[i].valid) {
-              data[i].field.style.border = '1px solid #f5c6cb';
-              data[i].field.style.background = '#f8d7da';
-              msg += `<div class="warning">
-                ${data[i].field.placeholder}: ${data[i].field.validationMessage}
-              </div>`;
-            } else {
-              data[i].field.style.border = '1px solid #c3e6cb';
-              data[i].field.style.background = 'rgb(103,200,208)';
-            }
+        Object.values(data).forEach(i => {
+          if (!i.valid) {
+            i.field.style.border = '1px solid #f5c6cb';
+            i.field.style.background = '#f8d7da';
+            msg += `<div class="warning">${i.field.placeholder}: ${i.field.validationMessage}</div>`;
+          } else {
+            i.field.style.border = '1px solid #c3e6cb';
+            i.field.style.background = 'rgb(103,200,208)';
           }
         });
         status.innerHTML = msg;
@@ -347,7 +346,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
-  const utmInit = () => {
+  const urlParams = () => {
     let all = document.querySelectorAll(".ifs-form");
     let fields = {
       utm_adgroup: [`input[name="utm_adgroup"]`, `input[name="inf_custom_utm_adgroup"]`],
@@ -361,12 +360,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       family_name: [`input[name="family_name"]`],
       phone: [`input[name="phone"]`],
       address: [`input[name="line1"]`],
+      address2: [`input[name="line2"]`],
       city: [`input[name="locality"]`],
       state: [`input[name="region"]`],
-      zip: [`input[name="postal_code"]`],
-        product_line: [`input[name="product_line"]`],
-        contact_id: [`input[name="contact_id"]`],
-        account_id: [`input[name="account_id"]`],
+      postalcode: [`input[name="postal_code"]`],
+      product_line: [`input[name="product_line"]`],
+      contact_id: [`input[name="contact_id"]`],
+      account_id: [`input[name="account_id"]`],
       lat: [`input[name="lat"]`, `input[name="latitude"]`],
       lng: [`input[name="lng"]`, `input[name="longitude"]`],
       workbook_id: [`input[name="workbook_id"]`],
@@ -401,6 +401,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const prompt = (a) => {
     let background = document.querySelector('#background');
+    const close = () => {
+      background.classList.add('hidden');
+      background.innerHTML = '';
+    }
     if (a.container) {
       if (a.container === 'popup') {
         var popup = `
@@ -417,11 +421,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     background.classList.remove('hidden');
 
     if (a.remove) close();
-    if (popup) background.querySelector('#popup > .close').addEventListener('click', close);
-
-    function close() {
-      background.classList.add('hidden');
-      background.innerHTML = '';
+    if (popup) {
+      background.querySelector('#popup > .close').addEventListener('click', close);
     }
   }
   const formatData = (string) => {
@@ -513,7 +514,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         localStorage.setItem("agileRepEmail", null);
         localStorage.setItem("agileRepId", null);
       }
-
       if (exists.includes(localStorage.getItem("agileRepToken"))) {
         agileLogin.style.display = 'flex';
       } else {
@@ -558,7 +558,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         password: document.querySelector('[name=password]').value
       })
     }
-    console.log(api);
     await ajax(api).then(async res => {
       btnLoader(e.target, false);
       if (![200].includes(res.status)) {
@@ -570,83 +569,119 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem("agileRepId", res.id);
       salesRep.value = res.email;
       agileLogin.style.display = 'none';
-      setTimeout(() => loadPackages(), 1000);
+      loadPackages();
     });
   }
   const loadPackages = async () => {
-    let token = await getToken();
-    setTimeout( async () => {
-      let api = {
-        url: `${agileUrl}sales-package/?o=5&html=false`,
-        method: 'GET',
-        headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
-      }
-      await ajax(api).then(res => {
-        let container = document.querySelector('.shopping-cart .packages');
-        if (container) {
-          if ([200, 201, 202, 203].includes(res.status) && container) {
-            let pack = res.data.filter(i => {
-              return i.product_category__name === 'Fiber' && i.product_line__name === 'Residential' && i.id !== 68;
-            });
-            let cell = '';
-            for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
-            let percent = 100 - (pack.length * 20);
-            
-            if (curPg.includes('access')) {
-              for (let i of pack) {
-                let tmp = percent;
-                percent = tmp + 20;
-                container.insertAdjacentHTML("afterbegin", `
-                  <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-                  <label for="id-${i.id}" class="paq-ver">
-                    <h5 class="title" style="width:50%;">${i.name}</h5>
-                    <div class="anim-container" style="width:30%;">
-                      <div class="anim">${cell}</div>
-                      <div class="hide" style="left:${percent}%"></div>
-                    </div>
-                    <h3 class="amount" style="width:20%;text-align:right;">$${i.monthly_price}</h3>
-                  </label>
-                `);
-              }
-            } else {
-              for (let i of pack) {
-                let tmp = percent;
-                percent = tmp + 20;
-                container.insertAdjacentHTML("afterbegin", `
-                  <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-                  <label for="id-${i.id}" class="paq${i.id === 74 ? ' active' : ''}">
-                    <h3 class="amount">$${i.monthly_price}</h3>
-                    <div class="anim-container">
-                      <div class="anim">${cell}</div>
-                      <div class="hide" style="left:${percent}%"></div>
-                    </div>
-                    <h3 class="title">${i.name}</h3>
-                    <h4 style="color:#fff;">${i.speed}</h4>
-                    <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
-                    ${i.id === 74 ? '<div class="main">MOST POPULAR</div>' : ''}
-                  </label>
-                `);
-                let checkbox = document.querySelector(`#id-${i.id}`);
-                let btn = document.querySelector(`[data-id="${i.id}"]`);
-                checkbox.addEventListener('click', (elem) => {
-                  let btns = document.querySelectorAll(`[data-html]`);
-                  for (let i of btns) i.innerHTML = i.getAttribute('data-html');
-                  let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
-                  if (elem.target.checked === true) btn.innerHTML = 'Selected';
-                });
-              }
-              let accordion = document.querySelectorAll('[data-accordion="accordion"]');
-              for (let i of accordion) add_accordion(i);
-            }            
-            console.log('Loaded packages....')
-          } else {
-            let msg = 'Failed to load packages....'
-            console.log(`Agile: ${res.detail}`);
-            container.insertAdjacentHTML("afterbegin", `<div class="warning col-12">${msg}</div>`);
-          }
+    const token = await getToken();
+    if (exists.includes(localStorage.getItem("agilePackages"))) {
+      if (token) {
+        const packages = {
+          commercial: {},
+          residential: {}
         }
-      });
-    }, 1000);
+        setTimeout( async () => {
+          let api = {
+            url: `${agileUrl}sales-package/?o=1&html=false`,
+            method: 'GET',
+            headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
+          }
+          await ajax(api).then(res => {
+            if ([200, 201, 202, 203].includes(res.status)) {
+              packages.commercial.wireless = res.data.filter(i => {
+                return i.product_category__name === "Wireless" && i.product_line__name === "Commercial";
+              });
+              packages.commercial.fiber = res.data.filter(i => {
+                return i.product_category__name === "Fiber" && i.product_line__name === "Commercial";
+              });
+              packages.residential.fiber = res.data.filter(i => {
+                return i.product_category__name === "Fiber" && i.product_line__name === "Residential";
+              });
+              packages.residential.wireless = res.data.filter(i => {
+                return i.product_category__name === "Wireless" && i.product_line__name === "Residential" && i.id !== 2;
+              });
+            } else {
+              console.log(`Agile: ${res.detail}`);
+            }
+          });
+          api.url = `${agileUrl}sales-package/?o=5&html=false`;
+          await ajax(api).then(res => {
+            if ([200, 201, 202, 203].includes(res.status)) {
+              packages.commercial.elko = res.data.filter(i => {
+                return i.product_category__name === "Fiber" && i.product_line__name === "Residential" && i.id !== 68;
+              });
+              packages.residential.elko = packages.commercial.elko;
+            } else {
+              console.log(`Agile: ${res.detail}`);
+            }
+          });
+          if (hasProp(packages.commercial) && hasProp(packages.residential)) {
+            localStorage.setItem("agilePackages", JSON.stringify(packages));
+          }
+        }, 1000);
+        console.log('Packages Data Loaded...');
+      }
+    } else {
+      console.log('Packages Data Already Exists...');
+    }
+  }
+  const getPackages = (pProductLine=false, pType=false) => {
+    const packages = JSON.parse(localStorage.getItem("agilePackages"));
+    const containerList = document.querySelectorAll('[data-packages]');
+    for (let container of containerList) {
+      container.innerHTML = '';
+      const type = pType ? pType : container.getAttribute('data-type');
+      const productline = pProductLine ? pProductLine : container.getAttribute('data-productline');
+      const dbtn = container.getAttribute('data-btn') ? container.getAttribute('data-btn') : 'Select';
+      let pack = packages[productline][type];
+      let cell = '';
+      for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
+      let percent = 0;
+      let active = pack[pack.length - 2].id;
+      let templateId = parseInt(container.getAttribute('data-template'));
+      for (let i of pack) {
+        percent = percent + (100 / pack.length);
+        let innerContent = '';
+        let animation = `<div class="anim-container" style="${templateId === 2 ? 'width:30%;' : ''}">
+          <div class="anim">${cell}</div>
+          <div class="hide" style="left:${percent}%"></div>
+        </div>`;
+        
+        let temp2Content = `
+          <h5 class="title">${i.name}</h5>
+          ${animation}
+          <h3 class="amount">$${i.monthly_price}</h3>
+          <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
+        `;
+        let temp1Content = `
+          <h3 class="amount" style="color:#fff;">$${i.monthly_price}</h3>
+          ${animation}   
+          <h3 class="title flex-center">${i.name}</h3>
+          <h4 style="color:#fff;">${i.speed}*</h4>
+          <div class="action" data-id="id-${i.id}" data-html="${dbtn}">${dbtn}</div>
+          ${i.id === active ? '<div class="main">MOST POPULAR</div>' : ''}
+        `;
+        
+        if (templateId === 1) {
+          innerContent = temp1Content;
+        } else if (templateId == 2) {
+          innerContent = temp2Content;
+        } else {}
+        container.insertAdjacentHTML("beforeend", `
+          <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
+          <label for="id-${i.id}" class="paq ${i.id === active ? 'active' : ''}">${innerContent}</label>
+        `);
+        
+        let checkbox = document.querySelector(`#id-${i.id}`);
+        let btn = document.querySelector(`[data-id="${i.id}"]`);
+        checkbox.addEventListener('click', (elem) => {
+          let btns = document.querySelectorAll(`[data-html]`);
+          for (let i of btns) i.innerHTML = i.getAttribute('data-html');
+          let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
+          if (elem.target.checked === true) btn.innerHTML = 'Selected';
+        });
+      }
+    }
   }
   const agileLookup = async (token, data) => {
     let api = {
@@ -729,6 +764,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       method: 'POST'
     }
     return ajax(api).then(res => {
+      // USE THIS LOG TO OUTPUT CUSTOM FIELDS
+      // console.log(res);
       if ( [200, 201].includes(res.contact.status_code) ) {
         if (res.contact) {
           let i = res.contact;
@@ -861,22 +898,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const workorderToWb = async(a, elem, label) => {
     let token = await getToken();
     let data = {
-      "o": 0,
-      "workorder_id": 0,
-      "sales_source_id": 0,
-      "lead_source_id": 0,
-      "packages": [
-        {
-          "id": 0,
-          "qty": 0
-        }
-      ],
-      "promotions": [
-        {
-          "id": 0
-        }
-      ],
-      "referred_by": "string"
+      o: 5,
+      workorder_id: a.workorder_id,
+      sales_source_id: a.sale_source,
+      packages: a.packages
     }
     let api = {
       url: `${agileUrl}sales/workorder_to_wb/`,
@@ -900,13 +925,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         thisTab[i.field.name] = i.value;
       }
     });
+    if (thisTab.check_address) {
+      let status = await widthinZone(thisTab);
+      if (!status.result.length > 0) {
+        let stat = document.querySelector('.controller .status');
+        stat.innerHTML = addressNotFound;
+        btnLoader(elem, false);
+        return false;
+      }
+    }
 
     if (thisTab.create_contact) {
-      let ifs = infusionsoftSubmit(thisTab);
+      if (!url.get('address') && !checkedAdrs) {
+        let wo = await woLookup(thisTab.line1);
+        if (wo.length > 0) {
+          woExistsPrompt(wo);
+          btnLoader(elem, false);
+          checkedAdrs = true;
+          return false;
+        }
+      }
+
       wbOb = generateWoObj(thisTab);
       let wb = await workbook(wbOb, elem, 'Workbook Entry');
       wbOb.workbook_id = parseInt(wb.result.workbook_id);
-      let workbook_id_list = document.querySelectorAll('.shopping-cart [name=workbook_id]');
+      thisTab.workbook_id = parseInt(wb.result.workbook_id);
+      let ifs = infusionsoftSubmit(thisTab);
+      let workbook_id_list = document.querySelectorAll('[name=workbook_id]');
       for (let i of workbook_id_list) i.value = wb.result.workbook_id;
       let i = thisTab;
 
@@ -934,6 +979,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (thisTab.contracts) {
+      if (wbOb.packages.length > 0) {
+        if (wbOb.packages[0].id !== 102) {
+          thisTab.tags += `,${thisTab.dynamic_tags}`;
+        }
+      }
+
       let contractData = infusionsoftSubmit(thisTab);
       let i = thisTab;
       let or = '';
@@ -982,12 +1033,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (thisTab.create_contact) {
       let ifs = infusionsoftSubmit(thisTab);
       let agileCon = await agileCreateContact(thisTab, elem, 'Agile ');
-      let conId = document.querySelectorAll('.shopping-cart [name=contact_id]');
-      let accId= document.querySelectorAll('.shopping-cart [name=account_id]');
+      let conId = document.querySelectorAll('[name=contact_id]');
+      let accId= document.querySelectorAll('[name=account_id]');
       for (let i of conId) i.value = agileCon.contact.id;
       for (let i of accId) i.value = agileCon.account.id;
       thisTab.contact_id = agileCon.contact.id;
-      thisTab.account_id = agileCon.account.id;
+      thisTab.account_id = agileCon.account.id; 
 
       let i = thisTab;
       if (document.querySelector('#vac')) {
@@ -1000,21 +1051,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       delete thisTab.tags;
     }
 
-    if (thisTab.agile_schedule) {
-      let schedule = await agileScheduleLookup(token, thisTab.contact_id);
-      getSchedule(values.availability);
-      delete values.agile_schedule;
-    }
-
     if (thisTab.package && thisTab.package !== '') {
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
-      wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
-      let wbPack = await workbook(wbOb, elem, 'Package');
-
+      thisTab.packages = [{ id: parseInt(thisTab.package), qty: 1 }];
+      let p = await workorderToWb(thisTab, next);
+      console.log(p);
       delete thisTab.package;
     }
 
-    if (thisTab.contracts) {
+    if (thisTab.create_wo) {
       let contractData = infusionsoftSubmit(thisTab);
       let i = thisTab;
       let notes = `
@@ -1029,16 +1074,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         Sales Representative: ${localStorage.getItem("agileRepEmail")}
       `;
       thisTab.notes = notes;
+
       let woCreate = await createWo(thisTab, elem, 'Workorder');
-      let woId = document.querySelectorAll('.shopping-cart [name=workorder_id]');
+      let woId = document.querySelectorAll('[name=workorder_id]');
       for (let i of woId) i.value = woCreate.workorder.id;
-
+      thisTab.workorder_id = woCreate.workorder.id;
       delete thisTab.tags;
-    }
-
-    if (thisTab.workorder_to_wo) {
-      let p = await workorderToWb(thisTab, next,);
-      console.log(p);
     }
 
     if (thisTab.tags && thisTab.tags !== '') {
@@ -1050,6 +1091,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     for (let key in thisTab) values[key] = thisTab[key];
     btnLoader(elem, false);
+    console.log(values);
     return true;
   }
   const onTabChangeGeneric = (data) => {
@@ -1075,13 +1117,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
       body: JSON.stringify({workbook_id: workbook_id})
     }
-    return await ajax(api).then(res => {
-      showStatus(res, elem, 'Finish Sale');
-      return [200, 201, 202].includes(res.status) ? res : false;
+    return await ajax(api).then( async res => {
+      if (res.status === 500 && recursiveCnt < 4) {
+        recursiveCnt = recursiveCnt + 1;
+        console.log(`Error ${res.status} - Trying again in 30 seconds, try #${recursiveCnt}`);
+        var timeout = setTimeout( async () => await makeSale(workbook_id, elem), 30000);
+      } else {
+        clearTimeout(timeout);
+        showStatus(res, elem, 'Finish Sale');
+        return [200, 201, 202].includes(res.status) ? res : false;
+      }
     });
   }
   const showStatus = (p, btn, label) => {
-    let stat = document.querySelector('.shopping-cart .controller .status');
+    let stat = document.querySelector('.controller .status');
     if (![200, 201, 202].includes(p.status)) {
       if (p.detail) {
         stat.innerHTML = `<div class="warning">${p.detail}</div>`;
@@ -1096,52 +1145,120 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   }
-  const widthinZone = (data) => {
+  const widthinZone = async (i) => {
+    let token = await getToken();
+    let string = `${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}`;
     let api = {
-      url: `${agileUrl}fiber-tool/zone_status/?address=${data.addr.string}&project_id=v%3A58&o=5`,
-      headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${data.token}` }
+      url: `${agileUrl}fiber-tool/zone_status/?address=${string}&project_id=v%3A${i.project_id}&o=${i.o}`,
+      headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}` }
     }
-    
-    if (data.addr.lat) api.url = `${api.url}&latitude=${data.addr.lat}`;
-    if (data.addr.lng) api.url = `${api.url}&longitude=${data.addr.lng}`;
-
+    if (i.lat) api.url = `${api.url}&latitude=${i.lat}`;
+    if (i.lng) api.url = `${api.url}&longitude=${i.lng}`;
     return ajax(api);
   }
   const woLookup = async (term) => {
     let token = await getToken();
-    let api = {
-      url: `${agileUrl}workorder/list_view/`,
-      headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
-      method: 'POST',
-      body: JSON.stringify({
-        wo_text_search: term,
-        o: 5,
-        html: false
-      })
-    }
-    return ajax(api).then(res => {
-      let header = res.data[0];
-      let woList = []
-      for (let i = 1; i < res.data.length; i++) {
-        let wo = res.data[i];
-        let cur = {}
-        for (let e = 0; e < wo.length; e++) {
-          cur[header[e]] = wo[e];
-        }
-        woList.push(cur);
+    if (token) {
+      let api = {
+        url: `${agileUrl}workorder/list_view/`,
+        headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`}),
+        method: 'POST',
+        body: JSON.stringify({
+          wo_text_search: term,
+          o: 5,
+          html: false
+        })
       }
-      let filtered = woList.filter( i => i.Status !== "Cancelled" && i.Type === "Anthem Fiber Drop");
-      console.log(filtered);
+      return ajax(api).then(res => {
+        let header = [];
+        for (let o of res.data[0]) header.push(o.replace(/\s/g, '_').toLowerCase());
+        let woList = []
+        for (let i = 1; i < res.data.length; i++) {
+          let wo = res.data[i];
+          let cur = {}
+          for (let e = 0; e < wo.length; e++) {
+            cur[header[e]] = wo[e];
+          }
+          woList.push(cur);
+        }
+        return woList.filter( i => i.status !== "Cancelled" && i.type === "Anthem Fiber Drop");
+      });
+    } else {
+      return [];
+    }
+  }
+  const woExistsPrompt = (wo) => {
+    let x = wo.length > 1;
+    let body = ``;
+    for (let i of wo) {
+      let admin = ''
+      if (localStorage.getItem("agileAdmin") === 'true') {
+        admin += ` <a class="btn yellow" href=${agile}?s=wo&p=edit&o=5&pk=${i['wo#']}> 
+          Agile Wo #${i['wo#']}
+        </a>`;
+      }
+      body += `<div class="flex-row" style="padding-bottom:1rem;">
+        <div style="width:50%;">
+          <strong>${i.service_street}, ${i.service_city}, ${i.service_postal_code}</strong><br>
+          Created On ${i.created_date}
+        </div>
+        ${admin}
+        
+      </div>`;
+    }
+    let s = `We already have ${x ? 'Work Orders' : 'a Work Order'} for the following address${x ? 'es' : ''}`;
+    let content = `
+      <h3 class="heading flex-center">${s}</h3>
+      <div class="body">
+        ${body}
+      </div>
+      <div class="footer primary flex-col" style="padding:1rem;">
+        <p style="color:#fff;">
+          <strong>To make changes to order, please contact a customer service rep at 
+          <a class="btn white" href="tel:+17753892892">775.389.2892</a></strong><br>
+          <strong>To continue placing a new order, click below.</strong>
+        </p>
+        <button class="btn secondary closebt">Begin New Order</button>
+      </div>
+    `;
+    prompt({ background: 'rgba(0, 0, 0, 0.8)', container: 'popup', content: content });
+    let bg = document.querySelector('#background');
+    bg.querySelector('.closebt').addEventListener('click', () => {
+      bg.classList.add('hidden');
+      bg.innerHTML = '';
     });
+  }
+  const selectUpdate = (e) => {
+    const string = e.name.replace('_update', '');
+    let element = document.querySelector(`[name=${string}]`);
+    element.value = e.options[e.selectedIndex].value;
+  }
+  const updateOrg = (e) => {
+    let list = document.querySelectorAll('[name=project_id]');
+    let id = e.options[e.selectedIndex].getAttribute('data-project-id');
+    for (let i of list) i.value = id;
+    updateProductLine(e);
+  }
+
+  const updateProductLine = (e) => {
+    selectUpdate(e);
+    let line = document.querySelector('[name=product_line]');
+    let o = document.querySelector('[name=o]');
+    if (line) {
+      if (line.value !== '' && o.value !== '') {
+        let type = o.value == 1 ? 'fiber' : 'elko';
+        let product_line = line.value == 83 ? 'residential' : 'commercial';
+        getPackages(product_line, type);
+      } 
+    }
   }
 
   // FORMS INIT
 
   const initVerifyAddress = async (firstTry=true) => {
 
-    var formStatus = verifyAddressForm.querySelector('.controller .status');
+    const formStatus = verifyAddressForm.querySelector('.controller .status');
     // var manual = verifyAddressForm.querySelector('#manual');
-    var address = {}
     const sendData = (url =>  window.location.href = url);
 
     let formEx = false;
@@ -1169,27 +1286,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     let token = await getToken();
     if (firstTry == false) {
       // manual.classList.remove('hidden');
-      formStatus.innerHTML = `<div class="warning">
-        <strong>We could not find your address or you are located outside of our active service area.</strong> 
-        <p>Please use a different method to locate your location.</p>
-      </div>`;
+      formStatus.innerHTML = addressNotFound;
     }
     form(verifyAddressForm).then( async val => {
       let next = document.querySelector('[name="next"]');
       btnLoader(next, true);
       let newVal = {};
-      for (let i in val) {
-        newVal[val[i].name] = val[i].field.value;
-      }
-      address.string = `${newVal.line1}, ${newVal.locality}, ${newVal.region} ${newVal.postal_code}`;
-      address.address = newVal.line1;
-      address.city = newVal.locality;
-      address.state = newVal.region;
-      address.zip = newVal.postal_code;
-            
-      let status = await widthinZone({addr: address, token: token});
-      console.log(status);
-      let i = address;
+      for (let i in val) newVal[val[i].name] = val[i].field.value;     
+      let status = await widthinZone(newVal);
       if (status.result.length > 0) {
         if (formEx) {
           formEx.cnt = parseInt(formEx.cnt) + 1;
@@ -1200,21 +1304,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
         
-    // 			if (formEx.cnt > 2) {
-    // 				if (!formEx.disabled) {
-    // 					let dt = new Date();
-    // 					dt.setHours( dt.getHours() + 1 );
-    // 					formEx.disabled = true;
-    // 					formEx.exp = dt;
-    // 				}
-    // 			}
-        
+        // if (formEx.cnt > 2) {
+        //   if (!formEx.disabled) {
+        //     let dt = new Date();
+        //     dt.setHours( dt.getHours() + 1 );
+        //     formEx.disabled = true;
+        //     formEx.exp = dt;
+        //   }
+        // }
+        let i = newVal;
+        i.address = `${i.line1}, ${i.locality}, ${i.region} ${i.postal_code}`;
+        let addrObj = `address=${i.line1}&address2=${i.line2}&city=${i.locality}&state=${i.region}&postalcode=${i.postal_code}`
         let j = `${verifyAddressForm.action}?`;
         let o = status.result[0].properties.Status;
         if (formEx) localStorage.setItem("formex", JSON.stringify(formEx));
-        sendData(`
-          ${j}address=${i.address}&city=${i.city}&state=${i.state}&zip=${i.zip}&status=${o}${utmString}
-        `);
+        sendData(`${j}${addrObj}&status=${o}${utmString}`);
         setTimeout(() => btnLoader(next, false), 8000);
       } else {
         initVerifyAddress(firstTry=false);
@@ -1223,7 +1327,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
   const initShopCartForm = async (firstTry=true) => {
-    setTimeout(() => loadPackages(), 1000);
     form(shop, onTabChange).then( async val => {
       btnLoader(next, true);
       let i = values;
@@ -1281,7 +1384,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
   const initAccessShop = async (firstTry=true) => {
-    setTimeout(() => loadPackages(), 1000);
     form(accessShop, onTabChangeAccess).then( async val => {
       btnLoader(next, true);
       let i = values;
@@ -1338,49 +1440,55 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // INITIALIZE
 
-  utmInit();
+  urlParams();
+  loadPackages();
 
-  if (genericIfsForms.length > 0) {
-    await initGenericForm();
+  if (genericIfsForms.length > 0) await initGenericForm();
+  if (verifyAddressForm) await initVerifyAddress();
+  if (shop) await initShopCartForm();
+  if (accessShop) await initAccessShop();
+  if (salesRep) salesRep.value = localStorage.getItem("agileRepEmail");
+
+  const oUpdate = document.querySelector('[name=o_update]');
+  if (oUpdate) {
+    updateOrg(oUpdate);
+    oUpdate.addEventListener('change', elem => updateOrg(elem.target));
   }
 
-  if (shop) {
-    await initShopCartForm();
-  }
-
-  if (verifyAddressForm) {
-    await initVerifyAddress();
-  }
-
-  if (accessShop) {
-    await initAccessShop();
+  const productLineUpdate = document.querySelector('[name=product_line_update]');
+  if (productLineUpdate) {
+    updateProductLine(productLineUpdate);
+    productLineUpdate.addEventListener('change', (elem) => updateProductLine(elem.target));
   }
 
   if (url.get('address')) {
-    let ad = formatData(url.get('address'));
+    let address = formatData(url.get('address'));
     let city = formatData(url.get('city'));
     let state = formatData(url.get('state'));
-    let zip = formatData(url.get('zip'));
-    if (document.querySelector('#vac')) {
-      document.querySelector('#vac').innerHTML = `${ad}, ${city}, ${state} ${zip}`;
+    let postalcode = formatData(url.get('postalcode'));
+    let addrContainer = document.querySelector('#vac');
+    if (addrContainer) {
+      addrContainer.innerHTML = `${address}, ${city}, ${state} ${postalcode}`;
     }
-
-    if (ad !== '' && city !== '') {
-      woLookup(`${ad}`);
+    if (address !== '' && city !== '') {
+      let wo = await woLookup(address);
+      if (wo.length > 0) {
+        woExistsPrompt(wo);
+      }
     }
   }
 
+  const zone_status = document.querySelector('.zone_status');
   if (zone_status) {
     if (url.get('status')) {
       let cap = url.get('status').charAt(0).toUpperCase() + url.get('status').slice(1);
       zone_status.innerHTML = cap;
+      zone_status.removeAttribute('hidden');
     }
   }
  
   //EVENT LISTENERS
-
-  if (salesRep) salesRep.value = localStorage.getItem("agileRepEmail");
-
+  const sendContract = document.querySelector('#send_contract');
   if (sendContract) {
     sendContract.addEventListener('click', async (e) => {
       e.preventDefault();
@@ -1398,6 +1506,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  const addon = document.querySelectorAll('.addon');
+  let addon_tags = document.querySelector('.addontags');
   if (addon) {
     if (addon.length > 0) {
       addon.forEach(a => a.addEventListener('click', (elem) => {
@@ -1413,9 +1523,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
   
+  const select_update = document.querySelectorAll('.select_update');
+  if (select_update.length > 0) {
+    for (let i of select_update) {
+      selectUpdate(i);
+      i.addEventListener('change', elem => selectUpdate(elem.target));
+    }
+  }
+
+  const owner = document.querySelectorAll('[name="own_location"]');
   if (owner) {
-    let no = document.querySelector('.shopping-cart #owner_no');
-    let yes = document.querySelector('.shopping-cart #owner_yes');
+    let no = document.querySelector('#owner_no');
+    let yes = document.querySelector('#owner_yes');
     let access = document.querySelector('[name="property_access"]');
     owner.forEach(a => {
       a.addEventListener('click', (e) => {
@@ -1438,32 +1557,40 @@ document.addEventListener("DOMContentLoaded", async () => {
       email: email.value
     }
     let ifs = await infusionsoftSubmit(ifsEm);
-    let ifs_id = document.querySelectorAll('.shopping-cart [name=ifs_lead_id]');
+    let ifs_id = document.querySelectorAll('[name=ifs_lead_id]');
     for (let i of ifs_id) i.value = ifs.contact.id;
   }
 
   if (email) {
     email.addEventListener('change', async () => {
       if (!email.validity.valid) {
-        email.insertAdjacentHTML("afterend", `
-          <small style="color:red;" class="lookupstatus">${email.validationMessage}</small>
-        `);
+        email.insertAdjacentHTML("afterend", `<small class="lookupstatus warning">${email.validationMessage}</small>`);
         return false;
       }
+      let utm_source = document.querySelector('[name=utm_source]');
+      let utm_adgroup = document.querySelector('[name=utm_adgroup]');
+      let utm_campaign = document.querySelector('[name=utm_campaign]');
+      let utm_medium = document.querySelector('[name=utm_medium]');
+      let utm_term = document.querySelector('[name=utm_term]');
+      let utm_content = document.querySelector('[name=utm_content]');
+      let source_page = document.querySelector('[name=source_page]');
+      let sales_rep = document.querySelector('[name=sales_rep]');
+      let workbook_id = document.querySelector('[name=workbook_id]');
+
       let ifsData = {
         email: email.value,
-        utm_source: document.querySelector('.shopping-cart [name=utm_source]').value,
-        utm_adgroup: document.querySelector('.shopping-cart [name=utm_adgroup]').value,
-        utm_campaign: document.querySelector('.shopping-cart [name=utm_campaign]').value,
-        utm_medium: document.querySelector('.shopping-cart [name=utm_medium]').value,
-        utm_term: document.querySelector('.shopping-cart [name=utm_term]').value,
-        utm_content: document.querySelector('.shopping-cart [name=utm_content]').value,
-        source_page: document.querySelector('.shopping-cart [name=source_page]').value,
-        sales_rep: document.querySelector('.shopping-cart [name=sales_rep]').value,
-        workbook_id: document.querySelector('.shopping-cart [name=workbook_id]').value
+        utm_source: utm_source ? utm_source.value : '',
+        utm_adgroup: utm_adgroup ? utm_adgroup.value : '',
+        utm_campaign: utm_campaign ? utm_campaign.value : '',
+        utm_medium: utm_medium ? utm_medium.value : '',
+        utm_term: utm_term ? utm_term.value : '',
+        utm_content: utm_content ? utm_content.value : '',
+        source_page: source_page ? source_page.value : '',
+        sales_rep: sales_rep ? sales_rep.value : '',
+        workbook_id: workbook_id ? workbook_id.value : ''
       }
       let ifs = await infusionsoftSubmit(ifsData);
-      let ifs_id = document.querySelectorAll('.shopping-cart [name=ifs_lead_id]');
+      let ifs_id = document.querySelectorAll('[name=ifs_lead_id]');
       for (let i of ifs_id) i.value = ifs.contact.id;
     });
   }

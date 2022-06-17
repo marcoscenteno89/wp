@@ -89,6 +89,9 @@
 .customize-control-ast-selector {
     margin-bottom: 1px;
 }
+.ast-alignment-inner-wrap.active button.components-button.is-primary {
+    border-color: #007cba;
+}
 
 #customize-controls .customize-control-notifications-container {
   margin: 0;
@@ -1140,13 +1143,6 @@
     width: 100%;
 }
 /** Modal Color Picker - Group Param */
-.ast-field-settings-modal .astra-popover-color .ast-color-palette {
-	padding: 8px 0px 0px 13px;
-	margin-bottom: -8px;
-}
-.ast-field-settings-modal .astra-popover-color .ast-color-palette .components-circular-option-picker__option-wrapper {
-    margin-right: 5px;
-}
 .ast-field-settings-modal .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
 	width: 24px;
     height: 24px;
@@ -1353,10 +1349,6 @@
 .customize-control-ast-color .customize-control-title, .customize-control-ast-responsive-background .customize-control-title,
 .customize-control-ast-background .customize-control-title, .customize-control-ast-responsive-color .customize-control-title {
   display: contents;
-}
-
-.customize-control-ast-font-variant .select2 {
-  margin-bottom: 12px;
 }
 
 .customize-control .ast-control-tooltip {
@@ -2142,6 +2134,9 @@ input[type="text"].select2-search__field {
 .ast-responsive-select-container.active {
   display: block;
 }
+.ast-variant-select > div {
+  border-color: #dddddd;
+}
 
 .customize-control-ast-responsive-slider .wrapper, .customize-control-ast-slider .wrapper {
   position: relative;
@@ -2390,7 +2385,7 @@ input[type="text"].select2-search__field {
 .customize-control-ast-responsive-spacing .ast-spacing-responsive-units li.single-unit {
   display: inline-block;
   margin-left: 6px;
-  width: 16px;
+  width: 18px;
   text-align: center;
   user-select: none;
   opacity: 0.6;
@@ -2970,6 +2965,13 @@ input[type="text"].select2-search__field {
 .ast-top-divider.customize-control-ast-settings-group .ast-toggle-desc-wrap .ast-adv-toggle-icon {
     top: 23px;
 }
+/**
+ * Responsive slider control inside settings-group, case: body-font, headings-font.
+ */
+.ast-fields-wrap .customize-control-ast-responsive-slider .ast-responsive-slider-btns {
+	top: 0;
+	right: 42px;
+}
 
 .customize-control-ast-slider .wrapper {
   display: flex;
@@ -3134,4 +3136,17 @@ span.select2-container.select2-container--default.select2-container--open li.sel
 .wp-full-overlay-footer .devices-wrapper .preview-tablet,
 .wp-full-overlay-footer .devices-wrapper .preview-mobile {
   vertical-align: middle;
+}
+
+.customize-control-ast-font-variant .ast-variant-select input#react-select-2-input:focus {
+  box-shadow: none;
+}
+
+.ast-variant-select [CLASS*="-indicatorContainer"] {
+  padding: 2px;
+  display: contents;
+}
+
+.ast-variant-select [CLASS*="-multiValue"] > div:first-child {
+  padding: 0 0 0 6px;
 }

@@ -1,0 +1,44 @@
+<style>
+  #primary.primary {
+      background-color: #FFF !important;
+  }
+  form .steps {
+      border-radius: 5px;
+      overflow: hidden;
+  }
+  form .steps .step {
+      color: #fff !important;
+      padding-top: 10px;
+      padding-bottom: 10px;
+  }
+  .tabs .tab {
+      padding: 10px 0 0 0 !important;
+  }
+</style>
+<form action="/sales-entry" class="verify-address" id="verify-address" style="width:280px;">
+<div class="tabs">
+  <div class="steps"></div>
+  <div class="tab" data-props='{"name":"Check Address","numerate":true,"validate":true}'>
+    <input type="hidden" class="form-input" name="lat">
+    <input type="hidden" class="form-input" name="lng">
+    <input type="hidden" class="form-input" name="project_id">
+    <select class="form-input" name="o" required data-placeholder="Organization">
+      <option value="">Organization</option>
+      <option selected value="5" data-project-id="58">Anthem of Nevada</option>
+      <option value="1" data-project-id="33">Anthem of Idaho</option>
+    </select>
+    <input required type="text" class="form-input" name="line1" placeholder="Address">
+    <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
+    <input required type="text" class="form-input" name="locality" placeholder="City">
+    <input required type="text" class="form-input" name="region" placeholder="State">
+    <input required type="text" class="form-input" name="postal_code" placeholder="Zip Code">
+  </div>
+  <div class="controller fullwidth">
+    <div class="status"></div>
+    <button name="next" class="btn red">Check Now</button>
+    <button class="btn hidden red" id="manual">Add location manually</button>
+    <button class="btn hidden yellow" id="manualsubmit">Submit Address</button>
+  </div>
+</div>
+</form>
+<section id="background" class="flex-row hidden"></section>

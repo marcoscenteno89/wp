@@ -187,11 +187,18 @@ form :is(.btn-rev) {
   pointer-events: none;
 }
 .warning {
-  color: #721c24;
+  color: red;
   background-color: #f8d7da;
-  border: 1px solid #f5c2c7;
-  padding: 4px 20px;
-  margin-bottom: 0.2rem;
+  border: 1px solid red;
+  padding: 3px 20px;
+  margin-bottom: 0.15rem;
+  border-radius: 5px;
+}
+.success {
+  color: #fff;
+  background-color: rgb(1,163,176);
+  padding: 15px 20px;
+  margin-bottom: 4px;
   border-radius: 5px;
 }
 /* CIRCLE STYLES */
