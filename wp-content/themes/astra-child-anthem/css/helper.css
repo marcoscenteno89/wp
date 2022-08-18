@@ -42,13 +42,15 @@ form :is(.btn) {
   opacity: 1;
   padding-right: 25px;
 }
+.hidden {
+  display: none !important;
+}
 form :is(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, .btn, textarea) {
   width: 100%;
   padding: 7px 20px;
   margin-bottom: 4px;
   border-radius: 5px;
   border: solid 1px #666;
-  max-width: 280px;
 }
 form :is(fieldset) {
 	padding: 2rem;
@@ -98,16 +100,6 @@ form :is(.btn-rev) {
   width: 100%;
   flex-wrap: wrap;
 }
-.w-100 { width: 100% !important; }
-.w-90 { width: 90% !important; }
-.w-75 { width: 75% !important; }
-.w-60 { width: 60% !important; }
-.w-50 { width: 50% !important; }
-.w-40 { width: 40% !important; }
-.w-25 { width: 25% !important; }
-.w-20 { width: 20% !important; }
-.block { display: block !important; }
-.hidden { display: none !important;}
 .black-transparent { background: rgba(0, 0, 0, 0.8) !important; }
 .white-transparent { background: rgba(255, 255, 255, 0.8) !important; }
 .bold { 

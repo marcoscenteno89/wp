@@ -23,30 +23,30 @@ function child_enqueue_styles() {
     CHILD_THEME_MARKETABLY_ASTRA_STAGING_VERSION, 
     'all' 
   );
-  wp_enqueue_style( 
-    'fontawesome', 
-    'https://use.fontawesome.com/releases/v5.3.1/css/all.css', 
-    array(),  
-    'all'
-  );
+  // wp_enqueue_style( 
+  //   'icons', 
+  //   'https://use.fontawesome.com/releases/v5.3.1/css/all.css', 
+  //   array(),  
+  //   'all'
+  // );
   wp_enqueue_style( 
     'bootstrapcss', 
-    'https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', 
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', 
     array(), 
     'all'
   );
   wp_enqueue_script( 
     'bootstrapjs', 
-    'https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', 
-    array('jquery'), 
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', 
+    array(), 
     ''
   );
-  wp_enqueue_script( 
-    'popperjs', 
-    'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', 
-    array('jquery'), 
-    ''
-  );
+  // wp_enqueue_script( 
+  //   'popperjs', 
+  //   'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', 
+  //   array('jquery'), 
+  //   ''
+  // );
 }
 
 function year_shortcode() {

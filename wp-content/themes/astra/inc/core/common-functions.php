@@ -925,12 +925,15 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 		if ( apply_filters( 'astra_the_title_enabled', true ) ) {
 
 			// Author.
-			if ( is_author() ) { ?>
+			if ( is_author() ) {
+				$author_name      = get_the_author() ? get_the_author() : '';
+				$author_name_html = ( true === astra_check_is_structural_setup() && $author_name ) ? __( 'Author name: ', 'astra' ) . $author_name : $author_name;
+				?>
 
 				<section class="ast-author-box ast-archive-description">
 					<div class="ast-author-bio">
 						<?php do_action( 'astra_before_archive_title' ); ?>
-						<h1 class='page-title ast-archive-title'><?php echo get_the_author(); ?></h1>
+						<h1 class='page-title ast-archive-title'><?php echo esc_html( apply_filters( 'astra_author_page_title', $author_name_html ) ); ?></h1>
 						<?php do_action( 'astra_after_archive_title' ); ?>
 						<p><?php echo wp_kses_post( get_the_author_meta( 'description' ) ); ?></p>
 						<?php do_action( 'astra_after_archive_description' ); ?>
@@ -1572,4 +1575,14 @@ function astra_block_based_legacy_setup() {
 	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
 	$legacy_setup   = ( isset( $astra_settings['blocks-legacy-setup'] ) && isset( $astra_settings['wp-blocks-ui'] ) && 'legacy' === $astra_settings['wp-blocks-ui'] ) ? true : false;
 	return $legacy_setup;
+}
+
+/**
+ * Check is new strctural things are updated.
+ *
+ * @return bool true|false.
+ */
+function astra_check_is_structural_setup() {
+	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	return apply_filters( 'astra_get_option_customizer-default-layout-update', isset( $astra_settings['customizer-default-layout-update'] ) ? false : true );
 }

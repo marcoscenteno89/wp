@@ -242,15 +242,15 @@ document.addEventListener("DOMContentLoaded", () => {
     //     inputmanual();
     //   });
     // }
-    window.addEventListener('scroll', () => {
-      for (let i of navElements) {
-        if (isInView(i.triggerElem)) {
-          i.navElem.classList.add('active');
-        } else {
-          i.navElem.classList.remove('active');
-        }
-      }
-    });
+    // window.addEventListener('scroll', () => {
+    //   for (let i of navElements) {
+    //     if (isInView(i.triggerElem)) {
+    //       i.navElem.classList.add('active');
+    //     } else {
+    //       i.navElem.classList.remove('active');
+    //     }
+    //   }
+    // });
   }
 
   initMap();

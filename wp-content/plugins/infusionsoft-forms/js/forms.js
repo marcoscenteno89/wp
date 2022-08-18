@@ -582,35 +582,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         setTimeout( async () => {
           let api = {
-            url: `${agileUrl}sales-package/?o=1&html=false`,
+            url: `${agileUrl}sales-workbook/get_choices/?o=1&choice_set=packages&return_dates=false`,
             method: 'GET',
             headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
           }
           await ajax(api).then(res => {
             if ([200, 201, 202, 203].includes(res.status)) {
-              packages.commercial.wireless = res.data.filter(i => {
-                return i.product_category__name === "Wireless" && i.product_line__name === "Commercial";
-              });
-              packages.commercial.fiber = res.data.filter(i => {
-                return i.product_category__name === "Fiber" && i.product_line__name === "Commercial";
-              });
-              packages.residential.fiber = res.data.filter(i => {
-                return i.product_category__name === "Fiber" && i.product_line__name === "Residential";
-              });
-              packages.residential.wireless = res.data.filter(i => {
-                return i.product_category__name === "Wireless" && i.product_line__name === "Residential" && i.id !== 2;
-              });
+              let m = res.result.choices.packages;
+              packages.commercial.wireless = m.filter(i => i.cat_id === 4 && i.prod_line_id === 84);
+              packages.commercial.fiber = m.filter(i => i.cat_id === 5 && i.prod_line_id === 84);
+              packages.residential.fiber = m.filter(i => i.cat_id === 2 && i.prod_line_id === 83);
+              packages.residential.wireless = m.filter(i => i.cat_id === 1 && i.prod_line_id === 83 && i.id !== 2);
+              packages.residential.carey = m.filter(i => i.group_name === 'Carey');
+              packages.commercial.carey = packages.residential.carey;
             } else {
               console.log(`Agile: ${res.detail}`);
             }
           });
-          api.url = `${agileUrl}sales-package/?o=5&html=false`;
+          api.url = `${agileUrl}sales-workbook/get_choices/?o=5&choice_set=packages&return_dates=false`;
           await ajax(api).then(res => {
             if ([200, 201, 202, 203].includes(res.status)) {
-              packages.commercial.elko = res.data.filter(i => {
-                return i.product_category__name === "Fiber" && i.product_line__name === "Residential" && i.id !== 68;
-              });
-              packages.residential.elko = packages.commercial.elko;
+              let m = res.result.choices.packages;
+              packages.residential.elko = m.filter(i => i.cat_id === 2 && i.prod_line_id === 83 && i.id !== 68);
+              packages.commercial.elko = m.filter(i => i.cat_id === 5 && i.prod_line_id === 84);
             } else {
               console.log(`Agile: ${res.detail}`);
             }
@@ -624,6 +618,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       console.log('Packages Data Already Exists...');
     }
+  }
+  const singlePackageTemplate = (percent, i, active, templateId, cell, dbtn, container) => {
+    let innerContent = '';
+    let animation = `<div class="anim-container" style="${templateId === 2 ? 'width:30%;' : ''}">
+      <div class="anim">${cell}</div>
+      <div class="hide" style="left:${percent}%"></div>
+    </div>`;
+        
+    let temp2Content = `
+      <h5 class="title">${i.name}</h5>
+      ${animation}
+      <h3 class="amount">$${i.price}</h3>
+      <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
+    `;
+    
+    let temp1Content = `
+      <h3 class="amount" style="color:#fff;">$${i.price}</h3>
+      ${animation}   
+      <h3 class="title flex-center">${i.name}</h3>
+      <h4 style="color:#fff;">${i.speed}*</h4>
+      <div class="action" data-id="id-${i.id}" data-html="${dbtn}">${dbtn}</div>
+      ${i.id === active ? '<div class="main">MOST POPULAR</div>' : ''}
+    `;
+    
+    if (templateId === 1) {
+      innerContent = temp1Content;
+    } else if (templateId == 2) {
+      innerContent = temp2Content;
+    } else {}
+    container.insertAdjacentHTML("beforeend", `
+      <input type="radio" data-price="${i.price}" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
+      <label for="id-${i.id}" class="paq ${i.id === active ? 'active' : ''}">${innerContent}</label>
+    `);
+    
+    let checkbox = document.querySelector(`#id-${i.id}`);
+    let btn = document.querySelector(`[data-id="${i.id}"]`);
+    checkbox.addEventListener('click', (elem) => {
+      let btns = document.querySelectorAll(`[data-html]`);
+      for (let i of btns) i.innerHTML = i.getAttribute('data-html');
+      let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
+      if (elem.target.checked === true) btn.innerHTML = 'Selected';
+    });
   }
   const getPackages = (pProductLine=false, pType=false) => {
     const packages = JSON.parse(localStorage.getItem("agilePackages"));
@@ -641,45 +677,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let templateId = parseInt(container.getAttribute('data-template'));
       for (let i of pack) {
         percent = percent + (100 / pack.length);
-        let innerContent = '';
-        let animation = `<div class="anim-container" style="${templateId === 2 ? 'width:30%;' : ''}">
-          <div class="anim">${cell}</div>
-          <div class="hide" style="left:${percent}%"></div>
-        </div>`;
-        
-        let temp2Content = `
-          <h5 class="title">${i.name}</h5>
-          ${animation}
-          <h3 class="amount">$${i.monthly_price}</h3>
-          <div class="action" data-id="id-${i.id}" data-html="Select">Select</div>
-        `;
-        let temp1Content = `
-          <h3 class="amount" style="color:#fff;">$${i.monthly_price}</h3>
-          ${animation}   
-          <h3 class="title flex-center">${i.name}</h3>
-          <h4 style="color:#fff;">${i.speed}*</h4>
-          <div class="action" data-id="id-${i.id}" data-html="${dbtn}">${dbtn}</div>
-          ${i.id === active ? '<div class="main">MOST POPULAR</div>' : ''}
-        `;
-        
-        if (templateId === 1) {
-          innerContent = temp1Content;
-        } else if (templateId == 2) {
-          innerContent = temp2Content;
-        } else {}
-        container.insertAdjacentHTML("beforeend", `
-          <input type="radio" placeholder="Package" class="form-input" name="package" value="${i.id}" id="id-${i.id}">
-          <label for="id-${i.id}" class="paq ${i.id === active ? 'active' : ''}">${innerContent}</label>
-        `);
-        
-        let checkbox = document.querySelector(`#id-${i.id}`);
-        let btn = document.querySelector(`[data-id="${i.id}"]`);
-        checkbox.addEventListener('click', (elem) => {
-          let btns = document.querySelectorAll(`[data-html]`);
-          for (let i of btns) i.innerHTML = i.getAttribute('data-html');
-          let btn = document.querySelector(`[data-id="${elem.target.id}"]`);
-          if (elem.target.checked === true) btn.innerHTML = 'Selected';
-        });
+        singlePackageTemplate(percent, i, active, templateId, cell, dbtn, container);
       }
     }
   }
@@ -825,7 +823,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         product_line_id: a.product_line === 'Residential' ? 83 : 84,
         type_id: 1082,
         workorder_org_id_list: [5],
-        o: 5,
+        o: a.o,
         notes: a.notes,
         sales_user_id: parseInt(localStorage.getItem("agileRepId"))
       })
@@ -837,7 +835,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const generateWoObj = (data) => {
     let ob = {  
-      o: 5,
+      o: data.o,
       contact_id: 0,
       contact_info: {
         first_name: data.given_name,
@@ -856,7 +854,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       product_line: data.product_line,
       obo_sales_user_id: parseInt(localStorage.getItem("agileRepId")),
       original_salesperson_id: parseInt(localStorage.getItem("agileRepId")),
-      packages: []
+      packages: [],
+      due_on_install: 0
     }
     if (data.sales_source !== '' && data.sales_source) {
       ob.sales_source = data.sale_source;
@@ -898,7 +897,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const workorderToWb = async(a, elem, label) => {
     let token = await getToken();
     let data = {
-      o: 5,
+      o: a.o,
       workorder_id: a.workorder_id,
       sales_source_id: a.sale_source,
       packages: a.packages
@@ -917,7 +916,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const onTabChange = async (data, elem, curTab, stat) => {
     btnLoader(elem, true);
     let thisTab = {};
-    
+
     data.forEach(i => {
       if (i.field.type === 'checkbox') {
         thisTab[i.field.name] = i.value === '' ? 'false' : i.value;
@@ -937,7 +936,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (thisTab.create_contact) {
       if (!url.get('address') && !checkedAdrs) {
-        let wo = await woLookup(thisTab.line1);
+        let wo = await woLookup(thisTab.line1, thisTab.o);
         if (wo.length > 0) {
           woExistsPrompt(wo);
           btnLoader(elem, false);
@@ -972,8 +971,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (thisTab.package && thisTab.package !== '') {
+      let price = data.filter(i => i.name === 'package')[0];
       values.packages.push({ id: parseInt(thisTab.package), qty: 1 });
       wbOb.packages.push({ id: parseInt(thisTab.package), qty: 1 });
+      values.due_on_install = parseInt(price.field.getAttribute('data-price'));
+      wbOb.due_on_install = parseInt(price.field.getAttribute('data-price'));
       let wbPack = await workbook(wbOb, elem, 'Package');
       delete thisTab.package;
     }
@@ -1154,9 +1156,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     if (i.lat) api.url = `${api.url}&latitude=${i.lat}`;
     if (i.lng) api.url = `${api.url}&longitude=${i.lng}`;
-    return ajax(api);
+    return await ajax(api);
   }
-  const woLookup = async (term) => {
+  const woLookup = async (term, org) => {
     let token = await getToken();
     if (token) {
       let api = {
@@ -1165,7 +1167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: 'POST',
         body: JSON.stringify({
           wo_text_search: term,
-          o: 5,
+          o: org,
           html: false
         })
       }
@@ -1233,20 +1235,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     let element = document.querySelector(`[name=${string}]`);
     element.value = e.options[e.selectedIndex].value;
   }
+  const getCheckList = async (workorder_id) => {
+    let token = await getToken();
+    if (token) {
+      let api = {
+        url: `${agileUrl}workorder/get_fiber_checklist/?workorder_id=${workorder_id}`,
+        method: 'GET',
+        headers: new Headers({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `JWT ${token}`})
+      }
+      return await ajax(api).then(res => {
+        if ([200, 201, 202, 203].includes(res.status)) {
+          return res.result;
+        } else {
+          console.log(`Agile: ${res.detail}`);
+        }
+      });
+    }
+  }
   const updateOrg = (e) => {
     let list = document.querySelectorAll('[name=project_id]');
     let id = e.options[e.selectedIndex].getAttribute('data-project-id');
     for (let i of list) i.value = id;
     updateProductLine(e);
   }
-
   const updateProductLine = (e) => {
     selectUpdate(e);
     let line = document.querySelector('[name=product_line]');
     let o = document.querySelector('[name=o]');
     if (line) {
       if (line.value !== '' && o.value !== '') {
-        let type = o.value == 1 ? 'fiber' : 'elko';
+        let type = o.value == 1 ? 'carey' : 'elko';
         let product_line = line.value == 83 ? 'residential' : 'commercial';
         getPackages(product_line, type);
       } 
@@ -1259,7 +1277,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const formStatus = verifyAddressForm.querySelector('.controller .status');
     // var manual = verifyAddressForm.querySelector('#manual');
-    const sendData = (url =>  window.location.href = url);
+    const sendData = url =>  window.location.href = url;
 
     let formEx = false;
     if (storageAvailable('localStorage')) {
@@ -1318,7 +1336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         let j = `${verifyAddressForm.action}?`;
         let o = status.result[0].properties.Status;
         if (formEx) localStorage.setItem("formex", JSON.stringify(formEx));
-        sendData(`${j}${addrObj}&status=${o}${utmString}`);
+        sendData(`${j}${addrObj}&status=${o}${utmString}&o=${i.o}`);
         setTimeout(() => btnLoader(next, false), 8000);
       } else {
         initVerifyAddress(firstTry=false);
@@ -1437,6 +1455,57 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   }
+  const checkList = () => {
+    form(document.querySelector('.checklist')).then( async val => {
+      let next = document.querySelector('[name="next"]');
+      let container = document.querySelector('.checklist-container');
+      btnLoader(next, true);
+      let newVal = {};
+      for (let i in val) newVal[val[i].name] = val[i].field.value;
+      let list = await getCheckList(newVal.workorder_id);
+      let html = '';
+      if (list) {
+        let yes = `<svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="16" 
+          height="16" 
+          fill="currentColor" 
+          class="bi bi-check-square-fill" 
+          viewBox="0 0 16 16">
+          <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+        </svg> `;
+        let no = `<svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="16" 
+          height="16" 
+          fill="currentColor" 
+          class="bi bi-x-square-fill" 
+          viewBox="0 0 16 16">
+          <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+        </svg> `;
+        for (let i of list.items) {
+          let content = '';
+          let styles = '';
+          if (typeof i.value === 'boolean') {
+            content = i.value ? `${yes} &nbsp; Complete` : `${no} &nbsp; Incomplete`;
+            styles = i.value ? 'background:#d1e7dd;color:#0f5132;' : 'background:#f8d7da;color:#842029;';
+          } else {
+            content = i.value;
+          }
+          html += `<div class="input-group mb-1">
+            <span class="input-group-text col-5">${i.name}</span>
+            <span class="input-group-text col-7" style="${styles}">${content}</span>
+          </div>`;
+        }
+      } else {
+        html = `<div class="alert alert-danger" role="alert">Work Order not Found.</div>`;
+      }
+      
+      container.innerHTML = html; 
+      btnLoader(next, false);
+      checkList();
+    });
+  }
   
   // INITIALIZE
 
@@ -1446,6 +1515,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (genericIfsForms.length > 0) await initGenericForm();
   if (verifyAddressForm) await initVerifyAddress();
   if (shop) await initShopCartForm();
+  if (document.querySelector('.checklist')) await checkList();
   if (accessShop) await initAccessShop();
   if (salesRep) salesRep.value = localStorage.getItem("agileRepEmail");
 
@@ -1471,7 +1541,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       addrContainer.innerHTML = `${address}, ${city}, ${state} ${postalcode}`;
     }
     if (address !== '' && city !== '') {
-      let wo = await woLookup(address);
+      let wo = await woLookup(address, url.get('o'));
       if (wo.length > 0) {
         woExistsPrompt(wo);
       }
