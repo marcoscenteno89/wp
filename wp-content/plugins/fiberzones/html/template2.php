@@ -1,31 +1,37 @@
 <script>sessionStorage.setItem("agiletoken", "<?php echo get_option('agile_token'); ?>");</script>
-<section>
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="/wp-content/uploads/2021/11/one.png" alt="First slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/wp-content/uploads/2021/11/three.png" alt="Second slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/wp-content/uploads/2021/11/two.png" alt="Third slide">
+<style>
+  table {
+    width: 100%;
+  }
+  table tr th:nth-of-type(1), table tr td:nth-of-type(1) {
+    width: 70%;
+  }
+  table tr th:nth-of-type(2), table tr td:nth-of-type(2), 
+  table tr th:nth-of-type(3), table tr td:nth-of-type(3) {
+    text-align: center;
+    width: 15%;
+  }
+  /* table tr:nth-child(odd) { 
+    background-color: #ccc; 
+  } */
+  [data-template="2"] .anim-container {
+    width: 60% !important;
+  }
+  [data-template="2"] .action {
+    display: none;
+  }
+  [data-template="2"] .amount, [data-template="2"] .title {
+    padding: 0 0.5rem;
+  }
+</style>
+<section class="container-fluid header-parent" style="padding:0;">
+  <div class="header"></div>
+  <div class="header-con container flex-center" style="justify-content:flex-end;">
+    <div class="flex-col" style="align-items:center;">
+      <h1 style="color:#fff;padding-bottom:2rem;">Quality Fiber Internet for Elko</h1>
+      <a href="#" class="btn cta">Get Connected for FREE*</a>
     </div>
   </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
 </section>
 <nav class="navbar main-nav navbar-expand-lg navbar-dark">
   <div class="container">
@@ -133,34 +139,13 @@
     </div>
   </section>
   <section class="row alert-secondary" style="padding-top:1rem;">
-    <div class="col-4">
-      <style>
-        [data-template="2"] .anim-container {
-          width: 80% !important;
-        }
-        [data-template="2"] .action {
-          display: none;
-        }
-        [data-template="2"] .amount, [data-template="2"] .title {
-          padding: 0 0.5rem;
-        }
-      </style>
+    <div class="col-5">
+      <div class="col-12 row">
+        <div class="col-8">connection to fiber network</div><div class="col-4">FREE</div>
+      </div>
       <div data-packages="true" data-type="elko" data-productline="residential" data-template="2"></div>
     </div>
-    <div class="col-8">
-      <style>
-        table {
-          width: 100%;
-        }
-        table tr th:nth-of-type(1), table tr td:nth-of-type(1) {
-          width: 70%;
-        }
-        table tr th:nth-of-type(2), table tr td:nth-of-type(2), 
-        table tr th:nth-of-type(3), table tr td:nth-of-type(3) {
-          text-align: center;
-          width: 15%;
-        }
-      </style>
+    <div class="col-7">
       <table>
         <tr>
           <th></th>
@@ -307,18 +292,6 @@
           <td>
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
-              style="color: #0f5132;"
-              width="16" 
-              height="16" 
-              fill="currentColor" 
-              class="bi bi-check-square-fill" 
-              viewBox="0 0 16 16">
-              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
-            </svg>
-          </td>
-          <td>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
               style="color: #842029;"
               width="16" 
               height="16" 
@@ -326,6 +299,18 @@
               class="bi bi-x-square-fill" 
               viewBox="0 0 16 16">
               <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
             </svg>
           </td>
         </tr>
@@ -385,10 +370,12 @@
         </tr>
       </table>
     </div>
-    <div class="col-12" style="background-color:#009bab;">
-      <p>To get started, choose your plan and click "hook me up</p>
-      <p>To get your home connected to the fiber network without subscribing to our sevice, just click the button.</p>
-      <button class="cta btn">Hook me up!</button>
+    <div class="col-12 row" style="background-color:#009bab;color:#fff;padding:1rem;align-items:center;">
+      <div class="col-9">
+        <p>To get started, choose your plan and click "hook me up<br>
+        To get your home connected to the fiber network without subscribing to our sevice, just click the button.</p>
+      </div>
+      <div class="col-3"><button class="cta btn">Hook me up!</button></div>
     </div>
   </section>
   <footer style="text-align:center;">
