@@ -132,59 +132,259 @@
         </ul>
     </div>
   </section>
-  <section class="row highlight">
+  <section class="row alert-secondary" style="padding-top:1rem;">
     <div class="col-4">
-      <!-- <div class="package">
-        <h5>2GB/2GB</h5>
-        <span>only</span>
-        <h2>$249</h2>
-        <ul>
-          <li>No construction fee</li>
-          <li>No installation fee</li>
-          <li>No contracts</li>
-          <li>No data caps</li>
-        </ul>
-        <a class="btn pakbtn" href="#verify-address">Get Started</a>
-      </div>
-      <div class="package popular">
-        <h5>1GB/1GB</h5>
-        <span>only</span>
-        <h2>$119</h2>
-        <ul>
-          <li>No construction fee</li>
-          <li>No installation fee</li>
-          <li>No contracts</li>
-          <li>No data caps</li>
-        </ul>
-        <a class="btn pakbtn" href="#verify-address">Get Started</a>
-      </div>
-      <div class="package">
-        <h5>500Mb/500Mb</h5>
-        <span>only</span>
-        <h2>$99</h2>
-        <ul>
-          <li>No construction fee</li>
-          <li>No installation fee</li>
-          <li>No contracts</li>
-          <li>No data caps</li>
-        </ul>
-        <a class="btn pakbtn" href="#verify-address">Get Started</a>
-      </div>
-      <div class="package">
-        <h5>250Mb/250Mb</h5>
-        <span>only</span>
-        <h2>$79</h2>
-        <ul>
-          <li>No construction fee</li>
-          <li>No installation fee</li>
-          <li>No contracts</li>
-          <li>No data caps</li>
-        </ul>
-        <a class="btn pakbtn" href="#verify-address">Get Started</a>
-      </div> -->
+      <style>
+        [data-template="2"] .anim-container {
+          width: 80% !important;
+        }
+        [data-template="2"] .action {
+          display: none;
+        }
+        [data-template="2"] .amount, [data-template="2"] .title {
+          padding: 0 0.5rem;
+        }
+      </style>
       <div data-packages="true" data-type="elko" data-productline="residential" data-template="2"></div>
     </div>
-    <div class="col-8"></div>
+    <div class="col-8">
+      <style>
+        table {
+          width: 100%;
+        }
+        table tr th:nth-of-type(1), table tr td:nth-of-type(1) {
+          width: 70%;
+        }
+        table tr th:nth-of-type(2), table tr td:nth-of-type(2), 
+        table tr th:nth-of-type(3), table tr td:nth-of-type(3) {
+          text-align: center;
+          width: 15%;
+        }
+      </style>
+      <table>
+        <tr>
+          <th></th>
+          <th>Anthem</th>
+          <th>Other ISPs</th>
+        </tr>
+        <tr>
+          <td>Redundant fiber backbone connections for maximum reliability</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Redundant distribution paths for enhanced connectivity</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Your own dedicated connection</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Guaranteed speeds</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Upfront pricing with no fine print</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Service contract</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>Free managed Wi-Fi and routers on ALL plans</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+        <tr>
+          <td>24/7 Local service from local employees and 24/7 network monitoring</td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #0f5132;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-check-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+            </svg>
+          </td>
+          <td>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              style="color: #842029;"
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              class="bi bi-x-square-fill" 
+              viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </td>
+        </tr>
+      </table>
+    </div>
     <div class="col-12" style="background-color:#009bab;">
       <p>To get started, choose your plan and click "hook me up</p>
       <p>To get your home connected to the fiber network without subscribing to our sevice, just click the button.</p>

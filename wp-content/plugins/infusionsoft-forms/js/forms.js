@@ -619,12 +619,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log('Packages Data Already Exists...');
     }
   }
-  const singlePackageTemplate = (percent, i, active, templateId, cell, dbtn, container) => {
+  const packAnim = (percent) => {
+    let cell = '';
+    for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
+    return `
+      <div class="anim-container">
+        <div class="anim">${cell}</div>
+        <div class="hide" style="left:${percent}%"></div>
+      </div>`
+    ;
+  }
+  const singlePackageTemplate = (animation, i, active, templateId, dbtn, container) => {
     let innerContent = '';
-    let animation = `<div class="anim-container" style="${templateId === 2 ? 'width:30%;' : ''}">
-      <div class="anim">${cell}</div>
-      <div class="hide" style="left:${percent}%"></div>
-    </div>`;
         
     let temp2Content = `
       <h5 class="title">${i.name}</h5>
@@ -669,15 +675,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const type = pType ? pType : container.getAttribute('data-type');
       const productline = pProductLine ? pProductLine : container.getAttribute('data-productline');
       const dbtn = container.getAttribute('data-btn') ? container.getAttribute('data-btn') : 'Select';
-      let pack = packages[productline][type];
-      let cell = '';
-      for (let i = 0; i < 9; i++) cell += '<div class="w-cell"></div>';
+      let pack = packages[productline][type].sort((a, b) => a.price - b.price);
       let percent = 0;
       let active = pack[pack.length - 2].id;
       let templateId = parseInt(container.getAttribute('data-template'));
       for (let i of pack) {
         percent = percent + (100 / pack.length);
-        singlePackageTemplate(percent, i, active, templateId, cell, dbtn, container);
+        let animation = packAnim(percent);
+        singlePackageTemplate(animation, i, active, templateId, dbtn, container);
       }
     }
   }
@@ -1482,7 +1487,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           class="bi bi-x-square-fill" 
           viewBox="0 0 16 16">
           <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
-        </svg> `;
+        </svg>`;
         for (let i of list.items) {
           let content = '';
           let styles = '';
@@ -1508,7 +1513,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   
   // INITIALIZE
-
   urlParams();
   loadPackages();
 
@@ -1599,6 +1603,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       selectUpdate(i);
       i.addEventListener('change', elem => selectUpdate(elem.target));
     }
+  }
+
+  const packageList = document.querySelectorAll('[data-packages]');
+  if (packageList.length > 0) {
+    getPackages();
   }
 
   const owner = document.querySelectorAll('[name="own_location"]');
