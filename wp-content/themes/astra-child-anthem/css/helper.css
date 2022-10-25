@@ -45,7 +45,7 @@ form :is(.btn) {
 .hidden {
   display: none !important;
 }
-form :is(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, .btn, textarea) {
+form :is(input, button, input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, .btn, textarea) {
   width: 100%;
   padding: 7px 20px;
   margin-bottom: 4px;

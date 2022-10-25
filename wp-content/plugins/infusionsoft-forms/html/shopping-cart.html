@@ -34,9 +34,8 @@
           <input type="hidden" class="form-input" name="opportunity_stage" value="281">
           <input type="hidden" class="form-input" name="tags" value="120,389">
           <input type="hidden" class="form-input" name="check_address" value="true">
-          <input type="hidden" class="form-input" name="o" value="5">
           <input type="hidden" class="form-input" name="project_id" value="58">
-          <input type="hidden" class="form-input" name="product_line">
+          <input type="hidden" class="form-input" name="o" value="5">
           <input required="" type="email" class="form-input lookup" name="email" placeholder="Email">
           <input required="" type="text" class="form-input" name="given_name" placeholder="First Name">
           <input required="" type="text" class="form-input" name="family_name" placeholder="Last Name">
@@ -44,12 +43,15 @@
           <input required="" type="text" class="form-input" name="line1" placeholder="Address">
           <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
           <input required="" type="text" class="form-input" name="locality" placeholder="City">
-          <select class="form-input" name="region" required="" data-placeholder="State">
+          <input required="" type="text" hidden="" class="form-input" name="region" placeholder="State">
+          <select class="select_update" name="region_update">
+            <option value="">State</option>
             <option selected value="NV">Nevada</option>
           </select>
           <input required="" type="text" class="form-input" name="postal_code" placeholder="Zip Code">
           <input type="text" class="form-input" name="promo_code" placeholder="Promo Code">
-          <select class="form-input" name="product_line_update" required="" data-placeholder="Residential or Commercial Use">
+          <input required="" type="text" hidden="" class="form-input" name="product_line" placeholder="Residential or Commercial Use">
+          <select class="select_update" name="product_line_update">
             <option value="">Residential or Commercial Use</option>
             <option value="83">Residential</option>
             <option value="84">Commercial</option>
@@ -61,9 +63,8 @@
       <input type="hidden" class="form-input" name="email">
       <input type="hidden" class="form-input" name="ifs_lead_id">
       <input type="hidden" class="form-input" name="workbook_id">
-      <div data-packages="true" data-type="elko" data-productline="residential" data-template="1">
-        <input checked type="radio" placeholder="Package" class="form-input" name="package" value="102" id="id-102">
-      </div>
+      <input checked type="radio" placeholder="Package" class="form-input hidden" name="package" value="102" id="id-102">
+      <div data-packages="true" data-type="elko" data-productline="residential" data-template="1"></div>
     </div>
     <div class="tab" data-props='{"name":"Add Ons","numerate":true,"allowskip":true}'>
       <input type="hidden" class="form-input" name="email">
@@ -97,7 +98,8 @@
       <input type="hidden" class="form-input" name="email">
       <input type="hidden" class="form-input" name="workbook_id">
       <input type="hidden" class="form-input" name="contracts" value="true">
-      <input type="hidden" class="form-input" name="tags" value="218">
+      <input type="hidden" class="form-input" name="tags" value="120">
+      <input type="hidden" class="form-input" name="dynamic_tags" value="218">
       <h2>Tell us more about the property</h2>
       <br>
       <strong id="vac"></strong>
@@ -151,21 +153,6 @@
         <input required="" placeholder="Notification Email" type="email" class="form-input" name="notification_email">
       </div>
     </div>
-    <!-- <div class="tab validate" data-props='{"name":"Schedule","numerate":true}'>
-      <input type="hidden" class="form-input" name="email">
-      <input type="hidden" class="form-input" name="workbook_id">
-      <div class="calendar-content">
-        <input type="hidden" class="form-input" name="date">
-        <div id="myCalendar" class="vanilla-calendar"></div>
-        <div class="appointments">
-          <div class="date"></div>
-          <input placeholder="Time Slot" type="radio" class="form-input" name="time" value="1" id="1">
-          <label for="1" class="morning"></label>
-          <input placeholder="Time Slot" type="radio" class="form-input" name="time" value="2" id="2">
-          <label for="2" class="afternoon"></label>
-        </div>
-      </div>
-    </div> -->
     <div class="controller fullwidth">
       <div class="status"></div>
       <div class="flex-center w-100" style="justify-content:space-between;">

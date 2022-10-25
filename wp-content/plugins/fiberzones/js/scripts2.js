@@ -223,12 +223,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function initMap() {
     const navElements = []
-    for (let i of navItems) {
-      navElements.push({
-        navElem: i,
-        triggerElem: document.querySelector(`${remChar(i.childNodes[0].href, '#')}`)
-      });
-    }
+    // for (let i of navItems) {
+    //   navElements.push({
+    //     navElem: i,
+    //     triggerElem: document.querySelector(`${remChar(i.childNodes[0].href, '#')}`)
+    //   });
+    // }
 
     if (document.querySelector('#ast-mobile-popup-wrapper')) {
       document.querySelector('#ast-mobile-popup-wrapper').style.display = 'none';

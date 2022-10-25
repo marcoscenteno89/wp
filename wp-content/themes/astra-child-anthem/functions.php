@@ -10,7 +10,12 @@ define( 'CHILD_THEME_MARKETABLY_ASTRA_STAGING_VERSION', '1.0.0' );
 
 // Enqueue styles
 function child_enqueue_styles() {
- 
+  wp_enqueue_style( 
+    'bootstrapcss', 
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', 
+    array(), 
+    'all'
+  );
   wp_enqueue_style( 
     'helpercss', get_stylesheet_directory_uri() . '/css/helper.css', 
     array(), 
@@ -23,30 +28,13 @@ function child_enqueue_styles() {
     CHILD_THEME_MARKETABLY_ASTRA_STAGING_VERSION, 
     'all' 
   );
-  // wp_enqueue_style( 
-  //   'icons', 
-  //   'https://use.fontawesome.com/releases/v5.3.1/css/all.css', 
-  //   array(),  
-  //   'all'
-  // );
-  wp_enqueue_style( 
-    'bootstrapcss', 
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', 
-    array(), 
-    'all'
-  );
   wp_enqueue_script( 
     'bootstrapjs', 
     'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', 
     array(), 
-    ''
+    'all',
+    true
   );
-  // wp_enqueue_script( 
-  //   'popperjs', 
-  //   'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', 
-  //   array('jquery'), 
-  //   ''
-  // );
 }
 
 function year_shortcode() {
