@@ -1294,6 +1294,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       } 
     }
   }
+  const fillInAddress = (auto) => {
+    
+    const place = auto.getPlace();
+    console.log(place.address_components);
+  }
 
   // FORMS INIT
 
@@ -1697,10 +1702,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     agileSubmit.addEventListener('click', newRepToken);
   }
   
-  const fillInAddress = (auto) => {
-    const place = auto.getPlace();
-    console.log(place.address_components);
-  }
   let address1Field = document.querySelector("#ship-address");
 
   let autocomplete = new google.maps.places.Autocomplete(address1Field, {
