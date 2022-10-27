@@ -66,7 +66,7 @@ function mc_fz_enqueue_scripts() {
   );
   wp_enqueue_script( 
     'googleapi', 
-    "https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry&key=$googleapi", 
+    "https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry,places&key=$googleapi", 
     array(), 
     array(), 
     true,

@@ -1696,15 +1696,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (localStorage.getItem("agileAdmin") === 'true') {
     agileSubmit.addEventListener('click', newRepToken);
   }
-  let autocomplete = google.maps.places.Autocomplete;
+  
+  const fillInAddress = (auto) => {
+    const place = auto.getPlace();
+    console.log(place.address_components);
+  }
   let address1Field = document.querySelector("#ship-address");
 
-  autocomplete = new google.maps.places.Autocomplete(address1Field, {
-    componentRestrictions: { country: ["us", "ca"] },
+  let autocomplete = new google.maps.places.Autocomplete(address1Field, {
+    componentRestrictions: { country: ["us", "id"] },
     fields: ["address_components", "geometry"],
     types: ["address"],
   });
   address1Field.focus();
 
-  autocomplete.addListener("place_changed", fillInAddress);
+  autocomplete.addListener("place_changed", () => fillInAddress(autocomplete));
 });
