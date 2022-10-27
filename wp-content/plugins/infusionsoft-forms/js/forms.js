@@ -796,7 +796,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
   const generateWoObj = (data) => {
-    let ob = {  
+    let ob = { 
       o: data.o,
       contact_id: 0,
       contact_info: {
@@ -1294,10 +1294,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       } 
     }
   }
-  const fillInAddress = (auto) => {
-    
+  const fillInAddress = (auto, addr) => {
     const place = auto.getPlace();
-    console.log(place.address_components);
+    const getVal = (arr, nam) => arr.filter(i => i.types.includes(nam))[0].long_name;
+    let i = place.address_components;
+    console.log(i);
+    addr.line1.value = `${getVal(i, 'street_number')} ${getVal(i, 'route')}`;
+    // addr.line2.value = document.querySelector('[name="line2"]');
+    addr.locality.value = getVal(i, 'locality');
+    addr.region.value = getVal(i, 'administrative_area_level_1');
+    addr.postal_code.value = getVal(i, 'postal_code');
   }
 
   // FORMS INIT
@@ -1702,14 +1708,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     agileSubmit.addEventListener('click', newRepToken);
   }
   
-  let address1Field = document.querySelector("#ship-address");
+  if (document.querySelector('[name="line1"]')) {
+    const addr = {
+      line1: document.querySelector('[name="line1"]'),
+      line2: document.querySelector('[name="line2"]'),
+      locality: document.querySelector('[name="locality"]'),
+      region: document.querySelector('[name="region"]'),
+      postal_code: document.querySelector('[name="postal_code"]'),
+    }
 
-  let autocomplete = new google.maps.places.Autocomplete(address1Field, {
-    componentRestrictions: { country: ["us", "id"] },
-    fields: ["address_components", "geometry"],
-    types: ["address"],
-  });
-  address1Field.focus();
-
-  autocomplete.addListener("place_changed", () => fillInAddress(autocomplete));
+    let autocomplete = new google.maps.places.Autocomplete(addr.line1, {
+      componentRestrictions: { country: ["us", "id"] },
+      fields: ["address_components", "geometry"],
+      types: ["address"],
+    });
+    addr.line1.focus();
+  
+    autocomplete.addListener("place_changed", () => fillInAddress(autocomplete, addr));
+  }
 });
