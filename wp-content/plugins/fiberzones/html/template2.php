@@ -103,14 +103,14 @@
               <input type="hidden" class="form-input" name="utm_term" value="*">
               <input type="hidden" class="form-input" name="utm_content" value="*">
               <input type="hidden" class="form-input" name="o" value="5">
+              <input type="hidden" class="form-input" name="project_id" value="58">
+              <input required="" type="text" class="form-input" name="line1" placeholder="Address">
+              <input type="text" class="form-input" name="line2" placeholder="Apartment, unit, suite, or floor #">
+              <input required="" type="text" class="form-input" name="locality" placeholder="City">
+              <input required="" type="text" class="form-input" name="region" placeholder="State">
+              <input required="" type="text" class="form-input" name="postal_code" placeholder="Zip Code">
               <input type="hidden" class="form-input" name="lat">
               <input type="hidden" class="form-input" name="lng">
-              <input type="hidden" class="form-input" name="project_id" value="58">
-              <input required type="text" class="form-input" name="line1" placeholder="Address">
-              <input type="text" class="form-input" name="line2" placeholder="Address Line 2">
-              <input required type="text" class="form-input" name="locality" placeholder="City">
-              <input required type="text" class="form-input" name="region" placeholder="State">
-              <input required type="text" class="form-input" name="postal_code" placeholder="Zip Code">
             </div>
             <div class="controller">
               <div class="status"></div>

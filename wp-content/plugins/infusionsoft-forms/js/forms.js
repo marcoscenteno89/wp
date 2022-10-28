@@ -1294,16 +1294,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       } 
     }
   }
-  const fillInAddress = (auto, addr) => {
+  const fillInAddress = (auto, addr, type='long_name') => {
+    const getVal = (arr, nam) => arr.filter(i => i.types.includes(nam))[0][type];
     const place = auto.getPlace();
-    const getVal = (arr, nam) => arr.filter(i => i.types.includes(nam))[0].long_name;
+    console.log(place);
     let i = place.address_components;
-    console.log(i);
-    addr.line1.value = `${getVal(i, 'street_number')} ${getVal(i, 'route')}`;
-    // addr.line2.value = document.querySelector('[name="line2"]');
+    addr.line1.value = `${getVal(i, 'street_number')} ${getVal(i, 'route', 'short_name')}`;
     addr.locality.value = getVal(i, 'locality');
-    addr.region.value = getVal(i, 'administrative_area_level_1');
+    addr.region.value = getVal(i, 'administrative_area_level_1', 'short_name');
     addr.postal_code.value = getVal(i, 'postal_code');
+    addr.lat.value = place.geometry.location.lat();
+    addr.lng.value = place.geometry.location.lng();
   }
 
   // FORMS INIT
@@ -1715,6 +1716,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       locality: document.querySelector('[name="locality"]'),
       region: document.querySelector('[name="region"]'),
       postal_code: document.querySelector('[name="postal_code"]'),
+      lat: document.querySelector('[name="lat"]'),
+      lng: document.querySelector('[name="lng"]')
     }
 
     let autocomplete = new google.maps.places.Autocomplete(addr.line1, {
