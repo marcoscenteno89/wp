@@ -1,0 +1,27 @@
+# Whitelist: track only our own code. Everything else (WP core, third-party
+# plugins/themes, uploads, secrets) stays local.
+/*
+!/.gitignore
+!/docker-compose.yml
+!/.env.example
+!/.htaccess
+
+!/wp-content/
+/wp-content/*
+
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/marccent/
+!/wp-content/themes/astra-child-anthem/
+
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/agile/
+!/wp-content/plugins/agile2/
+!/wp-content/plugins/keap/
+!/wp-content/plugins/google_polygons/
+
+node_modules/
+.env
+.vscode/
+vendor/
